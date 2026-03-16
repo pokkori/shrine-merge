@@ -1,0 +1,101 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&display=swap");
+
+:root {
+  --shrine-red: #c0392b;
+  --shrine-gold: #d4af37;
+  --shrine-dark: #0f0c29;
+  --shrine-mid: #1a1040;
+}
+
+body {
+  background: var(--shrine-dark);
+  color: #f3f0e8;
+  font-family: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif;
+}
+
+/* ===== 背景 ===== */
+.starry-bg {
+  background: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== アニメーション ===== */
+@keyframes pop-in {
+  0%   { transform: scale(0); opacity: 0; }
+  70%  { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes merge-pop {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.3); filter: brightness(1.6); }
+  60%  { transform: scale(0.92); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+@keyframes shine-pulse {
+  0%, 100% { box-shadow: 0 0 8px 2px rgba(212,175,55,0.5); }
+  50%       { box-shadow: 0 0 20px 6px rgba(212,175,55,0.9); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+@keyframes score-popup {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  80%  { opacity: 0.8; transform: translateY(-24px) scale(1.2); }
+  100% { opacity: 0; transform: translateY(-36px) scale(0.8); }
+}
+
+@keyframes glow-in {
+  from { opacity: 0; transform: scale(0.8); filter: brightness(2); }
+  to   { opacity: 1; transform: scale(1); filter: brightness(1); }
+}
+
+.cell-new    { animation: pop-in 0.22s ease-out; }
+.cell-merged { animation: merge-pop 0.28s ease-out; }
+.cell-shine  { animation: shine-pulse 2s ease-in-out infinite; }
+.cell-float  { animation: float 3s ease-in-out infinite; }
+
+/* ===== ガラスカード ===== */
+.glass-card {
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212,175,55,0.25);
+  border-radius: 16px;
+}
+
+/* ===== ボタン ===== */
+.btn-gold {
+  background: linear-gradient(135deg, #d4af37, #f0d060, #c8a020);
+  color: #1a0a00;
+  font-weight: 900;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(212,175,55,0.4);
+  transition: all 0.15s;
+}
+.btn-gold:hover  { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-gold:active { transform: scale(0.97); }
+
+.btn-shrine-red {
+  background: linear-gradient(135deg, #c0392b, #e74c3c);
+  color: white;
+  font-weight: 900;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(192,57,43,0.4);
+  transition: all 0.15s;
+}
+.btn-shrine-red:hover  { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-shrine-red:active { transform: scale(0.97); }
+
+/* ===== グリッド ===== */
+.game-grid {
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
