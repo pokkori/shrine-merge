@@ -313,7 +313,9 @@ export default function GamePage() {
   }, [state?.highestLevel]);
 
   const highestShrine = SHRINES[state.highestLevel - 1];
-  const shareMsg = `【神社マージ】${state.score.toLocaleString()}点！最高神社は「${highestShrine.emoji}${highestShrine.name}」(御利益:${highestShrine.goryaku})✨ あなたは天照大神まで辿り着ける？ → https://shrine-merge.vercel.app #神社マージ #パズルゲーム #神社`;
+  // スコアによる上位%推定（バイラル設計）
+  const shrineTopPercent = state.score >= 2000 ? "上位5%" : state.score >= 1000 ? "上位20%" : state.score >= 500 ? "上位40%" : "入門者";
+  const shareMsg = `【神社マージ】${state.score.toLocaleString()}点・${shrineTopPercent}の参拝力！⛩️ 最高神社「${highestShrine.emoji}${highestShrine.name}」(${highestShrine.goryaku}) あなたは天照大神まで辿り着ける？ → https://shrine-merge.vercel.app #神社マージ #パズルゲーム #神社`;
   const shareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareMsg);
   const remainingPlays = isPremium ? null : Math.max(0, DAILY_FREE_LIMIT - dailyPlays);
   const dailyChallengeProgress = Math.min(100, Math.round((dailyChallenge.best / dailyChallenge.target) * 100));
