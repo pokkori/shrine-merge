@@ -21,6 +21,7 @@ import {
 } from "@/lib/game";
 
 const DAILY_FREE_LIMIT = 3;
+const AMATERASU_LEVEL = 9; // 天照大神のレベル
 
 function getDailyPlayCount(): number {
   if (typeof window === "undefined") return 0;
@@ -68,6 +69,8 @@ export default function GamePage() {
   const [showPayjp, setShowPayjp] = useState(false);
   const [dailyBest, setDailyBest] = useState(0);
   const [isNewDailyBest, setIsNewDailyBest] = useState(false);
+  const [showAmaterasuCelebration, setShowAmaterasuCelebration] = useState(false);
+  const [amaterasuShown, setAmaterasuShown] = useState(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
   const goryakuInterval = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -239,6 +242,15 @@ export default function GamePage() {
     );
   }
 
+  // 天照大神到達チェック
+  useEffect(() => {
+    if (!state || amaterasuShown) return;
+    if (state.highestLevel >= AMATERASU_LEVEL) {
+      setShowAmaterasuCelebration(true);
+      setAmaterasuShown(true);
+    }
+  }, [state?.highestLevel]);
+
   const highestShrine = SHRINES[state.highestLevel - 1];
   const shareMsg = `【神社マージ】${state.score.toLocaleString()}点！最高神社は「${highestShrine.emoji}${highestShrine.name}」(御利益:${highestShrine.goryaku})✨ あなたは天照大神まで辿り着ける？ → https://shrine-merge.vercel.app #神社マージ #パズルゲーム #神社`;
   const shareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareMsg);
@@ -361,10 +373,10 @@ export default function GamePage() {
               style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)" }}>
               <p className="text-amber-200 font-bold text-sm mb-2">プレミアム会員なら</p>
               {[
-                "プレイ回数が無制限",
-                "御利益ポイント2倍速",
+                "無制限参拝（1日何度でも）",
+                "御利益ポイント2倍速で金運UP",
                 "全ての神社がアンロック",
-                "広告なし",
+                "広告なし（集中して参拝）",
               ].map((feat) => (
                 <div key={feat} className="flex items-center gap-2 text-sm text-amber-300">
                   <span className="text-amber-500">&#10003;</span>{feat}
@@ -384,7 +396,7 @@ export default function GamePage() {
                   color: "#1a0a00",
                 }}
               >
-                プレミアムに登録する
+                🙏 プレミアムで御利益アップ
               </button>
               <button
                 onClick={() => setShowPaywall(false)}
@@ -457,9 +469,110 @@ export default function GamePage() {
                   onClick={() => { setShowPayjp(true); }}
                   className="w-full py-2 text-xs text-amber-500 hover:text-amber-300 transition-colors"
                 >
-                  &#11088; プレミアム（&#165;480/月）で無制限プレイ
+                  🙏 プレミアムで御利益アップ（¥480/月）
                 </button>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 天照大神到達 花火セレブレーション */}
+      {showAmaterasuCelebration && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4"
+          style={{ backdropFilter: "blur(4px)" }}>
+          {/* 花火パーティクル CSS */}
+          <style>{`
+            @keyframes firework-1 {
+              0%   { transform: translate(0,0) scale(1); opacity: 1; }
+              100% { transform: translate(-120px,-160px) scale(0); opacity: 0; }
+            }
+            @keyframes firework-2 {
+              0%   { transform: translate(0,0) scale(1); opacity: 1; }
+              100% { transform: translate(130px,-140px) scale(0); opacity: 0; }
+            }
+            @keyframes firework-3 {
+              0%   { transform: translate(0,0) scale(1); opacity: 1; }
+              100% { transform: translate(-80px,-200px) scale(0); opacity: 0; }
+            }
+            @keyframes firework-4 {
+              0%   { transform: translate(0,0) scale(1); opacity: 1; }
+              100% { transform: translate(90px,-190px) scale(0); opacity: 0; }
+            }
+            @keyframes firework-5 {
+              0%   { transform: translate(0,0) scale(1); opacity: 1; }
+              100% { transform: translate(-150px,-100px) scale(0); opacity: 0; }
+            }
+            @keyframes firework-6 {
+              0%   { transform: translate(0,0) scale(1); opacity: 1; }
+              100% { transform: translate(160px,-80px) scale(0); opacity: 0; }
+            }
+            @keyframes firework-7 {
+              0%   { transform: translate(0,0) scale(1); opacity: 1; }
+              100% { transform: translate(-60px,-220px) scale(0); opacity: 0; }
+            }
+            @keyframes firework-8 {
+              0%   { transform: translate(0,0) scale(1); opacity: 1; }
+              100% { transform: translate(70px,-215px) scale(0); opacity: 0; }
+            }
+            .particle { position: absolute; width: 10px; height: 10px; border-radius: 50%; }
+            .p1 { background: #ffd700; animation: firework-1 1.2s ease-out infinite; }
+            .p2 { background: #ff6b6b; animation: firework-2 1.1s ease-out infinite 0.1s; }
+            .p3 { background: #a78bfa; animation: firework-3 1.3s ease-out infinite 0.2s; }
+            .p4 { background: #34d399; animation: firework-4 1.0s ease-out infinite 0.15s; }
+            .p5 { background: #fb923c; animation: firework-5 1.4s ease-out infinite 0.05s; }
+            .p6 { background: #60a5fa; animation: firework-6 1.1s ease-out infinite 0.25s; }
+            .p7 { background: #f472b6; animation: firework-7 1.2s ease-out infinite 0.1s; }
+            .p8 { background: #facc15; animation: firework-8 1.3s ease-out infinite 0.3s; }
+          `}</style>
+          <div className="relative rounded-2xl p-6 w-full max-w-xs text-center shadow-2xl overflow-hidden"
+            style={{
+              background: "linear-gradient(160deg, #1a0a20, #2d1040, #0f0c29)",
+              border: "2px solid rgba(212,175,55,0.6)",
+              boxShadow: "0 0 60px rgba(212,175,55,0.4), 0 0 120px rgba(212,175,55,0.15)",
+            }}>
+            {/* 花火パーティクル */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 0 }}>
+              <div className="relative">
+                <div className="particle p1" />
+                <div className="particle p2" />
+                <div className="particle p3" />
+                <div className="particle p4" />
+                <div className="particle p5" />
+                <div className="particle p6" />
+                <div className="particle p7" />
+                <div className="particle p8" />
+              </div>
+            </div>
+            <div className="relative z-10">
+              <div className="text-6xl mb-2 animate-bounce">✨</div>
+              <h2 className="text-2xl font-black mb-1"
+                style={{ color: "#d4af37", textShadow: "0 0 20px rgba(212,175,55,0.8)" }}>
+                天照大神に到達！
+              </h2>
+              <p className="text-amber-300 text-sm font-bold mb-1">神社マージコンプリート！</p>
+              <p className="text-amber-500 text-xs mb-4 leading-relaxed">
+                鳥居から最強の神へ。<br />あなたの御利益は「最強」です！
+              </p>
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("🎊 天照大神に到達しました！！神社マージコンプリート！✨ 鳥居から最強の神まで合体成功！ → https://shrine-merge.vercel.app #神社マージ #天照大神 #パズルゲーム")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white text-sm mb-3 transition-all active:scale-95"
+                style={{ background: "#000" }}
+              >
+                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+                🎊 Xで達成を自慢する
+              </a>
+              <button
+                onClick={() => setShowAmaterasuCelebration(false)}
+                className="w-full py-2 text-sm font-bold rounded-xl transition-all active:scale-95"
+                style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00" }}
+              >
+                ゲームを続ける ⛩️
+              </button>
             </div>
           </div>
         </div>
