@@ -23,6 +23,52 @@ import {
 const DAILY_FREE_LIMIT = 3;
 const AMATERASU_LEVEL = 9; // 天照大神のレベル
 
+// ─── ストリーク ─────────────────────────────────────────────────────────────
+
+function getShrineStreakData(): { streak: number; lastDate: string } {
+  try {
+    return JSON.parse(localStorage.getItem("shrine_streak") ?? "{}") ?? { streak: 0, lastDate: "" };
+  } catch { return { streak: 0, lastDate: "" }; }
+}
+
+function updateShrineStreak(): { streak: number; isNew: boolean } {
+  const today = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const data = getShrineStreakData();
+  if (data.lastDate === today) return { streak: data.streak, isNew: false };
+  const newStreak = data.lastDate === yesterday ? data.streak + 1 : 1;
+  localStorage.setItem("shrine_streak", JSON.stringify({ streak: newStreak, lastDate: today }));
+  return { streak: newStreak, isNew: true };
+}
+
+// ─── デイリーチャレンジ (日付seed) ───────────────────────────────────────────
+
+function getShrineDailyChallengeTarget(): number {
+  const d = new Date();
+  const seed = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+  return 256 + (seed % 7) * 128; // 256〜1024ptの間
+}
+
+function getShrineDailyChallengeStatus(): { target: number; best: number; cleared: boolean } {
+  const today = new Date().toISOString().slice(0, 10);
+  const target = getShrineDailyChallengeTarget();
+  try {
+    const data = JSON.parse(localStorage.getItem("shrine_daily_challenge") ?? "{}");
+    if (data.date === today) {
+      return { target, best: data.best ?? 0, cleared: (data.best ?? 0) >= target };
+    }
+  } catch { /* */ }
+  return { target, best: 0, cleared: false };
+}
+
+function saveShrineDailyChallengeScore(score: number): void {
+  const today = new Date().toISOString().slice(0, 10);
+  const current = getShrineDailyChallengeStatus();
+  if (score > current.best) {
+    localStorage.setItem("shrine_daily_challenge", JSON.stringify({ date: today, best: score }));
+  }
+}
+
 function getDailyPlayCount(): number {
   if (typeof window === "undefined") return 0;
   const today = new Date().toISOString().slice(0, 10);
@@ -71,6 +117,9 @@ export default function GamePage() {
   const [isNewDailyBest, setIsNewDailyBest] = useState(false);
   const [showAmaterasuCelebration, setShowAmaterasuCelebration] = useState(false);
   const [amaterasuShown, setAmaterasuShown] = useState(false);
+  const [shrineStreak, setShrineStreak] = useState(0);
+  const [showStreakBanner, setShowStreakBanner] = useState(false);
+  const [dailyChallenge, setDailyChallenge] = useState(() => getShrineDailyChallengeStatus());
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
   const goryakuInterval = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -93,6 +142,15 @@ export default function GamePage() {
     setDailyPlays(plays);
     setDailyBest(getDailyBestScore());
     setState(initGame(best));
+    // ストリーク更新
+    const { streak, isNew } = updateShrineStreak();
+    setShrineStreak(streak);
+    if (isNew && streak >= 2) {
+      setShowStreakBanner(true);
+      setTimeout(() => setShowStreakBanner(false), 3000);
+    }
+    // デイリーチャレンジ初期化
+    setDailyChallenge(getShrineDailyChallengeStatus());
   }, []);
 
   useEffect(() => {
@@ -197,6 +255,9 @@ export default function GamePage() {
     const updated = saveDailyBestScore(state.score);
     setDailyBest(getDailyBestScore());
     setIsNewDailyBest(updated);
+    // デイリーチャレンジ保存
+    saveShrineDailyChallengeScore(state.score);
+    setDailyChallenge(getShrineDailyChallengeStatus());
   }, [state?.isGameOver]);
 
   const handleRestart = () => {
@@ -255,6 +316,7 @@ export default function GamePage() {
   const shareMsg = `【神社マージ】${state.score.toLocaleString()}点！最高神社は「${highestShrine.emoji}${highestShrine.name}」(御利益:${highestShrine.goryaku})✨ あなたは天照大神まで辿り着ける？ → https://shrine-merge.vercel.app #神社マージ #パズルゲーム #神社`;
   const shareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareMsg);
   const remainingPlays = isPremium ? null : Math.max(0, DAILY_FREE_LIMIT - dailyPlays);
+  const dailyChallengeProgress = Math.min(100, Math.round((dailyChallenge.best / dailyChallenge.target) * 100));
 
   return (
     <div
@@ -262,6 +324,37 @@ export default function GamePage() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
+      {/* ストリークバナー */}
+      {showStreakBanner && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
+          <div className="px-6 py-3 rounded-2xl font-black text-lg shadow-2xl animate-bounce"
+            style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00", boxShadow: "0 0 30px rgba(212,175,55,0.7)" }}>
+            🔥 {shrineStreak}日連続参拝！御利益UP！
+          </div>
+        </div>
+      )}
+
+      {/* デイリーチャレンジバー */}
+      <div className="w-full max-w-sm px-1 pt-1 mb-1">
+        <div className="flex items-center justify-between mb-0.5">
+          <span className="text-[10px] font-bold" style={{ color: "#d4af37" }}>
+            📅 今日のお告げ {dailyChallenge.cleared ? "✅ 達成！" : `目標: ${dailyChallenge.target.toLocaleString()}pt`}
+          </span>
+          {shrineStreak >= 2 && (
+            <span className="text-[10px] font-bold text-amber-400">🔥 {shrineStreak}日連続</span>
+          )}
+        </div>
+        <div className="w-full h-1.5 rounded-full" style={{ background: "rgba(212,175,55,0.15)" }}>
+          <div className="h-1.5 rounded-full transition-all duration-500"
+            style={{
+              width: `${dailyChallengeProgress}%`,
+              background: dailyChallenge.cleared
+                ? "linear-gradient(90deg, #34d399, #10b981)"
+                : "linear-gradient(90deg, #d4af37, #f59e0b)",
+            }} />
+        </div>
+      </div>
+
       <div className="w-full max-w-sm mx-auto flex items-center justify-between mb-3">
         <a href="/" className="text-amber-400 text-sm hover:text-amber-300 transition-colors">&#8592; トップ</a>
         <h1 className="text-xl font-black" style={{ color: "#d4af37", textShadow: "0 0 12px rgba(212,175,55,0.5)" }}>
