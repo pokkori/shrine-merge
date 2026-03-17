@@ -75,6 +75,48 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* SNS Share Section */}
+      <section className="px-4 pb-10 max-w-sm mx-auto">
+        <div
+          className="rounded-2xl p-5 text-center"
+          style={{
+            background: "rgba(212,175,55,0.08)",
+            border: "1px solid rgba(212,175,55,0.25)",
+          }}
+        >
+          <p className="text-amber-300 font-black text-base mb-2">
+            🦊 スコアをXでシェアしよう
+          </p>
+          <p className="text-amber-500 text-xs mb-4 leading-relaxed">
+            ゲームオーバー後にワンタップでXに投稿できます。<br />
+            友達と最高スコアを競って一緒に盛り上がろう！
+          </p>
+          <div
+            className="rounded-xl px-4 py-3 mb-4 text-left"
+            style={{ background: "rgba(0,0,0,0.3)", border: "1px solid rgba(212,175,55,0.15)" }}
+          >
+            <p className="text-amber-400 text-xs font-bold mb-1">投稿イメージ</p>
+            <p className="text-amber-200 text-xs leading-relaxed">
+              「神社マージ で 8,450点！⛩️ 最高神社は稲荷神社🦊<br />
+              鳥居から天照大神まで目指すパズルゲーム<br />
+              → shrine-merge.vercel.app #神社マージ」
+            </p>
+          </div>
+          <a
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("【神社マージ】鳥居から天照大神まで合体させるパズルゲームにハマってる⛩️🦊 → https://shrine-merge.vercel.app #神社マージ #パズルゲーム")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white text-sm transition-all active:scale-95"
+            style={{ background: "#000" }}
+          >
+            <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+            Xで神社マージを紹介する
+          </a>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="text-center pb-16 px-4">
         <Link
