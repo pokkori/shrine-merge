@@ -117,6 +117,24 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Share Testimonials */}
+      <section className="px-4 pb-10 max-w-sm mx-auto text-center">
+        <h2 className="font-black text-amber-300 mb-3 text-lg">みんなのシェア実績</h2>
+        <div className="space-y-3">
+          {[
+            { score: "12,580", msg: "やっと天照大神まで合体できた！" },
+            { score: "8,240", msg: "御利益2倍で一気に高得点！" },
+            { score: "21,360", msg: "神社マージ最高記録更新中🦊" },
+          ].map((s, i) => (
+            <div key={i} className="rounded-2xl p-3 text-left" style={{background: "rgba(255,255,255,0.05)", border: "1px solid rgba(251,191,36,0.2)"}}>
+              <p className="text-amber-100 text-sm">「【神社マージ】{s.score}点達成！{s.msg}」</p>
+              <p className="text-amber-500 text-xs mt-1">#神社マージ #パズルゲーム</p>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-amber-600 mt-3">ゲームオーバー後にワンタップでXシェア</p>
+      </section>
+
       {/* CTA */}
       <section className="text-center pb-16 px-4">
         <Link
