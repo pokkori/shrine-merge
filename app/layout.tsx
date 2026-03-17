@@ -12,9 +12,9 @@ export const metadata: Metadata = {
     locale: "ja_JP",
   },
   twitter: {
-    card: "summary",
-    title: "神社マージ",
-    description: "神社を合体させる新感覚パズルゲーム",
+    card: "summary_large_image",
+    title: "神社マージ - 神社を合体させて最強の神社を目指せ！",
+    description: "神社を合体させる新感覚パズルゲーム。鳥居から天照大神まで合体させてスコアを競おう！",
   },
 };
 
