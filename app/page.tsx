@@ -15,8 +15,11 @@ export default function HomePage() {
         <p className="text-lg text-amber-200 mb-2 font-bold">
           神社を合体させて<br className="sm:hidden" />天照大神を目指せ！
         </p>
-        <p className="text-sm text-amber-500 mb-10">
+        <p className="text-sm text-amber-500 mb-3">
           鳥居からはじめ、合体を繰り返して最強の神社へ
+        </p>
+        <p className="text-sm text-amber-300 mb-10 font-bold">
+          🦊 スコアをXでシェアして友達と競おう！
         </p>
         <Link
           href="/game"

@@ -212,7 +212,7 @@ export default function GamePage() {
   }
 
   const highestShrine = SHRINES[state.highestLevel - 1];
-  const shareMsg = `⛩️神社マージでスコア${state.score.toLocaleString()}達成!\n最高レベル: ${highestShrine.name}「${highestShrine.goryaku}」\n\n#神社マージ #shrinemerge\nあなたも試す→ https://shrine-merge.vercel.app`;
+  const shareMsg = `【神社マージ】${state.score.toLocaleString()}点達成！鳥居から天照大神まで合体させよう🦊 → https://shrine-merge.vercel.app #神社マージ #パズルゲーム #神社`;
   const shareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareMsg);
   const remainingPlays = isPremium ? null : Math.max(0, DAILY_FREE_LIMIT - dailyPlays);
 
@@ -408,13 +408,12 @@ export default function GamePage() {
                 href={shareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2"
-                style={{ background: "#1a1a1a", display: "flex" }}
+                className="w-full py-3 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2 bg-black hover:bg-gray-800 transition-colors"
               >
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
-                Xでシェア
+                スコアをXでシェア
               </a>
               {!isPremium && (
                 <button
