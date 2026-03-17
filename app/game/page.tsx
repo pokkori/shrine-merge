@@ -240,7 +240,7 @@ export default function GamePage() {
   }
 
   const highestShrine = SHRINES[state.highestLevel - 1];
-  const shareMsg = `【神社マージ】${state.score.toLocaleString()}点達成！鳥居から天照大神まで合体させよう🦊 → https://shrine-merge.vercel.app #神社マージ #パズルゲーム #神社`;
+  const shareMsg = `【神社マージ】${state.score.toLocaleString()}点！最高神社は「${highestShrine.emoji}${highestShrine.name}」(御利益:${highestShrine.goryaku})✨ あなたは天照大神まで辿り着ける？ → https://shrine-merge.vercel.app #神社マージ #パズルゲーム #神社`;
   const shareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareMsg);
   const remainingPlays = isPremium ? null : Math.max(0, DAILY_FREE_LIMIT - dailyPlays);
 
@@ -432,20 +432,25 @@ export default function GamePage() {
             <div className="space-y-2">
               <button
                 onClick={handleRestart}
-                className="btn-shrine-red w-full py-3 text-base"
+                className="w-full py-4 rounded-2xl font-black text-lg transition-all active:scale-95"
+                style={{
+                  background: "linear-gradient(135deg, #d4af37, #f59e0b)",
+                  color: "#1a0a00",
+                  boxShadow: "0 0 20px rgba(212,175,55,0.4)",
+                }}
               >
-                もう一度プレイ
+                ⛩️ もう一度！
               </button>
               <a
                 href={shareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 rounded-xl font-bold text-white text-base flex items-center justify-center gap-2 bg-black hover:bg-gray-800 transition-colors"
+                className="w-full py-3 rounded-xl font-bold text-white text-sm flex items-center justify-center gap-2 bg-black hover:bg-gray-800 transition-colors"
               >
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
-                スコアをXでシェア
+                スコアをXでシェアして自慢する
               </a>
               {!isPremium && (
                 <button
