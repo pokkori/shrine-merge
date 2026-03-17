@@ -27,6 +27,9 @@ export default function HomePage() {
         >
           今すぐ遊ぶ
         </Link>
+        <p className="mt-3 text-xs text-amber-500">
+          1日3回まで無料 • プレミアムで無制限プレイ
+        </p>
       </section>
 
       {/* Shrine evolution route */}
@@ -80,6 +83,9 @@ export default function HomePage() {
         >
           ゲームスタート
         </Link>
+        <p className="mt-3 text-xs text-amber-500">
+          1日3回まで無料 • プレミアムで無制限プレイ
+        </p>
       </section>
 
       {/* Footer */}

@@ -42,6 +42,23 @@ function incrementDailyPlayCount(): void {
   localStorage.setItem("jinja-daily-plays", JSON.stringify({ date: today, count: current + 1 }));
 }
 
+function getDailyBestScore(): number {
+  if (typeof window === "undefined") return 0;
+  const today = new Date().toISOString().slice(0, 10);
+  return parseInt(localStorage.getItem(`shrine_daily_best_${today}`) ?? "0", 10);
+}
+
+function saveDailyBestScore(score: number): boolean {
+  if (typeof window === "undefined") return false;
+  const today = new Date().toISOString().slice(0, 10);
+  const current = getDailyBestScore();
+  if (score > current) {
+    localStorage.setItem(`shrine_daily_best_${today}`, String(score));
+    return true;
+  }
+  return false;
+}
+
 export default function GamePage() {
   const [state, setState] = useState<GameState | null>(null);
   const [isPremium, setIsPremium] = useState(false);
@@ -49,6 +66,8 @@ export default function GamePage() {
   const [dailyPlays, setDailyPlays] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
   const [showPayjp, setShowPayjp] = useState(false);
+  const [dailyBest, setDailyBest] = useState(0);
+  const [isNewDailyBest, setIsNewDailyBest] = useState(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
   const goryakuInterval = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -69,6 +88,7 @@ export default function GamePage() {
     const best = loadBestScore();
     const plays = getDailyPlayCount();
     setDailyPlays(plays);
+    setDailyBest(getDailyBestScore());
     setState(initGame(best));
   }, []);
 
@@ -167,6 +187,14 @@ export default function GamePage() {
       return { ...prev, grid: newGrid, goryakuPoints: prev.goryakuPoints - OMIKUJI_COST };
     });
   };
+
+  // Update daily best when game ends
+  useEffect(() => {
+    if (!state?.isGameOver) return;
+    const updated = saveDailyBestScore(state.score);
+    setDailyBest(getDailyBestScore());
+    setIsNewDailyBest(updated);
+  }, [state?.isGameOver]);
 
   const handleRestart = () => {
     // Check daily limit for free users
@@ -383,10 +411,14 @@ export default function GamePage() {
             <div className="text-5xl mb-2">⛩️</div>
             <h2 className="text-2xl font-black mb-1" style={{ color: "#d4af37" }}>ゲームオーバー</h2>
             <p className="text-amber-400 text-sm mb-4">グリッドが埋まってしまいました</p>
+            {isNewDailyBest && (
+              <p className="text-amber-300 font-black text-sm mb-2">🏆 本日ベスト更新！</p>
+            )}
             <div className="rounded-xl p-4 mb-4 space-y-2"
               style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)" }}>
               {[
                 ["スコア", state.score.toLocaleString()],
+                ["本日ベスト", dailyBest.toLocaleString()],
                 ["ベストスコア", state.bestScore.toLocaleString()],
                 ["最高神社", `${highestShrine.emoji} ${highestShrine.name}`],
                 ["御利益", highestShrine.goryaku],

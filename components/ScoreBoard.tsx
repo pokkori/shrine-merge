@@ -43,6 +43,7 @@ export default function ScoreBoard({ score, bestScore, goryakuPoints }: ScoreBoa
       >
         <div className="text-[10px] text-yellow-100 font-bold uppercase tracking-wide">御利益pt</div>
         <div className="font-black text-lg leading-tight text-yellow-900">{goryakuPoints.toLocaleString()}</div>
+        <div className="text-[9px] text-yellow-800 leading-tight mt-0.5">おみくじで新しい<br />神社を召喚（50pt）</div>
       </div>
     </div>
   );
