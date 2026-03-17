@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SHRINES } from "@/lib/game";
 
 export default function HomePage() {
@@ -6,7 +7,7 @@ export default function HomePage() {
     <div className="starry-bg min-h-screen">
       {/* Hero */}
       <section className="text-center py-16 px-4">
-        <div className="text-7xl mb-4" style={{ filter: "drop-shadow(0 0 20px rgba(212,175,55,0.6))" }}>⛩️</div>
+        <Image src="/images/hero.png" alt="神社マージ" width={400} height={225} className="mx-auto rounded-2xl mb-4" style={{ filter: "drop-shadow(0 0 20px rgba(212,175,55,0.6))" }} priority />
         <h1 className="text-4xl sm:text-5xl font-black mb-3"
           style={{ color: "#d4af37", textShadow: "0 0 24px rgba(212,175,55,0.4)" }}>
           神社マージ
@@ -21,7 +22,7 @@ export default function HomePage() {
           href="/game"
           className="btn-shrine-red inline-block px-12 py-4 text-xl font-black"
         >
-          今すぐ遊ぶ 🎋
+          今すぐ遊ぶ
         </Link>
       </section>
 
@@ -74,7 +75,7 @@ export default function HomePage() {
           href="/game"
           className="btn-gold inline-block px-12 py-4 text-xl font-black rounded-2xl"
         >
-          ゲームスタート ⛩️
+          ゲームスタート
         </Link>
       </section>
 
