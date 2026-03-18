@@ -148,6 +148,24 @@ export default function HomePage() {
         </p>
       </section>
 
+      {/* FAQ */}
+      <section className="py-10 px-4 max-w-lg mx-auto">
+        <h2 className="text-center text-lg font-bold text-amber-400 mb-5">よくある質問</h2>
+        <div className="space-y-3">
+          {[
+            { q: "神社マージとはどんなゲームですか？", a: "神社の御神体をマージ（合体）させて、より格の高い神社に育てるパズルゲームです。神社同士を同じエリアに置くと次のランクに昇格します。" },
+            { q: "無料で遊べますか？", a: "1日3回まで無料でプレイできます。制限なく遊びたい方はプレミアムプラン（¥480/月）にアップグレードしてください。" },
+            { q: "スコアは保存されますか？", a: "ハイスコアはブラウザに保存されます。別のデバイスでの引き継ぎにはプレミアムアカウントが必要です。" },
+            { q: "どこまで進化できますか？", a: "全12段階の神社レベルがあります。最高位の神社「大神宮」を目指してください！" },
+          ].map((faq, i) => (
+            <div key={i} style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: "12px", padding: "14px 16px" }}>
+              <p style={{ color: "#fcd34d", fontWeight: "600", fontSize: "13px", marginBottom: "6px" }}>Q. {faq.q}</p>
+              <p style={{ color: "#d4a017", fontSize: "12px" }}>A. {faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="py-6 px-4 text-center text-xs text-amber-700 space-y-1"
         style={{ borderTop: "1px solid rgba(212,175,55,0.15)" }}>
