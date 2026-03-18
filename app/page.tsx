@@ -187,6 +187,27 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* 神社マージで楽しむ3選 */}
+      <section className="py-8 px-4 max-w-lg mx-auto">
+        <h2 className="text-center text-base font-bold text-amber-400 mb-4">⛩️ もっと楽しむ3選</h2>
+        <ol className="space-y-3">
+          {[
+            { icon: "🏆", title: "大神宮を目指して挑戦", desc: "全12段階の最高位「大神宮」まで合体できるか挑戦！日本の神社格制度を学びながら楽しめます。" },
+            { icon: "🦊", title: "友達とスコアを競う", desc: "ゲームオーバー後にXでスコアをシェアして、誰が一番高い神社まで到達できるか競争しよう。" },
+            { icon: "🌸", title: "毎日の癒しパズルとして", desc: "和の雰囲気で心が落ち着くパズル体験。朝の5分間の瞑想代わりに。" },
+          ].map((item, i) => (
+            <li key={i} className="flex items-start gap-3"
+              style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: "12px", padding: "12px 14px" }}>
+              <span style={{ fontSize: "24px", lineHeight: "1" }}>{item.icon}</span>
+              <div>
+                <div style={{ color: "#fcd34d", fontWeight: "700", fontSize: "13px" }}>{i + 1}. {item.title}</div>
+                <div style={{ color: "rgba(212,175,55,0.7)", fontSize: "12px", marginTop: "2px" }}>{item.desc}</div>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
       {/* Footer */}
       <footer className="py-6 px-4 text-center text-xs text-amber-700 space-y-1"
         style={{ borderTop: "1px solid rgba(212,175,55,0.15)" }}>
