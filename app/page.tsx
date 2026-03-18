@@ -148,6 +148,27 @@ export default function HomePage() {
         </p>
       </section>
 
+      {/* 感情フック */}
+      <section className="py-10 px-4 max-w-lg mx-auto">
+        <h2 className="text-center text-base font-bold text-amber-400 mb-5">こんな経験ありませんか？</h2>
+        <div className="space-y-3">
+          {[
+            { icon: "😓", text: "スマホゲームに疲れて、もっとまったり遊べるゲームが欲しい..." },
+            { icon: "😤", text: "暇つぶしに気軽に遊べる和風ゲームがなかなか見つからない..." },
+            { icon: "💭", text: "日本文化に触れながら、パズルゲームを楽しみたい..." },
+          ].map((item, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "12px 14px" }}>
+              <span style={{ fontSize: "20px" }}>{item.icon}</span>
+              <p style={{ color: "#fef3c7", fontSize: "13px", fontWeight: "500" }}>{item.text}</p>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: "14px", background: "linear-gradient(135deg, #92400e, #d97706)", borderRadius: "14px", padding: "14px", textAlign: "center" }}>
+          <p style={{ color: "#fff", fontWeight: "700", fontSize: "13px", marginBottom: "4px" }}>神社マージがその悩みを解決！</p>
+          <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "12px" }}>神社を合体させて最高位の大神宮へ。心が落ち着くパズル体験。</p>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section className="py-10 px-4 max-w-lg mx-auto">
         <h2 className="text-center text-lg font-bold text-amber-400 mb-5">よくある質問</h2>
