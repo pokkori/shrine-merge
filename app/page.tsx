@@ -187,6 +187,26 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* BASEアフィリエイト */}
+      <section className="py-6 px-4 max-w-lg mx-auto">
+        <div style={{ background: "rgba(139,0,0,0.15)", border: "1px solid rgba(139,0,0,0.4)", borderRadius: "16px", padding: "16px" }}>
+          <p style={{ color: "#fca5a5", fontWeight: "700", fontSize: "14px", marginBottom: "12px" }}>⛩️ 神社グッズをBASEで販売しよう</p>
+          <a
+            href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+8ZAE9E+2QQG+62MDD"
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+            style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(139,0,0,0.2)", border: "1px solid rgba(180,0,0,0.4)", borderRadius: "12px", padding: "12px 14px", textDecoration: "none" }}
+          >
+            <div>
+              <div style={{ color: "#fef2f2", fontWeight: "700", fontSize: "13px" }}>BASE（ベイス）で無料ネットショップ開業</div>
+              <div style={{ color: "rgba(252,165,165,0.65)", fontSize: "11px", marginTop: "2px" }}>初期費用・月額0円 • 最短5分で開設 • 35万店以上が利用</div>
+            </div>
+            <span style={{ color: "#fca5a5", fontWeight: "700", fontSize: "11px", background: "rgba(139,0,0,0.3)", border: "1px solid rgba(180,0,0,0.4)", padding: "4px 8px", borderRadius: "999px", whiteSpace: "nowrap", marginLeft: "8px" }}>無料で始める →</span>
+          </a>
+          <p style={{ color: "rgba(180,100,100,0.6)", fontSize: "11px", textAlign: "center", marginTop: "8px" }}>※ 広告・PR掲載</p>
+        </div>
+      </section>
+
       {/* 神社マージで楽しむ3選 */}
       <section className="py-8 px-4 max-w-lg mx-auto">
         <h2 className="text-center text-base font-bold text-amber-400 mb-4">⛩️ もっと楽しむ3選</h2>
