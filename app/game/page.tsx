@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import ShrineGrid from "@/components/ShrineGrid";
 import ScoreBoard from "@/components/ScoreBoard";
-import PayjpModal from "@/components/PayjpModal";
+import KomojuButton from "@/components/KomojuButton";
 import { useGameAudio } from "@/hooks/useGameAudio";
 import {
   GameState,
@@ -673,14 +673,31 @@ export default function GamePage() {
         </div>
       )}
 
-      {/* PAY.JP Payment Modal */}
+      {/* Komoju Payment Modal */}
       {showPayjp && (
-        <PayjpModal
-          publicKey={process.env.NEXT_PUBLIC_PAYJP_PUBLIC_KEY ?? ""}
-          planLabel="神社マージ プレミアム — ¥480/月（無制限プレイ・御利益2倍速・広告なし）"
-          onSuccess={handlePaySuccess}
-          onClose={() => setShowPayjp(false)}
-        />
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-xl relative">
+            <button
+              onClick={() => setShowPayjp(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl"
+            >
+              ✕
+            </button>
+            <div className="text-4xl mb-3">⛩️</div>
+            <h2 className="text-lg font-bold text-gray-900 mb-2">神社マージ プレミアム</h2>
+            <p className="text-sm text-gray-500 mb-4">月額¥480で無制限プレイ・御利益2倍速</p>
+            <ul className="text-sm text-gray-600 space-y-1 mb-5 text-left">
+              <li>✓ 無制限プレイ（1日3回制限なし）</li>
+              <li>✓ 御利益ゲージ2倍速</li>
+              <li>✓ 広告なし快適プレイ</li>
+            </ul>
+            <KomojuButton
+              planId="standard"
+              planLabel="¥480/月で始める"
+              className="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-xl transition-colors disabled:opacity-50"
+            />
+          </div>
+        </div>
       )}
     </div>
   );
