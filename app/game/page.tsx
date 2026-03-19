@@ -19,6 +19,7 @@ import {
   saveBestScore,
   calcGoryakuGain,
 } from "@/lib/game";
+import ShrineCollection, { unlockShrine, getUnlockedShrines } from "@/components/ShrineCollection";
 
 const DAILY_FREE_LIMIT = 3;
 const AMATERASU_LEVEL = 9; // 天照大神のレベル
@@ -39,6 +40,18 @@ function updateShrineStreak(): { streak: number; isNew: boolean } {
   const newStreak = data.lastDate === yesterday ? data.streak + 1 : 1;
   localStorage.setItem("shrine_streak", JSON.stringify({ streak: newStreak, lastDate: today }));
   return { streak: newStreak, isNew: true };
+}
+
+// ─── 週次ランキング スコア保存 ────────────────────────────────────────────────
+function saveWeeklyBestScore(score: number): void {
+  if (typeof window === "undefined") return;
+  const weekStart = new Date();
+  weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+  const weekKey = weekStart.toISOString().slice(0, 10);
+  const current = parseInt(localStorage.getItem(`shrine_weekly_best_${weekKey}`) ?? "0", 10);
+  if (score > current) {
+    localStorage.setItem(`shrine_weekly_best_${weekKey}`, String(score));
+  }
 }
 
 // ─── デイリーチャレンジ (日付seed) ───────────────────────────────────────────
@@ -154,6 +167,12 @@ export default function GamePage() {
   const [showOmikujiOverlay, setShowOmikujiOverlay] = useState(false);
   const [omikujiResult, setOmikujiResult] = useState<OmikujiResult | null>(null);
   const [omikujiRevealed, setOmikujiRevealed] = useState(false);
+  const [showCollection, setShowCollection] = useState(false);
+  const [collectionCount, setCollectionCount] = useState(0);
+  const [showBonusEvent, setShowBonusEvent] = useState(false);
+  const [bonusEventShrineLevel, setBonusEventShrineLevel] = useState(0);
+  const [goryakuBuff, setGoryakuBuff] = useState(false);
+  const [goryakuBuffEndTime, setGoryakuBuffEndTime] = useState(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
   const goryakuInterval = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -188,22 +207,26 @@ export default function GamePage() {
     // デイリーおみくじ状態初期化
     const omikujiStatus = getDailyOmikujiStatus();
     setDailyOmikujiDrawn(omikujiStatus.drawn);
+    // コレクション数初期化
+    setCollectionCount(getUnlockedShrines().length);
   }, []);
 
   useEffect(() => {
     if (!state || state.isGameOver) return;
-    const multiplier = isPremium ? 2 : 1;
+    const baseMultiplier = isPremium ? 2 : 1;
     goryakuInterval.current = setInterval(() => {
+      const buffActive = Date.now() < goryakuBuffEndTime;
+      const buffMultiplier = buffActive ? 2 : 1;
       setState(prev => {
         if (!prev || prev.isGameOver) return prev;
-        const gain = calcGoryakuGain(prev.grid) * multiplier;
+        const gain = calcGoryakuGain(prev.grid) * baseMultiplier * buffMultiplier;
         return { ...prev, goryakuPoints: prev.goryakuPoints + gain };
       });
     }, 1000);
     return () => {
       if (goryakuInterval.current) clearInterval(goryakuInterval.current);
     };
-  }, [state?.isGameOver, isPremium]);
+  }, [state?.isGameOver, isPremium, goryakuBuffEndTime]);
 
   const handleMove = useCallback((direction: Direction) => {
     if (isMoving.current) return;
@@ -221,6 +244,25 @@ export default function GamePage() {
       if (newBest > prev.bestScore) saveBestScore(newBest);
       const highestLevel = getHighestLevel(newGrid);
       const gameOver = !canMove(newGrid);
+      // コレクション図鑑: 合成した最高レベルを解放
+      if (highestLevel > prev.highestLevel) {
+        unlockShrine(highestLevel);
+        setTimeout(() => setCollectionCount(getUnlockedShrines().length), 0);
+      }
+      // ボーナスイベント: Lv7(大社)またはLv8(総本社)合成で御利益2倍バフ発動
+      if (scoreGained > 0 && (highestLevel === 7 || highestLevel === 8)) {
+        const now = Date.now();
+        setTimeout(() => {
+          setBonusEventShrineLevel(highestLevel);
+          setShowBonusEvent(true);
+          setGoryakuBuff(true);
+          setGoryakuBuffEndTime(now + 60000); // 60秒バフ
+          setTimeout(() => {
+            setShowBonusEvent(false);
+            setGoryakuBuff(false);
+          }, 60000);
+        }, 200);
+      }
       if (scoreGained > 0) {
         const mergeLevel = getHighestLevel(newGrid);
         if (mergeLevel >= 6) {
@@ -326,6 +368,13 @@ export default function GamePage() {
     // デイリーチャレンジ保存
     saveShrineDailyChallengeScore(state.score);
     setDailyChallenge(getShrineDailyChallengeStatus());
+    // 週次ランキング保存
+    saveWeeklyBestScore(state.score);
+    // 到達した最高神社をすべて解放
+    for (let lvl = 1; lvl <= state.highestLevel; lvl++) {
+      unlockShrine(lvl);
+    }
+    setCollectionCount(getUnlockedShrines().length);
   }, [state?.isGameOver]);
 
   const handleRestart = () => {
@@ -433,6 +482,21 @@ export default function GamePage() {
           ⛩️ 神社マージ
         </h1>
         <div className="flex items-center gap-2">
+          {/* 図鑑ボタン */}
+          <button
+            onClick={() => setShowCollection(true)}
+            className="relative text-xl leading-none"
+            aria-label="神様図鑑"
+            title="神様図鑑"
+          >
+            📖
+            {collectionCount > 0 && (
+              <span className="absolute -top-1 -right-1 text-[9px] font-black px-1 rounded-full"
+                style={{ background: "#d4af37", color: "#1a0a00", minWidth: "14px", lineHeight: "14px", textAlign: "center" }}>
+                {collectionCount}
+              </span>
+            )}
+          </button>
           <button
             onClick={toggleMute}
             className="text-xl leading-none"
@@ -449,6 +513,32 @@ export default function GamePage() {
           </button>
         </div>
       </div>
+
+      {/* ボーナスイベントバナー */}
+      {showBonusEvent && (
+        <div className="w-full max-w-sm mb-2">
+          <div className="rounded-xl px-4 py-2 text-center animate-bounce"
+            style={{
+              background: "linear-gradient(135deg, rgba(212,175,55,0.3), rgba(245,158,11,0.2))",
+              border: "1px solid rgba(212,175,55,0.6)",
+              boxShadow: "0 0 16px rgba(212,175,55,0.4)",
+            }}>
+            <p className="text-sm font-black" style={{ color: "#fcd34d" }}>
+              🌟 {SHRINES[bonusEventShrineLevel - 1]?.name}合成！御利益2倍バフ発動中！
+            </p>
+            <p className="text-xs text-amber-400">60秒間 御利益ポイント獲得量2倍</p>
+          </div>
+        </div>
+      )}
+      {/* 御利益バフ中インジケーター */}
+      {goryakuBuff && !showBonusEvent && (
+        <div className="w-full max-w-sm mb-2">
+          <div className="rounded-lg px-3 py-1 text-center"
+            style={{ background: "rgba(212,175,55,0.1)", border: "1px solid rgba(212,175,55,0.3)" }}>
+            <p className="text-xs font-bold" style={{ color: "#fcd34d" }}>⚡ 御利益2倍バフ発動中</p>
+          </div>
+        </div>
+      )}
 
       {/* Daily play counter for free users */}
       {!isPremium && premiumChecked && (
@@ -697,6 +787,18 @@ export default function GamePage() {
                 </svg>
                 {scoreOmikuji}🎴 {state.score.toLocaleString()}点をXでシェア
               </a>
+              <a
+                href="/ranking"
+                className="w-full py-2 text-xs text-amber-400 hover:text-amber-200 transition-colors flex items-center justify-center gap-1"
+              >
+                🏆 週次ランキングを確認
+              </a>
+              <button
+                onClick={() => setShowCollection(true)}
+                className="w-full py-2 text-xs text-amber-400 hover:text-amber-200 transition-colors"
+              >
+                📖 神様図鑑を見る（{collectionCount}/{SHRINES.length}体解放済み）
+              </button>
               {!isPremium && (
                 <button
                   onClick={() => { setShowPayjp(true); }}
@@ -809,6 +911,11 @@ export default function GamePage() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* 神様コレクション図鑑 */}
+      {showCollection && (
+        <ShrineCollection onClose={() => setShowCollection(false)} />
       )}
 
       {/* Komoju Payment Modal */}

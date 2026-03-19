@@ -35,6 +35,23 @@ export default function HomePage() {
         <div className="mt-4 flex justify-center">
           <ShrineStreakBadge />
         </div>
+        {/* ランキング・図鑑リンク */}
+        <div className="mt-4 flex justify-center gap-3">
+          <Link
+            href="/ranking"
+            className="flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95"
+            style={{ background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.3)", color: "#fcd34d" }}
+          >
+            🏆 週次ランキング
+          </Link>
+          <Link
+            href="/collection"
+            className="flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95"
+            style={{ background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.3)", color: "#fcd34d" }}
+          >
+            📖 神様図鑑
+          </Link>
+        </div>
       </section>
 
       {/* ご利益プリセット */}
