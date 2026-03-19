@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SHRINES } from "@/lib/game";
+import ShrineStreakBadge from "@/components/ShrineStreakBadge";
 
 export default function HomePage() {
   return (
@@ -30,6 +31,38 @@ export default function HomePage() {
         <p className="mt-3 text-xs text-amber-500">
           1日3回まで無料 • プレミアムで無制限プレイ
         </p>
+        {/* 連続プレイ日数ストリークバッジ */}
+        <div className="mt-4 flex justify-center">
+          <ShrineStreakBadge />
+        </div>
+      </section>
+
+      {/* ご利益プリセット */}
+      <section className="px-4 pb-8 max-w-sm mx-auto">
+        <h2 className="text-center font-black text-amber-300 mb-4 text-base">⛩️ 今日の願い事を選んで参拝</h2>
+        <div className="grid grid-cols-5 gap-2">
+          {[
+            { emoji: "💑", label: "縁結び" },
+            { emoji: "💰", label: "金運" },
+            { emoji: "🎓", label: "学業" },
+            { emoji: "🏥", label: "健康" },
+            { emoji: "🏆", label: "勝負運" },
+          ].map((item) => (
+            <Link
+              key={item.label}
+              href="/game"
+              className="flex flex-col items-center gap-1 rounded-xl py-3 px-1 transition-all active:scale-95 hover:scale-105"
+              style={{
+                background: "rgba(212,175,55,0.10)",
+                border: "1px solid rgba(212,175,55,0.30)",
+              }}
+            >
+              <span className="text-2xl">{item.emoji}</span>
+              <span className="text-xs font-bold text-amber-300">{item.label}</span>
+            </Link>
+          ))}
+        </div>
+        <p className="text-center text-xs text-amber-600 mt-3">タップしてゲームスタート！神社を合体させて願いを叶えよう</p>
       </section>
 
       {/* Shrine evolution route */}
