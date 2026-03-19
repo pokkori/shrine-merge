@@ -69,6 +69,36 @@ function saveShrineDailyChallengeScore(score: number): void {
   }
 }
 
+// ─── デイリー無料おみくじ ──────────────────────────────────────────────────────
+type OmikujiResult = { rank: "大吉" | "中吉" | "小吉" | "凶"; emoji: string; message: string; goryaku: string; bonusLevel: number | null };
+const OMIKUJI_RESULTS: OmikujiResult[] = [
+  { rank: "大吉", emoji: "🌟", message: "素晴らしい運気！今日は何をやっても上手くいく日。", goryaku: "金運・開運・縁結び すべて叶います", bonusLevel: 6 },
+  { rank: "中吉", emoji: "🌸", message: "良い運気に恵まれています。前向きに行動しましょう。", goryaku: "健康・出世・開運 がアップ", bonusLevel: 4 },
+  { rank: "小吉", emoji: "🌿", message: "小さな幸せが訪れる日。感謝の気持ちを大切に。", goryaku: "縁結び・浄化 に御利益あり", bonusLevel: 2 },
+  { rank: "凶", emoji: "🌧️", message: "今日は慎重に。焦らず、じっくり取り組むことで運気が開けます。", goryaku: "今日は休息日。明日から運気UP！", bonusLevel: null },
+];
+// 大吉:15%, 中吉:40%, 小吉:35%, 凶:10%
+function drawOmikuji(): OmikujiResult {
+  const r = Math.random();
+  if (r < 0.15) return OMIKUJI_RESULTS[0]; // 大吉
+  if (r < 0.55) return OMIKUJI_RESULTS[1]; // 中吉
+  if (r < 0.90) return OMIKUJI_RESULTS[2]; // 小吉
+  return OMIKUJI_RESULTS[3]; // 凶
+}
+function getDailyOmikujiStatus(): { drawn: boolean; result: OmikujiResult | null } {
+  if (typeof window === "undefined") return { drawn: false, result: null };
+  const today = new Date().toISOString().slice(0, 10);
+  try {
+    const data = JSON.parse(localStorage.getItem("shrine_daily_omikuji") ?? "{}");
+    if (data.date === today) return { drawn: true, result: data.result ?? null };
+  } catch { /* */ }
+  return { drawn: false, result: null };
+}
+function saveDailyOmikuji(result: OmikujiResult): void {
+  const today = new Date().toISOString().slice(0, 10);
+  localStorage.setItem("shrine_daily_omikuji", JSON.stringify({ date: today, result }));
+}
+
 function getDailyPlayCount(): number {
   if (typeof window === "undefined") return 0;
   const today = new Date().toISOString().slice(0, 10);
@@ -120,6 +150,10 @@ export default function GamePage() {
   const [shrineStreak, setShrineStreak] = useState(0);
   const [showStreakBanner, setShowStreakBanner] = useState(false);
   const [dailyChallenge, setDailyChallenge] = useState(() => getShrineDailyChallengeStatus());
+  const [dailyOmikujiDrawn, setDailyOmikujiDrawn] = useState(false);
+  const [showOmikujiOverlay, setShowOmikujiOverlay] = useState(false);
+  const [omikujiResult, setOmikujiResult] = useState<OmikujiResult | null>(null);
+  const [omikujiRevealed, setOmikujiRevealed] = useState(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
   const goryakuInterval = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -151,6 +185,9 @@ export default function GamePage() {
     }
     // デイリーチャレンジ初期化
     setDailyChallenge(getShrineDailyChallengeStatus());
+    // デイリーおみくじ状態初期化
+    const omikujiStatus = getDailyOmikujiStatus();
+    setDailyOmikujiDrawn(omikujiStatus.drawn);
   }, []);
 
   useEffect(() => {
@@ -247,6 +284,37 @@ export default function GamePage() {
       const newGrid = addRandomCell(prev.grid);
       return { ...prev, grid: newGrid, goryakuPoints: prev.goryakuPoints - OMIKUJI_COST };
     });
+  };
+
+  const handleDailyOmikuji = () => {
+    if (dailyOmikujiDrawn) return;
+    playSE("omikuji");
+    setShowOmikujiOverlay(true);
+    setOmikujiRevealed(false);
+    // Reveal after animation delay
+    setTimeout(() => {
+      const result = drawOmikuji();
+      setOmikujiResult(result);
+      setOmikujiRevealed(true);
+      saveDailyOmikuji(result);
+      setDailyOmikujiDrawn(true);
+      // Add bonus tile if result has bonusLevel
+      if (result.bonusLevel !== null) {
+        setState(prev => {
+          if (!prev) return prev;
+          // Add specific level cell
+          const emptyCells: [number, number][] = [];
+          for (let r = 0; r < 4; r++) for (let c = 0; c < 4; c++) {
+            if (!prev.grid[r][c]) emptyCells.push([r, c]);
+          }
+          if (emptyCells.length === 0) return prev;
+          const [row, col] = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+          const newGrid = prev.grid.map(row2 => [...row2]);
+          newGrid[row][col] = { id: Date.now(), level: result.bonusLevel!, isNew: true };
+          return { ...prev, grid: newGrid };
+        });
+      }
+    }, 1200);
   };
 
   // Update daily best when game ends
@@ -422,7 +490,20 @@ export default function GamePage() {
       <div className="w-full max-w-sm mb-4">
         <ShrineGrid grid={state.grid} />
       </div>
-      <div className="w-full max-w-sm mb-2">
+      <div className="w-full max-w-sm mb-2 space-y-2">
+        {/* デイリー無料おみくじ */}
+        <button
+          onClick={handleDailyOmikuji}
+          disabled={dailyOmikujiDrawn}
+          className={`w-full py-3 rounded-xl font-black text-base transition-all active:scale-95 ${!dailyOmikujiDrawn ? "btn-gold" : ""}`}
+          style={dailyOmikujiDrawn
+            ? { background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.25)", cursor: "not-allowed" }
+            : { boxShadow: "0 0 20px rgba(212,175,55,0.5)" }
+          }
+        >
+          {dailyOmikujiDrawn ? "✅ 今日のおみくじは引きました" : "🎴 今日のおみくじ（毎日1回・無料）"}
+        </button>
+        {/* 御利益おみくじ */}
         <button
           onClick={handleOmikuji}
           disabled={state.goryakuPoints < OMIKUJI_COST}
@@ -436,10 +517,53 @@ export default function GamePage() {
         >
           🎋 おみくじを引く（御利益 {OMIKUJI_COST}pt）
         </button>
-        <p className="text-center text-xs text-amber-600 mt-1">
+        <p className="text-center text-xs text-amber-600">
           おみくじでグリッドにランダムな神社が出現します
         </p>
       </div>
+
+      {/* デイリーおみくじ オーバーレイ */}
+      {showOmikujiOverlay && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80" onClick={() => omikujiRevealed && setShowOmikujiOverlay(false)}>
+          <div className="relative w-72 rounded-3xl p-8 text-center shadow-2xl"
+            style={{ background: "linear-gradient(160deg, #1a0a00, #2d1800)", border: "2px solid rgba(212,175,55,0.6)", boxShadow: "0 0 60px rgba(212,175,55,0.3)" }}>
+            {!omikujiRevealed ? (
+              <div className="py-4">
+                <div className="text-6xl mb-4 animate-spin" style={{ animationDuration: "0.8s" }}>🎴</div>
+                <p className="text-amber-300 font-bold text-lg animate-pulse">おみくじを引いています…</p>
+              </div>
+            ) : omikujiResult && (
+              <>
+                <div className="text-6xl mb-2 animate-bounce">{omikujiResult.emoji}</div>
+                <div className="text-5xl font-black mb-3" style={{
+                  color: omikujiResult.rank === "大吉" ? "#fcd34d" : omikujiResult.rank === "中吉" ? "#86efac" : omikujiResult.rank === "小吉" ? "#93c5fd" : "#9ca3af",
+                  textShadow: omikujiResult.rank === "大吉" ? "0 0 30px rgba(252,211,77,0.8)" : "none",
+                }}>
+                  {omikujiResult.rank}
+                </div>
+                <p className="text-amber-200 text-sm mb-2 leading-relaxed">{omikujiResult.message}</p>
+                <div className="bg-amber-900/30 rounded-xl p-3 mb-4 border border-amber-700/30">
+                  <p className="text-xs text-amber-400 font-bold">⛩️ 御利益</p>
+                  <p className="text-xs text-amber-300 mt-1">{omikujiResult.goryaku}</p>
+                </div>
+                {omikujiResult.bonusLevel && (
+                  <div className="bg-green-900/30 rounded-xl p-2 mb-4 border border-green-700/30">
+                    <p className="text-xs text-green-400 font-bold">🎁 ボーナスタイル「{SHRINES[omikujiResult.bonusLevel - 1]?.name}」が出現！</p>
+                  </div>
+                )}
+                <button
+                  onClick={() => setShowOmikujiOverlay(false)}
+                  className="w-full py-3 rounded-xl font-black text-amber-900 text-base transition-all active:scale-95"
+                  style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)" }}
+                >
+                  参拝を続ける ⛩️
+                </button>
+                <p className="text-xs text-amber-800 mt-2">明日またおみくじが引けます</p>
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="w-full max-w-sm rounded-xl p-3 mt-2"
         style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.15)" }}>
