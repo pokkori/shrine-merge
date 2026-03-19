@@ -166,6 +166,116 @@ function saveDailyBestScore(score: number): boolean {
   return false;
 }
 
+// ─── スコアカード Canvas生成 ──────────────────────────────────────────────────
+function generateScoreCardDataURL(
+  score: number,
+  highestShrineName: string,
+  highestShrineEmoji: string,
+  bestScore: number
+): string {
+  try {
+    const canvas = document.createElement("canvas");
+    canvas.width = 480;
+    canvas.height = 280;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return "";
+
+    // 背景グラデーション
+    const grad = ctx.createLinearGradient(0, 0, 480, 280);
+    grad.addColorStop(0, "#1a0a20");
+    grad.addColorStop(1, "#2d1040");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 480, 280);
+
+    // ゴールドボーダー
+    ctx.strokeStyle = "rgba(212,175,55,0.7)";
+    ctx.lineWidth = 3;
+    ctx.roundRect(6, 6, 468, 268, 16);
+    ctx.stroke();
+
+    // タイトル
+    ctx.fillStyle = "#d4af37";
+    ctx.font = "bold 28px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("⛩️ 神社マージ", 240, 52);
+
+    // スコア
+    ctx.fillStyle = "#fcd34d";
+    ctx.font = "bold 56px sans-serif";
+    ctx.fillText(score.toLocaleString() + " pt", 240, 130);
+
+    // 最高神社
+    ctx.fillStyle = "#fde68a";
+    ctx.font = "22px sans-serif";
+    ctx.fillText(`最高神社: ${highestShrineEmoji} ${highestShrineName}`, 240, 175);
+
+    // ベストスコア
+    ctx.fillStyle = "rgba(212,175,55,0.7)";
+    ctx.font = "16px sans-serif";
+    ctx.fillText(`ベスト: ${bestScore.toLocaleString()} pt`, 240, 210);
+
+    // URL
+    ctx.fillStyle = "rgba(212,175,55,0.5)";
+    ctx.font = "14px sans-serif";
+    ctx.fillText("shrine-merge.vercel.app", 240, 252);
+
+    return canvas.toDataURL("image/png");
+  } catch {
+    return "";
+  }
+}
+
+async function shareScoreCard(
+  score: number,
+  highestShrineName: string,
+  highestShrineEmoji: string,
+  bestScore: number,
+  scoreOmikuji: string,
+  xShareUrl: string
+): Promise<void> {
+  const dataUrl = generateScoreCardDataURL(score, highestShrineName, highestShrineEmoji, bestScore);
+  // Web Share API対応時は画像+テキストで共有
+  if (dataUrl && navigator.share && navigator.canShare) {
+    try {
+      const res = await fetch(dataUrl);
+      const blob = await res.blob();
+      const file = new File([blob], "shrine-merge-score.png", { type: "image/png" });
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          text: `神社マージで${score.toLocaleString()}点達成！最高は${highestShrineEmoji}${highestShrineName}まで合体させた⛩️ #神社マージ`,
+          url: "https://shrine-merge.vercel.app",
+        });
+        return;
+      }
+    } catch { /* fallthrough to X */ }
+  }
+  // フォールバック: Xシェア
+  window.open(xShareUrl, "_blank", "noopener,noreferrer");
+}
+
+// ─── カウントダウンタイマー（FOMO用） ─────────────────────────────────────────
+function useSaleCountdown() {
+  const [timeLeft, setTimeLeft] = useState("23:59:59");
+  useEffect(() => {
+    // 本日の残り時間を計算
+    const calcTimeLeft = () => {
+      const now = new Date();
+      const endOfDay = new Date(now);
+      endOfDay.setHours(23, 59, 59, 999);
+      const diff = endOfDay.getTime() - now.getTime();
+      const h = Math.floor(diff / 3600000).toString().padStart(2, "0");
+      const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, "0");
+      const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, "0");
+      return `${h}:${m}:${s}`;
+    };
+    setTimeLeft(calcTimeLeft());
+    const id = setInterval(() => setTimeLeft(calcTimeLeft()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return timeLeft;
+}
+
 export default function GamePage() {
   const [state, setState] = useState<GameState | null>(null);
   const [isPremium, setIsPremium] = useState(false);
@@ -195,6 +305,7 @@ export default function GamePage() {
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
   const goryakuInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const saleCountdown = useSaleCountdown();
   const { startBGM, playSE, toggleMute, isMuted } = useGameAudio();
 
   // Check premium status
@@ -736,6 +847,19 @@ export default function GamePage() {
               boxShadow: "0 0 40px rgba(212,175,55,0.2)",
             }}
           >
+            {/* 🔥 期間限定セールバナー */}
+            <div className="rounded-xl px-3 py-2 mb-3 text-center"
+              style={{
+                background: "linear-gradient(135deg, rgba(239,68,68,0.25), rgba(220,38,38,0.15))",
+                border: "1px solid rgba(239,68,68,0.5)",
+                boxShadow: "0 0 12px rgba(239,68,68,0.2)",
+              }}>
+              <p className="text-xs font-black" style={{ color: "#fca5a5" }}>🔥 期間限定 50%OFFキャンペーン中！</p>
+              <p className="text-xs mt-0.5" style={{ color: "rgba(252,165,165,0.7)" }}>
+                終了まで{" "}
+                <span className="font-black tabular-nums" style={{ color: "#f87171" }}>{saleCountdown}</span>
+              </p>
+            </div>
             <div className="text-5xl mb-2">⛩️</div>
             <h2 className="text-2xl font-black mb-1" style={{ color: "#d4af37" }}>本日のプレイ上限</h2>
             <p className="text-amber-400 text-sm mb-4">
@@ -755,8 +879,12 @@ export default function GamePage() {
                 </div>
               ))}
               <div className="mt-3 pt-3" style={{ borderTop: "1px solid rgba(212,175,55,0.2)" }}>
-                <span className="text-2xl font-black" style={{ color: "#d4af37" }}>&#165;480</span>
+                <span className="text-base line-through" style={{ color: "rgba(212,175,55,0.5)" }}>通常¥980</span>
+                <span className="text-sm text-red-400 font-bold ml-2">→ 今すぐ</span>
+                <br />
+                <span className="text-3xl font-black" style={{ color: "#d4af37" }}>&#165;490</span>
                 <span className="text-amber-400 text-sm">/月</span>
+                <p className="text-xs font-black mt-1" style={{ color: "#fca5a5" }}>今日だけの特別価格</p>
               </div>
             </div>
             <div className="space-y-2">
@@ -766,9 +894,10 @@ export default function GamePage() {
                 style={{
                   background: "linear-gradient(135deg, #d4af37, #f59e0b)",
                   color: "#1a0a00",
+                  boxShadow: "0 0 16px rgba(212,175,55,0.4)",
                 }}
               >
-                🙏 プレミアムで御利益アップ
+                🙏 50%OFFで今すぐ始める
               </button>
               <button
                 onClick={() => setShowPaywall(false)}
@@ -824,6 +953,25 @@ export default function GamePage() {
                 }}
               >
                 ⛩️ もう一度！
+              </button>
+              {/* スコアカードシェアボタン */}
+              <button
+                onClick={() => shareScoreCard(
+                  state.score,
+                  highestShrine.name,
+                  highestShrine.emoji,
+                  state.bestScore,
+                  scoreOmikuji,
+                  shareUrl
+                )}
+                className="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-95"
+                style={{
+                  background: "linear-gradient(135deg, rgba(212,175,55,0.2), rgba(245,158,11,0.15))",
+                  border: "1px solid rgba(212,175,55,0.5)",
+                  color: "#fcd34d",
+                }}
+              >
+                🎴 スコアカードをシェア
               </button>
               <a
                 href={shareUrl}
