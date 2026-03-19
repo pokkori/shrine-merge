@@ -179,7 +179,7 @@ export default function HomePage() {
         </div>
         <div style={{ marginTop: "14px", background: "linear-gradient(135deg, #92400e, #d97706)", borderRadius: "14px", padding: "14px", textAlign: "center" }}>
           <p style={{ color: "#fff", fontWeight: "700", fontSize: "13px", marginBottom: "4px" }}>神社マージがその悩みを解決！</p>
-          <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "12px" }}>神社を合体させて最高位の大神宮へ。心が落ち着くパズル体験。</p>
+          <p style={{ color: "rgba(255,255,255,0.8)", fontSize: "12px" }}>神社を合体させて最高位の天照大神へ。心が落ち着くパズル体験。</p>
         </div>
       </section>
 
@@ -191,7 +191,7 @@ export default function HomePage() {
             { q: "神社マージとはどんなゲームですか？", a: "神社の御神体をマージ（合体）させて、より格の高い神社に育てるパズルゲームです。神社同士を同じエリアに置くと次のランクに昇格します。" },
             { q: "無料で遊べますか？", a: "1日3回まで無料でプレイできます。制限なく遊びたい方はプレミアムプラン（¥480/月）にアップグレードしてください。" },
             { q: "スコアは保存されますか？", a: "ハイスコアはブラウザに保存されます。別のデバイスでの引き継ぎにはプレミアムアカウントが必要です。" },
-            { q: "どこまで進化できますか？", a: "全12段階の神社レベルがあります。最高位の神社「大神宮」を目指してください！" },
+            { q: "どこまで進化できますか？", a: "全9段階の神社レベルがあります。最高位「天照大神✨」を目指してください！" },
           ].map((faq, i) => (
             <div key={i} style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: "12px", padding: "14px 16px" }}>
               <p style={{ color: "#fcd34d", fontWeight: "600", fontSize: "13px", marginBottom: "6px" }}>Q. {faq.q}</p>
@@ -247,7 +247,7 @@ export default function HomePage() {
         <h2 className="text-center text-base font-bold text-amber-400 mb-4">⛩️ もっと楽しむ3選</h2>
         <ol className="space-y-3">
           {[
-            { icon: "🏆", title: "大神宮を目指して挑戦", desc: "全12段階の最高位「大神宮」まで合体できるか挑戦！日本の神社格制度を学びながら楽しめます。" },
+            { icon: "🏆", title: "天照大神を目指して挑戦", desc: "全9段階の最高位「天照大神✨」まで合体できるか挑戦！日本の神社格制度を学びながら楽しめます。" },
             { icon: "🦊", title: "友達とスコアを競う", desc: "ゲームオーバー後にXでスコアをシェアして、誰が一番高い神社まで到達できるか競争しよう。" },
             { icon: "🌸", title: "毎日の癒しパズルとして", desc: "和の雰囲気で心が落ち着くパズル体験。朝の5分間の瞑想代わりに。" },
           ].map((item, i) => (
