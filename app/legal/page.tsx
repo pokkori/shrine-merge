@@ -8,13 +8,17 @@ export default function LegalPage() {
         <div className="space-y-6 text-sm text-amber-900">
           <section>
             <h2 className="font-bold text-base mb-2">販売業者</h2>
-            <p>屋号：ポッコリラボ</p>
+            <p>氏名：新美諭</p>
             <p>代表：新美</p>
             <p>住所：〒475-0077 愛知県半田市元山町</p>
           </section>
           <section>
+            <h2 className="font-bold text-base mb-2">電話番号</h2>
+            <p>090-6093-5290</p>
+          </section>
+          <section>
             <h2 className="font-bold text-base mb-2">問い合わせ</h2>
-            <p>X(Twitter) @levona_design へのDMにて受付けます。</p>
+            <p>levonadesign@gmail.com（X: @levona_design）</p>
           </section>
           <section>
             <h2 className="font-bold text-base mb-2">サービス名</h2>
