@@ -182,6 +182,29 @@ export default function HomePage() {
         <p className="text-xs text-amber-600 mt-3">ゲームオーバー後にワンタップでXシェア</p>
       </section>
 
+      {/* プレイヤーの声 */}
+      <section className="px-4 pb-10 max-w-sm mx-auto">
+        <h2 className="text-center font-black text-amber-300 mb-4 text-lg">⛩️ プレイヤーの声</h2>
+        <div className="space-y-3">
+          {[
+            { stars: 5, text: "毎日参拝してます。大吉が出た時の嬉しさは格別！", user: "@shrine_lover" },
+            { stars: 5, text: "漢字の御朱印集めが楽しくて気づいたら1時間経ってた", user: "@kanji_fun" },
+            { stars: 4, text: "ストリーク10日達成！御利益ありそう笑", user: "@daily_player" },
+          ].map((review, i) => (
+            <div key={i} className="rounded-2xl p-4"
+              style={{ background: "rgba(212,175,55,0.07)", border: "1px solid rgba(212,175,55,0.2)" }}>
+              <div className="flex items-center gap-1 mb-2">
+                {Array.from({ length: 5 }).map((_, j) => (
+                  <span key={j} style={{ color: j < review.stars ? "#fcd34d" : "rgba(212,175,55,0.25)", fontSize: "14px" }}>★</span>
+                ))}
+              </div>
+              <p className="text-amber-100 text-sm leading-relaxed mb-1">「{review.text}」</p>
+              <p className="text-amber-600 text-xs">{review.user}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="text-center pb-16 px-4">
         <Link

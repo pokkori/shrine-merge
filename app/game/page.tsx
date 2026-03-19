@@ -383,7 +383,9 @@ export default function GamePage() {
   const highestShrine = SHRINES[state.highestLevel - 1];
   // スコアによる上位%推定（バイラル設計）
   const shrineTopPercent = state.score >= 2000 ? "上位5%" : state.score >= 1000 ? "上位20%" : state.score >= 500 ? "上位40%" : "入門者";
-  const shareMsg = `【神社マージ】${state.score.toLocaleString()}点・${shrineTopPercent}の参拝力！⛩️ 最高神社「${highestShrine.emoji}${highestShrine.name}」(${highestShrine.goryaku}) あなたは天照大神まで辿り着ける？ → https://shrine-merge.vercel.app #神社マージ #パズルゲーム #神社`;
+  // スコアに応じたおみくじ結果
+  const scoreOmikuji = state.score >= 5000 ? "大吉" : state.score >= 3000 ? "中吉" : state.score >= 2000 ? "吉" : state.score >= 1000 ? "小吉" : "末吉";
+  const shareMsg = `【神社マージ】${state.score.toLocaleString()}点で${scoreOmikuji}🎴 ${shrineTopPercent}の参拝力！⛩️ 最高神社「${highestShrine.emoji}${highestShrine.name}」(${highestShrine.goryaku}) あなたは天照大神まで辿り着ける？ → https://shrine-merge.vercel.app #神社マージ #おみくじ #パズルゲーム`;
   const shareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareMsg);
   const remainingPlays = isPremium ? null : Math.max(0, DAILY_FREE_LIMIT - dailyPlays);
   const dailyChallengeProgress = Math.min(100, Math.round((dailyChallenge.best / dailyChallenge.target) * 100));
@@ -551,6 +553,18 @@ export default function GamePage() {
                     <p className="text-xs text-green-400 font-bold">🎁 ボーナスタイル「{SHRINES[omikujiResult.bonusLevel - 1]?.name}」が出現！</p>
                   </div>
                 )}
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`神社マージのおみくじで${omikujiResult.rank}が出た！⛩️✨ ${omikujiResult.goryaku} #神社マージ #おみくじ → https://shrine-merge.vercel.app`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white text-sm mb-2 transition-all active:scale-95"
+                  style={{ background: "#000" }}
+                >
+                  <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                  {omikujiResult.rank}をXでシェア
+                </a>
                 <button
                   onClick={() => setShowOmikujiOverlay(false)}
                   className="w-full py-3 rounded-xl font-black text-amber-900 text-base transition-all active:scale-95"
@@ -681,7 +695,7 @@ export default function GamePage() {
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
-                スコアをXでシェアして自慢する
+                {scoreOmikuji}🎴 {state.score.toLocaleString()}点をXでシェア
               </a>
               {!isPremium && (
                 <button
