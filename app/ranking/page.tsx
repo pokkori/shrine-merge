@@ -195,6 +195,66 @@ export default function RankingPage() {
           </div>
         )}
 
+        {/* Top3 表彰台 */}
+        {ranking.filter(e => e.rank <= 3).length >= 3 && (
+          <div className="mb-5">
+            <p className="text-center text-xs font-bold text-amber-500 mb-3">🏆 今週の神社マージ三傑</p>
+            <div className="flex items-end justify-center gap-2">
+              {/* 2位 */}
+              {(() => {
+                const e2 = ranking.find(e => e.rank === 2);
+                if (!e2) return null;
+                const s2 = SHRINES[Math.min(e2.highestLevel - 1, SHRINES.length - 1)];
+                return (
+                  <div className="flex flex-col items-center gap-1 w-24">
+                    <span className="text-2xl">{s2.emoji}</span>
+                    <p className="text-xs font-bold text-center truncate w-full text-center" style={{ color: "#c0c0c0" }}>{e2.name}</p>
+                    <p className="text-xs font-black" style={{ color: "#c0c0c0" }}>{e2.score.toLocaleString()}</p>
+                    <div className="w-full rounded-t-xl flex items-center justify-center py-3"
+                      style={{ background: "rgba(192,192,192,0.15)", border: "1px solid rgba(192,192,192,0.3)", height: "60px" }}>
+                      <span className="text-2xl">🥈</span>
+                    </div>
+                  </div>
+                );
+              })()}
+              {/* 1位 */}
+              {(() => {
+                const e1 = ranking.find(e => e.rank === 1);
+                if (!e1) return null;
+                const s1 = SHRINES[Math.min(e1.highestLevel - 1, SHRINES.length - 1)];
+                return (
+                  <div className="flex flex-col items-center gap-1 w-24">
+                    <span className="text-3xl">{s1.emoji}</span>
+                    <p className="text-xs font-bold text-center truncate w-full text-center" style={{ color: "#ffd700" }}>{e1.name}</p>
+                    <p className="text-sm font-black" style={{ color: "#ffd700" }}>{e1.score.toLocaleString()}</p>
+                    <div className="w-full rounded-t-xl flex items-center justify-center py-3"
+                      style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.25), rgba(212,175,55,0.1))", border: "1px solid rgba(212,175,55,0.5)", height: "80px", boxShadow: "0 0 16px rgba(212,175,55,0.3)" }}>
+                      <span className="text-3xl">🥇</span>
+                    </div>
+                  </div>
+                );
+              })()}
+              {/* 3位 */}
+              {(() => {
+                const e3 = ranking.find(e => e.rank === 3);
+                if (!e3) return null;
+                const s3 = SHRINES[Math.min(e3.highestLevel - 1, SHRINES.length - 1)];
+                return (
+                  <div className="flex flex-col items-center gap-1 w-24">
+                    <span className="text-2xl">{s3.emoji}</span>
+                    <p className="text-xs font-bold text-center truncate w-full text-center" style={{ color: "#cd7f32" }}>{e3.name}</p>
+                    <p className="text-xs font-black" style={{ color: "#cd7f32" }}>{e3.score.toLocaleString()}</p>
+                    <div className="w-full rounded-t-xl flex items-center justify-center py-3"
+                      style={{ background: "rgba(205,127,50,0.12)", border: "1px solid rgba(205,127,50,0.3)", height: "48px" }}>
+                      <span className="text-2xl">🥉</span>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
+        )}
+
         {/* ランキングテーブル */}
         <div className="space-y-2 mb-6">
           {ranking.map((entry) => {

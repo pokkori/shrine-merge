@@ -24,6 +24,23 @@ import ShrineCollection, { unlockShrine, getUnlockedShrines } from "@/components
 const DAILY_FREE_LIMIT = 3;
 const AMATERASU_LEVEL = 9; // 天照大神のレベル
 
+// 神社うんちくデータ（ゲームオーバー後にランダム表示）
+const SHRINE_TRIVIA = [
+  { shrine: "⛩️ 鳥居", fact: "鳥居は「神域」と「人間の世界」の境界を示す門。くぐることで心身が清められると言われています。" },
+  { shrine: "🦁 狛犬", fact: "狛犬の「阿（あ）」「吽（うん）」は宇宙の始まりと終わりを表す。口を開けた方が『阿』、閉じた方が『吽』。" },
+  { shrine: "💧 手水舎", fact: "手水（てみず）で手を清めるのは古代から続く儀式。左手→右手→口→左手の順で清めるのが正式な作法。" },
+  { shrine: "🏯 拝殿", fact: "拝殿は参拝者が礼拝するための建物。二礼二拍手一礼が一般的な参拝作法です。" },
+  { shrine: "🎋 本殿", fact: "本殿は神様が宿る最も神聖な場所。一般参拝者は通常、本殿に入れません。" },
+  { shrine: "🌸 神宮", fact: "「神宮」の称号は天皇・皇族を祀る最高格の社にのみ使われます。伊勢神宮が最も有名。" },
+  { shrine: "☀️ 大社", fact: "大社（たいしゃ）は神格が高い神社への称号。出雲大社や住吉大社などが代表的。縁結びで有名です。" },
+  { shrine: "🌟 総本社", fact: "総本社は全国に分社する神社の「本家」。稲荷神社の総本社は京都の伏見稲荷大社です。" },
+  { shrine: "✨ 天照大神", fact: "天照大神（あまてらすおおみかみ）は日本神話の最高神であり太陽の神。天皇家の祖先神とされています。" },
+];
+
+function getRandomTrivia(): typeof SHRINE_TRIVIA[0] {
+  return SHRINE_TRIVIA[Math.floor(Math.random() * SHRINE_TRIVIA.length)];
+}
+
 // ─── ストリーク ─────────────────────────────────────────────────────────────
 
 function getShrineStreakData(): { streak: number; lastDate: string } {
@@ -173,6 +190,8 @@ export default function GamePage() {
   const [bonusEventShrineLevel, setBonusEventShrineLevel] = useState(0);
   const [goryakuBuff, setGoryakuBuff] = useState(false);
   const [goryakuBuffEndTime, setGoryakuBuffEndTime] = useState(0);
+  const [currentTrivia, setCurrentTrivia] = useState<typeof SHRINE_TRIVIA[0] | null>(null);
+  const [showYayoiMode, setShowYayoiMode] = useState(false); // 八百万神モードバナー
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
   const goryakuInterval = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -375,6 +394,12 @@ export default function GamePage() {
       unlockShrine(lvl);
     }
     setCollectionCount(getUnlockedShrines().length);
+    // 神社うんちく表示
+    setCurrentTrivia(getRandomTrivia());
+    // 天照大神到達後に八百万神モードバナー
+    if (state.highestLevel >= AMATERASU_LEVEL) {
+      setShowYayoiMode(true);
+    }
   }, [state?.isGameOver]);
 
   const handleRestart = () => {
@@ -551,6 +576,30 @@ export default function GamePage() {
             }}>
             本日の残りプレイ: {remainingPlays}/{DAILY_FREE_LIMIT}
           </span>
+        </div>
+      )}
+
+      {/* 残り1回ゴールド警告バナー */}
+      {!isPremium && premiumChecked && remainingPlays === 1 && (
+        <div className="w-full max-w-sm mb-2">
+          <div className="rounded-xl px-4 py-2.5 flex items-center justify-between gap-3"
+            style={{
+              background: "linear-gradient(135deg, rgba(212,175,55,0.25), rgba(245,158,11,0.15))",
+              border: "2px solid rgba(212,175,55,0.7)",
+              boxShadow: "0 0 16px rgba(212,175,55,0.3)",
+            }}>
+            <div>
+              <p className="text-xs font-black" style={{ color: "#fcd34d" }}>⚠️ 本日の参拝はあと1回！</p>
+              <p className="text-xs" style={{ color: "rgba(212,175,55,0.7)" }}>プレミアムで明日も無制限参拝</p>
+            </div>
+            <button
+              onClick={() => setShowPayjp(true)}
+              className="text-xs font-black px-3 py-1.5 rounded-lg transition-all active:scale-95 shrink-0"
+              style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00" }}
+            >
+              ¥480/月
+            </button>
+          </div>
         </div>
       )}
 
@@ -806,6 +855,26 @@ export default function GamePage() {
                 >
                   🙏 プレミアムで御利益アップ（¥480/月）
                 </button>
+              )}
+              {/* 神社うんちく */}
+              {currentTrivia && (
+                <div className="mt-3 rounded-xl p-3 text-left"
+                  style={{ background: "rgba(212,175,55,0.06)", border: "1px solid rgba(212,175,55,0.15)" }}>
+                  <p className="text-xs font-bold mb-1" style={{ color: "#d4af37" }}>⛩️ 神社豆知識 — {currentTrivia.shrine}</p>
+                  <p className="text-xs leading-relaxed" style={{ color: "rgba(253,230,138,0.75)" }}>{currentTrivia.fact}</p>
+                </div>
+              )}
+              {/* 八百万神モードバナー */}
+              {showYayoiMode && (
+                <div className="mt-3 rounded-xl p-3 text-center animate-pulse"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(212,175,55,0.15), rgba(252,211,77,0.08))",
+                    border: "1px solid rgba(212,175,55,0.5)",
+                  }}>
+                  <p className="text-xs font-black mb-1" style={{ color: "#fcd34d" }}>✨ 天照大神到達者限定 — 八百万神モード解放！</p>
+                  <p className="text-xs" style={{ color: "rgba(212,175,55,0.7)" }}>全9神を解放したあなたへ。さらに高みを目指してスコアの限界に挑もう！</p>
+                  <p className="text-xs mt-1 font-bold" style={{ color: "#f59e0b" }}>新記録まで: あと {Math.max(0, (state.bestScore || 0) + 1000 - state.score).toLocaleString()} pt</p>
+                </div>
               )}
             </div>
           </div>
