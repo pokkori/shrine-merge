@@ -900,13 +900,55 @@ export default function GamePage() {
               </div>
             ) : omikujiResult && (
               <>
+                {/* 大吉専用: 桜の花びらアニメーション */}
+                {omikujiResult.rank === "大吉" && (
+                  <>
+                    <style>{`
+                      @keyframes omikuji-petal-fall {
+                        0% { transform: translateY(-30px) rotate(0deg); opacity: 1; }
+                        100% { transform: translateY(320px) rotate(720deg); opacity: 0; }
+                      }
+                      .omikuji-petal {
+                        position: absolute;
+                        font-size: 18px;
+                        pointer-events: none;
+                        z-index: 0;
+                        animation: omikuji-petal-fall linear infinite;
+                      }
+                      @keyframes gold-glow-pulse {
+                        0%, 100% { text-shadow: 0 0 30px rgba(252,211,77,0.8), 0 0 60px rgba(212,175,55,0.5); }
+                        50% { text-shadow: 0 0 50px rgba(252,211,77,1), 0 0 80px rgba(212,175,55,0.8), 0 0 120px rgba(255,200,0,0.4); }
+                      }
+                    `}</style>
+                    {Array.from({ length: 12 }, (_, i) => (
+                      <div
+                        key={`omikuji-petal-${i}`}
+                        className="omikuji-petal"
+                        style={{
+                          left: `${8 + (i * 7) % 84}%`,
+                          animationDuration: `${2 + Math.random() * 2}s`,
+                          animationDelay: `${Math.random() * 1.5}s`,
+                        }}
+                      >
+                        🌸
+                      </div>
+                    ))}
+                  </>
+                )}
+                <div className="relative z-10">
                 <div className="text-6xl mb-2 animate-bounce">{omikujiResult.emoji}</div>
                 <div className="text-5xl font-black mb-3" style={{
                   color: omikujiResult.rank === "大吉" ? "#fcd34d" : omikujiResult.rank === "中吉" ? "#86efac" : omikujiResult.rank === "小吉" ? "#93c5fd" : "#9ca3af",
                   textShadow: omikujiResult.rank === "大吉" ? "0 0 30px rgba(252,211,77,0.8)" : "none",
+                  animation: omikujiResult.rank === "大吉" ? "gold-glow-pulse 1.5s ease-in-out infinite" : "none",
                 }}>
                   {omikujiResult.rank}
                 </div>
+                {omikujiResult.rank === "大吉" && (
+                  <p className="text-xs font-black mb-2 animate-pulse" style={{ color: "#fcd34d" }}>
+                    天照大神まで一歩近づく神社が出現！
+                  </p>
+                )}
                 <p className="text-amber-200 text-sm mb-2 leading-relaxed">{omikujiResult.message}</p>
                 <div className="bg-amber-900/30 rounded-xl p-3 mb-4 border border-amber-700/30">
                   <p className="text-xs text-amber-400 font-bold">⛩️ 御利益</p>
@@ -937,6 +979,7 @@ export default function GamePage() {
                   参拝を続ける ⛩️
                 </button>
                 <p className="text-xs text-amber-800 mt-2">明日またおみくじが引けます</p>
+                </div>{/* close relative z-10 */}
               </>
             )}
           </div>
