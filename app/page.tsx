@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { SHRINES } from "@/lib/game";
 import ShrineStreakBadge from "@/components/ShrineStreakBadge";
+import DailyOmikujiTeaser from "@/components/DailyOmikujiTeaser";
 
 export default function HomePage() {
   return (
@@ -53,6 +54,9 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+
+      {/* 毎日変わるおみくじセクション */}
+      <DailyOmikujiTeaser />
 
       {/* ご利益プリセット */}
       <section className="px-4 pb-8 max-w-sm mx-auto">

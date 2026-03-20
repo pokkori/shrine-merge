@@ -24,6 +24,33 @@ import ShrineCollection, { unlockShrine, getUnlockedShrines } from "@/components
 const DAILY_FREE_LIMIT = 3;
 const AMATERASU_LEVEL = 9; // 天照大神のレベル
 
+// ─── 絵文字グリッドシェア（Wordle方式） ──────────────────────────────────────
+const SHRINE_EMOJIS = ['⛩️','🦁','💧','🏯','🎋','🌸','☀️','🌟','✨'];
+
+function generateEmojiGrid(highestLevel: number): string {
+  const filled = SHRINE_EMOJIS.slice(0, highestLevel);
+  const empty = Array(Math.max(0, 9 - highestLevel)).fill('　');
+  const all = [...filled, ...empty];
+  // 3列グリッド (3x3)
+  const rows = [];
+  for (let i = 0; i < 3; i++) {
+    rows.push(all.slice(i * 3, i * 3 + 3).join(''));
+  }
+  return rows.join('\n');
+}
+
+// ─── 合体演出レベル別テキスト ─────────────────────────────────────────────────
+const MERGE_EFFECT_TEXTS: Record<number, { text: string; color: string; size: string }> = {
+  2: { text: "⛩✨ 縁起良し！", color: "#fb923c", size: "text-sm" },
+  3: { text: "💧 浄化！", color: "#fbbf24", size: "text-sm" },
+  4: { text: "🏯 開運UP！御利益↑", color: "#4ade80", size: "text-base" },
+  5: { text: "🎋 健康祈願！御利益UP！", color: "#38bdf8", size: "text-base" },
+  6: { text: "🌸 金運上昇！✨ 御利益大！", color: "#a78bfa", size: "text-lg" },
+  7: { text: "☀️ 大吉！出世運爆上がり！", color: "#fcd34d", size: "text-lg" },
+  8: { text: "🌟 万能御利益！最高運到来！", color: "#d4af37", size: "text-xl" },
+  9: { text: "✨ 天照大神降臨！！大当たり！", color: "#fffbeb", size: "text-2xl" },
+};
+
 // 神社うんちくデータ（ゲームオーバー後にランダム表示）
 const SHRINE_TRIVIA = [
   { shrine: "⛩️ 鳥居", fact: "鳥居は「神域」と「人間の世界」の境界を示す門。くぐることで心身が清められると言われています。" },
@@ -302,6 +329,9 @@ export default function GamePage() {
   const [goryakuBuffEndTime, setGoryakuBuffEndTime] = useState(0);
   const [currentTrivia, setCurrentTrivia] = useState<typeof SHRINE_TRIVIA[0] | null>(null);
   const [showYayoiMode, setShowYayoiMode] = useState(false); // 八百万神モードバナー
+  const [mergePopup, setMergePopup] = useState<{ text: string; color: string; size: string; key: number } | null>(null);
+  const [showScreenFlash, setShowScreenFlash] = useState(false);
+  const [petals, setPetals] = useState<{ id: number; left: number; delay: number; duration: number }[]>([]);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
   const goryakuInterval = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -363,7 +393,7 @@ export default function GamePage() {
     setState(prev => {
       if (!prev || prev.isGameOver) return prev;
       isMoving.current = true;
-      const { grid: movedGrid, scoreGained, moved } = moveGrid(prev.grid, direction);
+      const { grid: movedGrid, scoreGained, moved, highestMerged } = moveGrid(prev.grid, direction);
       if (!moved) {
         isMoving.current = false;
         return prev;
@@ -394,13 +424,39 @@ export default function GamePage() {
         }, 200);
       }
       if (scoreGained > 0) {
-        const mergeLevel = getHighestLevel(newGrid);
+        const mergeLevel = highestMerged > 0 ? highestMerged : getHighestLevel(newGrid);
         if (mergeLevel >= 6) {
           setTimeout(() => playSE("levelup"), 0);
         } else {
           setTimeout(() => playSE("merge"), 0);
         }
         setTimeout(() => playSE("score"), 80);
+        // 合体演出ポップアップ
+        if (mergeLevel >= 2 && MERGE_EFFECT_TEXTS[mergeLevel]) {
+          const effect = MERGE_EFFECT_TEXTS[mergeLevel];
+          setTimeout(() => {
+            setMergePopup({ ...effect, key: Date.now() });
+            setTimeout(() => setMergePopup(null), 1200);
+          }, 0);
+        }
+        // レベル4以上: 画面フラッシュ
+        if (mergeLevel >= 4) {
+          setTimeout(() => {
+            setShowScreenFlash(true);
+            setTimeout(() => setShowScreenFlash(false), 700);
+          }, 50);
+        }
+        // 天照大神: 花びら演出
+        if (mergeLevel >= 9) {
+          const newPetals = Array.from({ length: 18 }, (_, i) => ({
+            id: Date.now() + i,
+            left: Math.random() * 100,
+            delay: Math.random() * 1.5,
+            duration: 2.5 + Math.random() * 2,
+          }));
+          setPetals(newPetals);
+          setTimeout(() => setPetals([]), 5000);
+        }
       }
       if (gameOver) setTimeout(() => playSE("gameover"), 300);
       setTimeout(() => { isMoving.current = false; }, 120);
@@ -570,6 +626,9 @@ export default function GamePage() {
   const shrineTopPercent = state.score >= 2000 ? "上位5%" : state.score >= 1000 ? "上位20%" : state.score >= 500 ? "上位40%" : "入門者";
   // スコアに応じたおみくじ結果
   const scoreOmikuji = state.score >= 5000 ? "大吉" : state.score >= 3000 ? "中吉" : state.score >= 2000 ? "吉" : state.score >= 1000 ? "小吉" : "末吉";
+  const emojiGrid = generateEmojiGrid(state.highestLevel);
+  const emojiShareMsg = `⛩️ 神社マージ 今日の記録\n${emojiGrid}\n最高: ${highestShrine.emoji}${highestShrine.name}（Lv.${state.highestLevel}）\nhttps://shrine-merge.vercel.app #神社マージ`;
+  const emojiShareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(emojiShareMsg);
   const shareMsg = `【神社マージ】${state.score.toLocaleString()}点で${scoreOmikuji}🎴 ${shrineTopPercent}の参拝力！⛩️ 最高神社「${highestShrine.emoji}${highestShrine.name}」(${highestShrine.goryaku}) あなたは天照大神まで辿り着ける？ → https://shrine-merge.vercel.app #神社マージ #おみくじ #パズルゲーム`;
   const shareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareMsg);
   const remainingPlays = isPremium ? null : Math.max(0, DAILY_FREE_LIMIT - dailyPlays);
@@ -581,6 +640,39 @@ export default function GamePage() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
+      {/* 画面フラッシュ演出 */}
+      {showScreenFlash && <div className="screen-flash" />}
+
+      {/* 花びら降下演出（天照大神） */}
+      {petals.map(p => (
+        <div
+          key={p.id}
+          className="petal"
+          style={{
+            left: `${p.left}%`,
+            animationDelay: `${p.delay}s`,
+            animationDuration: `${p.duration}s`,
+          }}
+        >
+          🌸
+        </div>
+      ))}
+
+      {/* 合体演出ポップアップ */}
+      {mergePopup && (
+        <div
+          key={mergePopup.key}
+          className={`merge-popup ${mergePopup.size} font-black`}
+          style={{
+            color: mergePopup.color,
+            top: "38%",
+            fontSize: mergePopup.size === "text-2xl" ? "1.5rem" : mergePopup.size === "text-xl" ? "1.25rem" : mergePopup.size === "text-lg" ? "1.125rem" : mergePopup.size === "text-base" ? "1rem" : "0.875rem",
+          }}
+        >
+          {mergePopup.text}
+        </div>
+      )}
+
       {/* ストリークバナー */}
       {showStreakBanner && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
@@ -954,6 +1046,20 @@ export default function GamePage() {
               >
                 ⛩️ もう一度！
               </button>
+              {/* 絵文字グリッドシェア（Wordle方式） */}
+              <a
+                href={emojiShareUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-95"
+                style={{
+                  background: "linear-gradient(135deg, rgba(212,175,55,0.25), rgba(245,158,11,0.15))",
+                  border: "1px solid rgba(212,175,55,0.6)",
+                  color: "#fcd34d",
+                }}
+              >
+                ⛩️ 絵文字グリッドでシェア
+              </a>
               {/* スコアカードシェアボタン */}
               <button
                 onClick={() => shareScoreCard(
@@ -1077,11 +1183,10 @@ export default function GamePage() {
             .p7 { background: #f472b6; animation: firework-7 1.2s ease-out infinite 0.1s; }
             .p8 { background: #facc15; animation: firework-8 1.3s ease-out infinite 0.3s; }
           `}</style>
-          <div className="relative rounded-2xl p-6 w-full max-w-xs text-center shadow-2xl overflow-hidden"
+          <div className="relative rounded-2xl p-6 w-full max-w-xs text-center shadow-2xl overflow-hidden amaterasu-modal-inner"
             style={{
-              background: "linear-gradient(160deg, #1a0a20, #2d1040, #0f0c29)",
-              border: "2px solid rgba(212,175,55,0.6)",
-              boxShadow: "0 0 60px rgba(212,175,55,0.4), 0 0 120px rgba(212,175,55,0.15)",
+              background: "linear-gradient(160deg, #1a0800, #3d2000, #1a0a20)",
+              border: "2px solid rgba(212,175,55,0.8)",
             }}>
             {/* 花火パーティクル */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ zIndex: 0 }}>
@@ -1097,17 +1202,22 @@ export default function GamePage() {
               </div>
             </div>
             <div className="relative z-10">
-              <div className="text-6xl mb-2 animate-bounce">✨</div>
-              <h2 className="text-2xl font-black mb-1"
-                style={{ color: "#d4af37", textShadow: "0 0 20px rgba(212,175,55,0.8)" }}>
-                天照大神に到達！
+              <div className="text-7xl mb-3 animate-bounce" style={{ filter: "drop-shadow(0 0 16px rgba(255,200,0,0.9))" }}>✨</div>
+              <h2 className="text-3xl font-black mb-1"
+                style={{ color: "#fcd34d", textShadow: "0 0 30px rgba(255,200,0,1), 0 0 60px rgba(212,175,55,0.6)" }}>
+                🎊 天照大神 降臨！
               </h2>
-              <p className="text-amber-300 text-sm font-bold mb-1">神社マージコンプリート！</p>
-              <p className="text-amber-500 text-xs mb-4 leading-relaxed">
-                鳥居から最強の神へ。<br />あなたの御利益は「最強」です！
-              </p>
+              <p className="text-amber-200 text-base font-black mb-1">神社マージ コンプリート！</p>
+              <p className="text-amber-400 text-sm mb-1">鳥居から最強の神まで到達！</p>
+              <div className="rounded-xl p-2 mb-4 mt-2"
+                style={{ background: "rgba(212,175,55,0.15)", border: "1px solid rgba(212,175,55,0.4)" }}>
+                <p className="text-xs font-bold" style={{ color: "#fcd34d" }}>
+                  スコア: {state.score.toLocaleString()} pt
+                </p>
+                <p className="text-xs text-amber-400 mt-1">御利益: 最強 — すべての願いが叶う</p>
+              </div>
               <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("🎊 天照大神に到達しました！！神社マージコンプリート！✨ 鳥居から最強の神まで合体成功！ → https://shrine-merge.vercel.app #神社マージ #天照大神 #パズルゲーム")}`}
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`🎊 天照大神に到達！！神社マージコンプリート！\n${emojiGrid}\n✨ Lv.9 天照大神（御利益：最強）\n${state.score.toLocaleString()}pt 達成！\nhttps://shrine-merge.vercel.app #神社マージ #天照大神`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white text-sm mb-3 transition-all active:scale-95"
@@ -1116,7 +1226,7 @@ export default function GamePage() {
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
-                🎊 Xで達成を自慢する
+                🎊 絵文字グリッドでXシェア
               </a>
               <button
                 onClick={() => setShowAmaterasuCelebration(false)}
