@@ -303,6 +303,22 @@ function useSaleCountdown() {
   return timeLeft;
 }
 
+// ─── チュートリアルモーダル ──────────────────────────────────────────────────
+const TUTORIAL_STEPS = [
+  { icon: "👆", title: "スワイプで神社を動かす", desc: "画面を上下左右にスワイプ（またはキーボード矢印キー）すると、グリッド全体の神社が一斉に動きます。" },
+  { icon: "⛩️", title: "同じ神社を合体させる", desc: "隣接した同じ種類の神社が自動で合体！より格の高い神社に昇格してスコアが上がります。" },
+  { icon: "🎋", title: "御利益ポイントを活用", desc: "神社があると御利益ポイントが自動で溜まります。おみくじを引くとボーナス神社が出現！大吉を狙え！" },
+];
+
+function getHasSeenTutorial(): boolean {
+  if (typeof window === "undefined") return true;
+  return localStorage.getItem("shrine_tutorial_seen") === "1";
+}
+function markTutorialSeen(): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem("shrine_tutorial_seen", "1");
+}
+
 export default function GamePage() {
   const [state, setState] = useState<GameState | null>(null);
   const [isPremium, setIsPremium] = useState(false);
@@ -332,6 +348,8 @@ export default function GamePage() {
   const [mergePopup, setMergePopup] = useState<{ text: string; color: string; size: string; key: number } | null>(null);
   const [showScreenFlash, setShowScreenFlash] = useState(false);
   const [petals, setPetals] = useState<{ id: number; left: number; delay: number; duration: number }[]>([]);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [tutorialStep, setTutorialStep] = useState(0);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
   const goryakuInterval = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -369,6 +387,10 @@ export default function GamePage() {
     setDailyOmikujiDrawn(omikujiStatus.drawn);
     // コレクション数初期化
     setCollectionCount(getUnlockedShrines().length);
+    // 初回チュートリアル
+    if (!getHasSeenTutorial()) {
+      setShowTutorial(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -1243,6 +1265,51 @@ export default function GamePage() {
       {/* 神様コレクション図鑑 */}
       {showCollection && (
         <ShrineCollection onClose={() => setShowCollection(false)} />
+      )}
+
+      {/* 初心者チュートリアルモーダル */}
+      {showTutorial && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4">
+          <div className="w-full max-w-xs rounded-3xl p-7 text-center shadow-2xl"
+            style={{ background: "linear-gradient(160deg, #1a0a00, #2d1800)", border: "2px solid rgba(212,175,55,0.6)", boxShadow: "0 0 60px rgba(212,175,55,0.3)" }}>
+            <div className="text-4xl mb-3">{TUTORIAL_STEPS[tutorialStep].icon}</div>
+            <h2 className="text-lg font-black mb-2" style={{ color: "#d4af37" }}>
+              {tutorialStep + 1}/{TUTORIAL_STEPS.length}｜{TUTORIAL_STEPS[tutorialStep].title}
+            </h2>
+            <p className="text-sm text-amber-200 leading-relaxed mb-6">
+              {TUTORIAL_STEPS[tutorialStep].desc}
+            </p>
+            <div className="flex gap-2 justify-center mb-3">
+              {TUTORIAL_STEPS.map((_, i) => (
+                <div key={i} className="w-2 h-2 rounded-full"
+                  style={{ background: i <= tutorialStep ? "#d4af37" : "rgba(212,175,55,0.25)" }} />
+              ))}
+            </div>
+            {tutorialStep < TUTORIAL_STEPS.length - 1 ? (
+              <button
+                onClick={() => setTutorialStep(s => s + 1)}
+                className="w-full py-3 rounded-xl font-black text-base transition-all active:scale-95"
+                style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00" }}
+              >
+                次へ →
+              </button>
+            ) : (
+              <button
+                onClick={() => { markTutorialSeen(); setShowTutorial(false); }}
+                className="w-full py-3 rounded-xl font-black text-base transition-all active:scale-95"
+                style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00" }}
+              >
+                ⛩️ ゲームスタート！
+              </button>
+            )}
+            <button
+              onClick={() => { markTutorialSeen(); setShowTutorial(false); }}
+              className="mt-2 text-xs text-amber-700 hover:text-amber-500 transition-colors"
+            >
+              スキップ
+            </button>
+          </div>
+        </div>
       )}
 
       {/* Komoju Payment Modal */}

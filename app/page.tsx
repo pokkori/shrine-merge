@@ -108,6 +108,69 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* スイカゲームとの違い SEOセクション */}
+      <section className="px-4 pb-10 max-w-sm mx-auto">
+        <h2 className="text-center font-black text-amber-300 mb-5 text-lg">スイカゲームとの違い</h2>
+        <div className="space-y-3 mb-4">
+          {[
+            {
+              icon: "⛩️",
+              title: "和の世界観・神社テーマ",
+              desc: "スイカゲームはフルーツを合体させるのに対し、神社マージは鳥居・拝殿・天照大神など本物の神社格制度を再現。日本の神道文化を学びながら遊べます。",
+            },
+            {
+              icon: "🌟",
+              title: "御利益バフシステム",
+              desc: "神社マージ独自の「御利益ポイント」システム。合体するほど御利益ポイントが溜まり、おみくじを引いてボーナス神社を召喚！高レベル合体で60秒間御利益2倍バフが発動。",
+            },
+            {
+              icon: "🎴",
+              title: "毎日引けるおみくじ",
+              desc: "スイカゲームにはない「デイリーおみくじ」機能。大吉〜凶まで4種類のおみくじを毎日無料で引けて、大吉なら高レベル神社がボーナス出現！",
+            },
+          ].map((item, i) => (
+            <div key={i} className="glass-card flex gap-3 items-start p-4">
+              <span className="text-2xl flex-shrink-0">{item.icon}</span>
+              <div>
+                <div className="font-bold text-amber-200 text-sm mb-1">{item.title}</div>
+                <div className="text-xs text-amber-400 leading-relaxed">{item.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="text-center">
+          <Link href="/game"
+            className="btn-shrine-red inline-block px-10 py-3 text-base font-black">
+            和風パズルを体験する ⛩️
+          </Link>
+        </div>
+      </section>
+
+      {/* 初心者ガイド（3ステップ）*/}
+      <section className="px-4 pb-10 max-w-sm mx-auto">
+        <h2 className="text-center font-black text-amber-300 mb-4 text-lg">初めての方へ — 3ステップで始める</h2>
+        <div className="space-y-3">
+          {[
+            { step: "01", icon: "👆", title: "上下左右にスワイプ", desc: "画面をスワイプ（またはキーボードの矢印キー）でグリッド全体が動きます。" },
+            { step: "02", icon: "⛩️", title: "同じ神社が合体", desc: "同じ種類の神社が隣接すると自動で合体！より格の高い神社に昇格します。" },
+            { step: "03", icon: "✨", title: "天照大神を目指せ", desc: "全9段階の最高位「天照大神」まで合体させるのが目標。おみくじも活用しよう！" },
+          ].map((item, i) => (
+            <div key={i} className="flex gap-3 items-start rounded-xl p-3"
+              style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)" }}>
+              <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-black text-xs"
+                style={{ background: "rgba(212,175,55,0.25)", color: "#d4af37" }}>
+                {item.step}
+              </div>
+              <div>
+                <div className="font-bold text-amber-200 text-sm">{item.icon} {item.title}</div>
+                <div className="text-xs text-amber-500 mt-0.5">{item.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p className="text-center text-xs text-amber-600 mt-3">1分でルール理解OK！まずは無料プレイを</p>
+      </section>
+
       {/* How to play */}
       <section className="px-4 pb-10 max-w-sm mx-auto">
         <h2 className="text-center font-black text-amber-300 mb-5 text-lg">遊び方</h2>
