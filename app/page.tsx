@@ -3,12 +3,13 @@ import Image from "next/image";
 import { SHRINES } from "@/lib/game";
 import ShrineStreakBadge from "@/components/ShrineStreakBadge";
 import DailyOmikujiTeaser from "@/components/DailyOmikujiTeaser";
+import MergeDemoSection from "@/components/MergeDemoSection";
 
 export default function HomePage() {
   return (
-    <div className="starry-bg min-h-screen">
+    <div className="starry-bg min-h-screen" role="main" aria-label="神社マージ ホーム">
       {/* Hero */}
-      <section className="text-center py-16 px-4">
+      <section className="text-center py-16 px-4" aria-label="ヒーローセクション">
         <Image src="/images/hero.png" alt="神社マージ" width={400} height={225} className="mx-auto rounded-2xl mb-4" style={{ filter: "drop-shadow(0 0 20px rgba(212,175,55,0.6))" }} priority />
         <h1 className="text-4xl sm:text-5xl font-black mb-3"
           style={{ color: "#d4af37", textShadow: "0 0 24px rgba(212,175,55,0.4)" }}>
@@ -25,7 +26,8 @@ export default function HomePage() {
         </p>
         <Link
           href="/game"
-          className="btn-shrine-red inline-block px-12 py-4 text-xl font-black"
+          className="btn-shrine-red inline-block px-12 py-4 text-xl font-black min-h-[44px]"
+          aria-label="神社マージのゲームを今すぐプレイする"
         >
           今すぐ遊ぶ
         </Link>
@@ -40,20 +42,25 @@ export default function HomePage() {
         <div className="mt-4 flex justify-center gap-3">
           <Link
             href="/ranking"
-            className="flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95"
+            className="flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95 min-h-[44px]"
+            aria-label="週次ランキングを見る"
             style={{ background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.3)", color: "#fcd34d" }}
           >
-            🏆 週次ランキング
+            週次ランキング
           </Link>
           <Link
             href="/collection"
-            className="flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95"
+            className="flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-bold transition-all hover:scale-105 active:scale-95 min-h-[44px]"
+            aria-label="神様図鑑を開く"
             style={{ background: "rgba(212,175,55,0.12)", border: "1px solid rgba(212,175,55,0.3)", color: "#fcd34d" }}
           >
-            📖 神様図鑑
+            神様図鑑
           </Link>
         </div>
       </section>
+
+      {/* インタラクティブ合体デモ */}
+      <MergeDemoSection />
 
       {/* 毎日変わるおみくじセクション */}
       <DailyOmikujiTeaser />
@@ -140,8 +147,9 @@ export default function HomePage() {
         </div>
         <div className="text-center">
           <Link href="/game"
-            className="btn-shrine-red inline-block px-10 py-3 text-base font-black">
-            和風パズルを体験する ⛩️
+            className="btn-shrine-red inline-block px-10 py-3 text-base font-black min-h-[44px]"
+            aria-label="和風パズル神社マージを体験する">
+            和風パズルを体験する
           </Link>
         </div>
       </section>
@@ -293,7 +301,8 @@ export default function HomePage() {
       <section className="text-center pb-16 px-4">
         <Link
           href="/game"
-          className="btn-gold inline-block px-12 py-4 text-xl font-black rounded-2xl"
+          className="btn-gold inline-block px-12 py-4 text-xl font-black rounded-2xl min-h-[44px]"
+          aria-label="神社マージのゲームをスタートする"
         >
           ゲームスタート
         </Link>
