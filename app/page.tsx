@@ -79,13 +79,16 @@ export default function HomePage() {
             <Link
               key={item.label}
               href="/game"
-              className="flex flex-col items-center gap-1 rounded-xl py-3 px-1 transition-all active:scale-95 hover:scale-105"
+              aria-label={`${item.label}の御利益を求めてゲームをプレイする`}
+              className="flex flex-col items-center gap-1 rounded-xl py-3 px-1 transition-all active:scale-95 hover:scale-105 min-h-[44px]"
               style={{
                 background: "rgba(212,175,55,0.10)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
                 border: "1px solid rgba(212,175,55,0.30)",
               }}
             >
-              <span className="text-2xl">{item.emoji}</span>
+              <span className="text-2xl" aria-hidden="true">{item.emoji}</span>
               <span className="text-xs font-bold text-amber-300">{item.label}</span>
             </Link>
           ))}
@@ -103,6 +106,9 @@ export default function HomePage() {
               className="rounded-xl p-3 text-center"
               style={{
                 background: s.bgColor,
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+                border: "1px solid rgba(255,255,255,0.15)",
                 color: s.color,
                 boxShadow: s.level >= 8 ? "0 0 12px rgba(212,175,55,0.5)" : "0 2px 8px rgba(0,0,0,0.4)",
               }}
