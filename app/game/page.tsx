@@ -756,6 +756,7 @@ export default function GamePage() {
           </button>
           <button
             onClick={() => { playSE("button"); handleRestart(); }}
+            aria-label="ゲームをリセットする"
             className="text-xs px-3 py-1 rounded-lg font-bold transition-all active:scale-95"
             style={{ background: "rgba(212,175,55,0.2)", color: "#d4af37", border: "1px solid rgba(212,175,55,0.4)" }}
           >
@@ -819,6 +820,7 @@ export default function GamePage() {
             </div>
             <button
               onClick={() => setShowPayjp(true)}
+              aria-label="月額プランに登録する"
               className="text-xs font-black px-3 py-1.5 rounded-lg transition-all active:scale-95 shrink-0"
               style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00" }}
             >
@@ -861,6 +863,7 @@ export default function GamePage() {
         <button
           onClick={handleDailyOmikuji}
           disabled={dailyOmikujiDrawn}
+          aria-label="デイリーおみくじを引く"
           className={`w-full py-3 rounded-xl font-black text-base transition-all active:scale-95 ${!dailyOmikujiDrawn ? "btn-gold" : ""}`}
           style={dailyOmikujiDrawn
             ? { background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.25)", cursor: "not-allowed" }
@@ -873,6 +876,7 @@ export default function GamePage() {
         <button
           onClick={handleOmikuji}
           disabled={state.goryakuPoints < OMIKUJI_COST}
+          aria-label="御利益おみくじを引く"
           className={`w-full py-3 rounded-xl font-black text-base transition-all active:scale-95 ${
             state.goryakuPoints >= OMIKUJI_COST ? "btn-gold" : ""
           }`}
