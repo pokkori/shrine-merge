@@ -977,6 +977,7 @@ export default function GamePage() {
                 </a>
                 <button
                   onClick={() => setShowOmikujiOverlay(false)}
+                  aria-label="おみくじを閉じて参拝を続ける"
                   className="w-full py-3 rounded-xl font-black text-amber-900 text-base transition-all active:scale-95"
                   style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)" }}
                 >
@@ -1001,9 +1002,9 @@ export default function GamePage() {
       {showPaywall && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4">
           <div
-            className="rounded-2xl p-6 w-full max-w-xs text-center shadow-2xl"
+            className="backdrop-blur-md rounded-2xl p-6 w-full max-w-xs text-center shadow-2xl"
             style={{
-              background: "linear-gradient(160deg, #1a0a20, #2d1040)",
+              background: "linear-gradient(160deg, rgba(26,10,32,0.95), rgba(45,16,64,0.95))",
               border: "1px solid rgba(212,175,55,0.4)",
               boxShadow: "0 0 40px rgba(212,175,55,0.2)",
             }}
@@ -1051,6 +1052,7 @@ export default function GamePage() {
             <div className="space-y-2">
               <button
                 onClick={() => { setShowPaywall(false); setShowPayjp(true); }}
+                aria-label="プレミアムプランに50%OFFで登録する"
                 className="w-full py-3 rounded-xl font-black text-base transition-all active:scale-95"
                 style={{
                   background: "linear-gradient(135deg, #d4af37, #f59e0b)",
@@ -1062,6 +1064,7 @@ export default function GamePage() {
               </button>
               <button
                 onClick={() => setShowPaywall(false)}
+                aria-label="ペイウォールを閉じて明日また遊ぶ"
                 className="w-full py-2 text-sm text-amber-500 hover:text-amber-300 transition-colors"
               >
                 明日また遊ぶ
@@ -1075,9 +1078,9 @@ export default function GamePage() {
       {state.isGameOver && !showPaywall && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 px-4">
           <div
-            className="rounded-2xl p-6 w-full max-w-xs text-center shadow-2xl"
+            className="backdrop-blur-md rounded-2xl p-6 w-full max-w-xs text-center shadow-2xl"
             style={{
-              background: "linear-gradient(160deg, #1a0a20, #2d1040)",
+              background: "linear-gradient(160deg, rgba(26,10,32,0.95), rgba(45,16,64,0.95))",
               border: "1px solid rgba(212,175,55,0.4)",
               boxShadow: "0 0 40px rgba(212,175,55,0.2)",
             }}
@@ -1106,6 +1109,7 @@ export default function GamePage() {
             <div className="space-y-2">
               <button
                 onClick={handleRestart}
+                aria-label="もう一度ゲームをプレイする"
                 className="w-full py-4 rounded-2xl font-black text-lg transition-all active:scale-95"
                 style={{
                   background: "linear-gradient(135deg, #d4af37, #f59e0b)",
@@ -1139,6 +1143,7 @@ export default function GamePage() {
                   scoreOmikuji,
                   shareUrl
                 )}
+                aria-label="スコアカード画像をシェアする"
                 className="w-full py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all active:scale-95"
                 style={{
                   background: "linear-gradient(135deg, rgba(212,175,55,0.2), rgba(245,158,11,0.15))",
@@ -1167,6 +1172,7 @@ export default function GamePage() {
               </a>
               <button
                 onClick={() => setShowCollection(true)}
+                aria-label={`神様図鑑を開く（${collectionCount}/${SHRINES.length}体解放済み）`}
                 className="w-full py-2 text-xs text-amber-400 hover:text-amber-200 transition-colors"
               >
                  神様図鑑を見る（{collectionCount}/{SHRINES.length}体解放済み）
@@ -1174,6 +1180,7 @@ export default function GamePage() {
               {!isPremium && (
                 <button
                   onClick={() => { setShowPayjp(true); }}
+                  aria-label="プレミアムプランで御利益アップする（月額480円）"
                   className="w-full py-2 text-xs text-amber-500 hover:text-amber-300 transition-colors"
                 >
                    プレミアムで御利益アップ（¥480/月）
@@ -1299,6 +1306,7 @@ export default function GamePage() {
               </a>
               <button
                 onClick={() => setShowAmaterasuCelebration(false)}
+                aria-label="天照大神セレブレーションを閉じてゲームを続ける"
                 className="w-full py-2 text-sm font-bold rounded-xl transition-all active:scale-95"
                 style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00" }}
               >
@@ -1335,6 +1343,7 @@ export default function GamePage() {
             {tutorialStep < TUTORIAL_STEPS.length - 1 ? (
               <button
                 onClick={() => setTutorialStep(s => s + 1)}
+                aria-label={`チュートリアル次のステップへ（${tutorialStep + 2}/${TUTORIAL_STEPS.length}）`}
                 className="w-full py-3 rounded-xl font-black text-base transition-all active:scale-95"
                 style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00" }}
               >
@@ -1343,6 +1352,7 @@ export default function GamePage() {
             ) : (
               <button
                 onClick={() => { markTutorialSeen(); setShowTutorial(false); }}
+                aria-label="チュートリアルを完了してゲームをスタートする"
                 className="w-full py-3 rounded-xl font-black text-base transition-all active:scale-95"
                 style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00" }}
               >
@@ -1351,6 +1361,7 @@ export default function GamePage() {
             )}
             <button
               onClick={() => { markTutorialSeen(); setShowTutorial(false); }}
+              aria-label="チュートリアルをスキップしてゲームを始める"
               className="mt-2 text-xs text-amber-700 hover:text-amber-500 transition-colors"
             >
               スキップ
