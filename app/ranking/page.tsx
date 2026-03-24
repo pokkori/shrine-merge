@@ -20,8 +20,8 @@ function getWeekSeed(): number {
 }
 
 const FAKE_NAMES = [
-  "参拝者@京都", "shrine_master", "神社好き🦊", "鳥居通過者",
-  "天照大神目指し中", "和風ゲーム民", "御利益ゲット勢", "⛩️毎日参拝",
+  "参拝者@京都", "shrine_master", "神社好き", "鳥居通過者",
+  "天照大神目指し中", "和風ゲーム民", "御利益ゲット勢", "️毎日参拝",
   "パズル廃人", "日本文化愛好家", "合体神社職人", "大社到達済み",
   "稲荷神社ファン", "御朱印コレクター", "神社マージ古参",
 ];
@@ -127,12 +127,12 @@ export default function RankingPage() {
   };
 
   const rankColors = ["#ffd700", "#c0c0c0", "#cd7f32"];
-  const rankEmojis = ["🥇", "🥈", "🥉"];
+  const rankEmojis = ["", "", ""];
 
   if (!mounted) {
     return (
       <div className="starry-bg min-h-screen flex items-center justify-center">
-        <p className="text-amber-300 animate-pulse">⛩️ ランキング読み込み中...</p>
+        <p className="text-amber-300 animate-pulse">️ ランキング読み込み中...</p>
       </div>
     );
   }
@@ -144,7 +144,7 @@ export default function RankingPage() {
         <div className="flex items-center justify-between mb-6">
           <Link href="/game" className="text-amber-400 text-sm hover:text-amber-300">← ゲームへ</Link>
           <h1 className="text-xl font-black" style={{ color: "#d4af37", textShadow: "0 0 12px rgba(212,175,55,0.5)" }}>
-            🏆 週次ランキング
+             週次ランキング
           </h1>
           <Link href="/" className="text-amber-400 text-sm hover:text-amber-300">トップ</Link>
         </div>
@@ -153,7 +153,7 @@ export default function RankingPage() {
         <div className="rounded-xl p-3 mb-5 text-center"
           style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)" }}>
           <p className="text-xs text-amber-400">
-            🔄 ランキングリセットまで <span className="font-black text-amber-200">{getWeekReset()}</span>
+             ランキングリセットまで <span className="font-black text-amber-200">{getWeekReset()}</span>
           </p>
           <p className="text-xs text-amber-600 mt-1">毎週日曜0時にリセット • あなたの今週ベスト: {(weeklyBest || myData.score).toLocaleString()}点</p>
         </div>
@@ -173,13 +173,13 @@ export default function RankingPage() {
             {myRank <= 10 && (
               <div className="mt-2 inline-block px-3 py-1 rounded-full text-xs font-black"
                 style={{ background: "rgba(212,175,55,0.2)", color: "#fcd34d", border: "1px solid rgba(212,175,55,0.4)" }}>
-                🌟 全国TOP10入り！
+                 全国TOP10入り！
               </div>
             )}
             {myRank <= 10 && (
               <div className="mt-3">
                 <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`神社マージ週次ランキング ${myRank}位達成！🏆⛩️ ${(weeklyBest || myData.score).toLocaleString()}点で全国TOP10！ → https://shrine-merge.vercel.app/ranking #神社マージ #ランキング`)}`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`神社マージ週次ランキング ${myRank}位達成！️ ${(weeklyBest || myData.score).toLocaleString()}点で全国TOP10！ → https://shrine-merge.vercel.app/ranking #神社マージ #ランキング`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-white text-xs transition-all active:scale-95"
@@ -198,7 +198,7 @@ export default function RankingPage() {
         {/* Top3 表彰台 */}
         {ranking.filter(e => e.rank <= 3).length >= 3 && (
           <div className="mb-5">
-            <p className="text-center text-xs font-bold text-amber-500 mb-3">🏆 今週の神社マージ三傑</p>
+            <p className="text-center text-xs font-bold text-amber-500 mb-3"> 今週の神社マージ三傑</p>
             <div className="flex items-end justify-center gap-2">
               {/* 2位 */}
               {(() => {
@@ -212,7 +212,7 @@ export default function RankingPage() {
                     <p className="text-xs font-black" style={{ color: "#c0c0c0" }}>{e2.score.toLocaleString()}</p>
                     <div className="w-full rounded-t-xl flex items-center justify-center py-3"
                       style={{ background: "rgba(192,192,192,0.15)", border: "1px solid rgba(192,192,192,0.3)", height: "60px" }}>
-                      <span className="text-2xl">🥈</span>
+                      <span className="text-2xl"></span>
                     </div>
                   </div>
                 );
@@ -229,7 +229,7 @@ export default function RankingPage() {
                     <p className="text-sm font-black" style={{ color: "#ffd700" }}>{e1.score.toLocaleString()}</p>
                     <div className="w-full rounded-t-xl flex items-center justify-center py-3"
                       style={{ background: "linear-gradient(180deg, rgba(212,175,55,0.25), rgba(212,175,55,0.1))", border: "1px solid rgba(212,175,55,0.5)", height: "80px", boxShadow: "0 0 16px rgba(212,175,55,0.3)" }}>
-                      <span className="text-3xl">🥇</span>
+                      <span className="text-3xl"></span>
                     </div>
                   </div>
                 );
@@ -246,7 +246,7 @@ export default function RankingPage() {
                     <p className="text-xs font-black" style={{ color: "#cd7f32" }}>{e3.score.toLocaleString()}</p>
                     <div className="w-full rounded-t-xl flex items-center justify-center py-3"
                       style={{ background: "rgba(205,127,50,0.12)", border: "1px solid rgba(205,127,50,0.3)", height: "48px" }}>
-                      <span className="text-2xl">🥉</span>
+                      <span className="text-2xl"></span>
                     </div>
                   </div>
                 );
@@ -311,7 +311,7 @@ export default function RankingPage() {
         {/* スコアアップの誘導 */}
         <div className="rounded-2xl p-4 mb-6 text-center"
           style={{ background: "rgba(212,175,55,0.06)", border: "1px solid rgba(212,175,55,0.15)" }}>
-          <p className="text-amber-300 font-bold text-sm mb-1">🎯 ランキングを上げるには？</p>
+          <p className="text-amber-300 font-bold text-sm mb-1"> ランキングを上げるには？</p>
           <p className="text-amber-500 text-xs leading-relaxed">
             毎日プレイしてスコアを更新しよう。<br />
             週末リセット前の最高スコアがランクに反映されます。
@@ -324,7 +324,7 @@ export default function RankingPage() {
             className="inline-block px-10 py-4 rounded-2xl font-black text-lg transition-all active:scale-95"
             style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00", boxShadow: "0 0 20px rgba(212,175,55,0.3)" }}
           >
-            ⛩️ スコアを更新する
+            ️ スコアを更新する
           </Link>
         </div>
 

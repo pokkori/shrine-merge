@@ -4,11 +4,11 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 
 const DEMO_SEQUENCE = [
-  { from: ["⛩️", "⛩️", null, null], merged: "🏯", label: "鳥居 × 鳥居 → 拝殿", color: "#c0392b" },
-  { from: ["🏯", "🏯", null, null], merged: "🌳", label: "拝殿 × 拝殿 → 御神木", color: "#15803d" },
-  { from: ["🌳", "🌳", null, null], merged: "🦊", label: "御神木 × 御神木 → 稲荷神社", color: "#0369a1" },
-  { from: ["🦊", "🦊", null, null], merged: "⚡", label: "稲荷神社 × 稲荷神社 → 雷神社", color: "#6d28d9" },
-  { from: ["⚡", "⚡", null, null], merged: "✨", label: "雷神社 × 雷神社 → 天照大神", color: "#d4af37" },
+  { from: ["️", "️", null, null], merged: "", label: "鳥居 × 鳥居 → 拝殿", color: "#c0392b" },
+  { from: ["", "", null, null], merged: "", label: "拝殿 × 拝殿 → 御神木", color: "#15803d" },
+  { from: ["", "", null, null], merged: "", label: "御神木 × 御神木 → 稲荷神社", color: "#0369a1" },
+  { from: ["", "", null, null], merged: "", label: "稲荷神社 × 稲荷神社 → 雷神社", color: "#6d28d9" },
+  { from: ["", "", null, null], merged: "", label: "雷神社 × 雷神社 → 天照大神", color: "#d4af37" },
 ];
 
 type Phase = "idle" | "highlight" | "merge" | "result";
@@ -41,7 +41,7 @@ export default function MergeDemoSection() {
 
   return (
     <section className="px-4 pb-10 max-w-sm mx-auto">
-      <h2 className="text-center font-black text-amber-300 mb-2 text-lg">⚡ 合体の瞬間を体験</h2>
+      <h2 className="text-center font-black text-amber-300 mb-2 text-lg"> 合体の瞬間を体験</h2>
       <p className="text-center text-xs text-amber-500 mb-5">神社同士が合体して進化！ライブデモで確認</p>
 
       {/* Demo arena */}
@@ -168,7 +168,7 @@ export default function MergeDemoSection() {
           href="/game"
           className="btn-shrine-red inline-block px-10 py-3 text-base font-black"
         >
-          自分で合体を体験する ⛩️
+          自分で合体を体験する ️
         </Link>
         <p className="text-xs text-amber-600 mt-2">全9段階の進化を自分の手で体験！</p>
       </div>

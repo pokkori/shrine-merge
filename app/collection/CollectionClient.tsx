@@ -32,7 +32,7 @@ export default function CollectionClient() {
   if (!mounted) {
     return (
       <div className="starry-bg min-h-screen flex items-center justify-center">
-        <p className="text-amber-300 animate-pulse">📖 図鑑を読み込み中...</p>
+        <p className="text-amber-300 animate-pulse"> 図鑑を読み込み中...</p>
       </div>
     );
   }
@@ -44,7 +44,7 @@ export default function CollectionClient() {
         <div className="flex items-center justify-between mb-6">
           <Link href="/game" className="text-amber-400 text-sm hover:text-amber-300">← ゲームへ</Link>
           <h1 className="text-xl font-black" style={{ color: "#d4af37", textShadow: "0 0 12px rgba(212,175,55,0.5)" }}>
-            📖 神様図鑑
+             神様図鑑
           </h1>
           <Link href="/" className="text-amber-400 text-sm hover:text-amber-300">トップ</Link>
         </div>
@@ -77,7 +77,7 @@ export default function CollectionClient() {
           </div>
           {completionRate >= 100 && (
             <p className="text-center text-sm font-black mt-2" style={{ color: "#fcd34d" }}>
-              ✨ 全神様コレクション達成！
+               全神様コレクション達成！
             </p>
           )}
         </div>
@@ -101,7 +101,7 @@ export default function CollectionClient() {
               >
                 <div className="flex items-center gap-3">
                   <div className="text-3xl shrink-0">
-                    {isUnlocked ? shrine.emoji : "❓"}
+                    {isUnlocked ? shrine.emoji : ""}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
@@ -153,7 +153,7 @@ export default function CollectionClient() {
         {completionRate >= 100 && (
           <div className="mb-5 text-center">
             <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("神社マージ 神様図鑑コンプリート！⛩️✨ 鳥居から天照大神まで全9種類の神様を解放しました！ → https://shrine-merge.vercel.app/collection #神社マージ #コンプリート")}`}
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("神社マージ 神様図鑑コンプリート！️ 鳥居から天照大神まで全9種類の神様を解放しました！ → https://shrine-merge.vercel.app/collection #神社マージ #コンプリート")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white text-sm transition-all active:scale-95"
@@ -173,12 +173,12 @@ export default function CollectionClient() {
             className="inline-block px-10 py-4 rounded-2xl font-black text-lg transition-all active:scale-95"
             style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00", boxShadow: "0 0 20px rgba(212,175,55,0.3)" }}
           >
-            ⛩️ 神様を集めに行く
+            ️ 神様を集めに行く
           </Link>
         </div>
 
         <div className="mt-6 text-center">
-          <Link href="/ranking" className="text-amber-500 text-xs hover:text-amber-300">🏆 週次ランキングを見る</Link>
+          <Link href="/ranking" className="text-amber-500 text-xs hover:text-amber-300"> 週次ランキングを見る</Link>
         </div>
       </div>
     </div>

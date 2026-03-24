@@ -35,7 +35,7 @@ export default function Image() {
         />
         {/* Icon */}
         <div style={{ fontSize: 120, marginBottom: 24, filter: "drop-shadow(0 0 30px rgba(255,200,0,0.6))" }}>
-          ⛩️
+          ️
         </div>
         {/* Title */}
         <div
@@ -63,7 +63,7 @@ export default function Image() {
         </div>
         {/* Shrine levels */}
         <div style={{ display: "flex", gap: 16, marginBottom: 32 }}>
-          {["⛩️", "🏮", "🎋", "🎎", "🏯", "⛩️✨"].map((s, i) => (
+          {["️", "", "", "", "", "️"].map((s, i) => (
             <div
               key={i}
               style={{

@@ -9,15 +9,15 @@ export interface Shrine {
 }
 
 export const SHRINES: Shrine[] = [
-  { level: 1, name: "鳥居",     emoji: "⛩️",  score: 2,    color: "#ffffff", bgColor: "#ef4444", goryaku: "縁結び" },
-  { level: 2, name: "狛犬",     emoji: "🦁",  score: 4,    color: "#ffffff", bgColor: "#f97316", goryaku: "魔除け" },
-  { level: 3, name: "手水舎",   emoji: "💧",  score: 8,    color: "#1a1a1a", bgColor: "#fbbf24", goryaku: "浄化" },
-  { level: 4, name: "拝殿",     emoji: "🏯",  score: 16,   color: "#ffffff", bgColor: "#22c55e", goryaku: "開運" },
-  { level: 5, name: "本殿",     emoji: "🎋",  score: 32,   color: "#ffffff", bgColor: "#06b6d4", goryaku: "健康" },
-  { level: 6, name: "神宮",     emoji: "🌸",  score: 64,   color: "#ffffff", bgColor: "#8b5cf6", goryaku: "金運" },
-  { level: 7, name: "大社",     emoji: "☀️",  score: 128,  color: "#1a1a1a", bgColor: "#f59e0b", goryaku: "出世" },
-  { level: 8, name: "総本社",   emoji: "🌟",  score: 256,  color: "#1a1a1a", bgColor: "#fcd34d", goryaku: "万能" },
-  { level: 9, name: "天照大神", emoji: "✨",  score: 512,  color: "#1a1a1a", bgColor: "#fffbeb", goryaku: "最強" },
+  { level: 1, name: "鳥居",     emoji: "️",  score: 2,    color: "#ffffff", bgColor: "#ef4444", goryaku: "縁結び" },
+  { level: 2, name: "狛犬",     emoji: "",  score: 4,    color: "#ffffff", bgColor: "#f97316", goryaku: "魔除け" },
+  { level: 3, name: "手水舎",   emoji: "",  score: 8,    color: "#1a1a1a", bgColor: "#fbbf24", goryaku: "浄化" },
+  { level: 4, name: "拝殿",     emoji: "",  score: 16,   color: "#ffffff", bgColor: "#22c55e", goryaku: "開運" },
+  { level: 5, name: "本殿",     emoji: "",  score: 32,   color: "#ffffff", bgColor: "#06b6d4", goryaku: "健康" },
+  { level: 6, name: "神宮",     emoji: "",  score: 64,   color: "#ffffff", bgColor: "#8b5cf6", goryaku: "金運" },
+  { level: 7, name: "大社",     emoji: "️",  score: 128,  color: "#1a1a1a", bgColor: "#f59e0b", goryaku: "出世" },
+  { level: 8, name: "総本社",   emoji: "",  score: 256,  color: "#1a1a1a", bgColor: "#fcd34d", goryaku: "万能" },
+  { level: 9, name: "天照大神", emoji: "",  score: 512,  color: "#1a1a1a", bgColor: "#fffbeb", goryaku: "最強" },
 ];
 
 export interface Cell {

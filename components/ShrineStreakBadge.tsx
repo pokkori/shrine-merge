@@ -36,7 +36,7 @@ export default function ShrineStreakBadge() {
         boxShadow: "0 0 16px rgba(212,175,55,0.3)",
       }}
     >
-      🔥 {streak}日連続参拝中！御利益UP中
+       {streak}日連続参拝中！御利益UP中
     </div>
   );
 }

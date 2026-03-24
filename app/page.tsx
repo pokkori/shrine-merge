@@ -22,7 +22,7 @@ export default function HomePage() {
           鳥居からはじめ、合体を繰り返して最強の神社へ
         </p>
         <p className="text-sm text-amber-300 mb-10 font-bold">
-          🦊 スコアをXでシェアして友達と競おう！
+           スコアをXでシェアして友達と競おう！
         </p>
         <Link
           href="/game"
@@ -67,14 +67,14 @@ export default function HomePage() {
 
       {/* ご利益プリセット */}
       <section className="px-4 pb-8 max-w-sm mx-auto">
-        <h2 className="text-center font-black text-amber-300 mb-4 text-base">⛩️ 今日の願い事を選んで参拝</h2>
+        <h2 className="text-center font-black text-amber-300 mb-4 text-base">️ 今日の願い事を選んで参拝</h2>
         <div className="grid grid-cols-5 gap-2">
           {[
-            { emoji: "💑", label: "縁結び" },
-            { emoji: "💰", label: "金運" },
-            { emoji: "🎓", label: "学業" },
-            { emoji: "🏥", label: "健康" },
-            { emoji: "🏆", label: "勝負運" },
+            { emoji: "", label: "縁結び" },
+            { emoji: "", label: "金運" },
+            { emoji: "", label: "学業" },
+            { emoji: "", label: "健康" },
+            { emoji: "", label: "勝負運" },
           ].map((item) => (
             <Link
               key={item.label}
@@ -121,17 +121,17 @@ export default function HomePage() {
         <div className="space-y-3 mb-4">
           {[
             {
-              icon: "⛩️",
+              icon: "️",
               title: "和の世界観・神社テーマ",
               desc: "スイカゲームはフルーツを合体させるのに対し、神社マージは鳥居・拝殿・天照大神など本物の神社格制度を再現。日本の神道文化を学びながら遊べます。",
             },
             {
-              icon: "🌟",
+              icon: "",
               title: "御利益バフシステム",
               desc: "神社マージ独自の「御利益ポイント」システム。合体するほど御利益ポイントが溜まり、おみくじを引いてボーナス神社を召喚！高レベル合体で60秒間御利益2倍バフが発動。",
             },
             {
-              icon: "🎴",
+              icon: "",
               title: "毎日引けるおみくじ",
               desc: "スイカゲームにはない「デイリーおみくじ」機能。大吉〜凶まで4種類のおみくじを毎日無料で引けて、大吉なら高レベル神社がボーナス出現！",
             },
@@ -159,12 +159,12 @@ export default function HomePage() {
         <h2 className="text-center font-black text-amber-300 mb-4 text-lg">初めての方へ — 3ステップで始める</h2>
         <div className="space-y-3">
           {[
-            { step: "01", icon: "👆", title: "上下左右にスワイプ", desc: "画面をスワイプ（またはキーボードの矢印キー）でグリッド全体が動きます。" },
-            { step: "02", icon: "⛩️", title: "同じ神社が合体", desc: "同じ種類の神社が隣接すると自動で合体！より格の高い神社に昇格します。" },
-            { step: "03", icon: "✨", title: "天照大神を目指せ", desc: "全9段階の最高位「天照大神」まで合体させるのが目標。おみくじも活用しよう！" },
+            { step: "01", icon: "", title: "上下左右にスワイプ", desc: "画面をスワイプ（またはキーボードの矢印キー）でグリッド全体が動きます。" },
+            { step: "02", icon: "️", title: "同じ神社が合体", desc: "同じ種類の神社が隣接すると自動で合体！より格の高い神社に昇格します。" },
+            { step: "03", icon: "", title: "天照大神を目指せ", desc: "全9段階の最高位「天照大神」まで合体させるのが目標。おみくじも活用しよう！" },
           ].map((item, i) => (
             <div key={i} className="flex gap-3 items-start rounded-xl p-3"
-              style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)" }}>
+              style={{ background: "rgba(255,255,255,0.08)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: "12px" }}>
               <div className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-black text-xs"
                 style={{ background: "rgba(212,175,55,0.25)", color: "#d4af37" }}>
                 {item.step}
@@ -184,10 +184,10 @@ export default function HomePage() {
         <h2 className="text-center font-black text-amber-300 mb-5 text-lg">遊び方</h2>
         <div className="space-y-3">
           {[
-            { icon: "👆", title: "スワイプ or 矢印キー", desc: "上下左右に全タイルを移動" },
-            { icon: "✨", title: "同じ神社をマージ", desc: "隣接した同じ神社が合体して次レベルに" },
-            { icon: "🌟", title: "御利益ポイントを貯める", desc: "神社が自動でポイントを生産。おみくじに使おう！" },
-            { icon: "🎋", title: "おみくじを引く", desc: "御利益ポイントで新しい神社を召喚！" },
+            { icon: "", title: "スワイプ or 矢印キー", desc: "上下左右に全タイルを移動" },
+            { icon: "", title: "同じ神社をマージ", desc: "隣接した同じ神社が合体して次レベルに" },
+            { icon: "", title: "御利益ポイントを貯める", desc: "神社が自動でポイントを生産。おみくじに使おう！" },
+            { icon: "", title: "おみくじを引く", desc: "御利益ポイントで新しい神社を召喚！" },
           ].map((item, i) => (
             <div key={i} className="glass-card flex gap-3 items-start p-3">
               <span className="text-2xl">{item.icon}</span>
@@ -205,12 +205,15 @@ export default function HomePage() {
         <div
           className="rounded-2xl p-5 text-center"
           style={{
-            background: "rgba(212,175,55,0.08)",
+            background: "rgba(255,255,255,0.08)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
             border: "1px solid rgba(212,175,55,0.25)",
+            borderRadius: "16px",
           }}
         >
           <p className="text-amber-300 font-black text-base mb-2">
-            🦊 スコアをXでシェアしよう
+             スコアをXでシェアしよう
           </p>
           <p className="text-amber-500 text-xs mb-4 leading-relaxed">
             ゲームオーバー後にワンタップでXに投稿できます。<br />
@@ -222,14 +225,14 @@ export default function HomePage() {
           >
             <p className="text-amber-400 text-xs font-bold mb-1">投稿イメージ</p>
             <p className="text-amber-200 text-xs leading-relaxed">
-              「神社マージ で 8,450点！⛩️ 最高神社は稲荷神社🦊<br />
+              「神社マージ で 8,450点！️ 最高神社は稲荷神社<br />
               鳥居から天照大神まで目指すパズルゲーム<br />
               → shrine-merge.vercel.app #神社マージ」
             </p>
           </div>
           <div className="flex flex-col gap-2">
             <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("【神社マージ】鳥居から天照大神まで合体させるパズルゲームにハマってる⛩️🦊 → https://shrine-merge.vercel.app #神社マージ #パズルゲーム")}`}
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("【神社マージ】鳥居から天照大神まで合体させるパズルゲームにハマってる️ → https://shrine-merge.vercel.app #神社マージ #パズルゲーム")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white text-sm transition-all active:scale-95"
@@ -241,7 +244,7 @@ export default function HomePage() {
               Xで神社マージを紹介する
             </a>
             <a
-              href={`https://line.me/R/msg/text/?${encodeURIComponent("【神社マージ】鳥居から天照大神まで合体させるパズルゲーム⛩️ 和風スイカゲームにハマってる！ https://shrine-merge.vercel.app")}`}
+              href={`https://line.me/R/msg/text/?${encodeURIComponent("【神社マージ】鳥居から天照大神まで合体させるパズルゲーム️ 和風スイカゲームにハマってる！ https://shrine-merge.vercel.app")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white text-sm transition-all active:scale-95"
@@ -263,9 +266,9 @@ export default function HomePage() {
           {[
             { score: "12,580", msg: "やっと天照大神まで合体できた！" },
             { score: "8,240", msg: "御利益2倍で一気に高得点！" },
-            { score: "21,360", msg: "神社マージ最高記録更新中🦊" },
+            { score: "21,360", msg: "神社マージ最高記録更新中" },
           ].map((s, i) => (
-            <div key={i} className="rounded-2xl p-3 text-left" style={{background: "rgba(255,255,255,0.05)", border: "1px solid rgba(251,191,36,0.2)"}}>
+            <div key={i} className="rounded-2xl p-3 text-left" style={{ background: "rgba(255,255,255,0.08)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid rgba(251,191,36,0.2)", borderRadius: "16px" }}>
               <p className="text-amber-100 text-sm">「【神社マージ】{s.score}点達成！{s.msg}」</p>
               <p className="text-amber-500 text-xs mt-1">#神社マージ #パズルゲーム</p>
             </div>
@@ -276,7 +279,7 @@ export default function HomePage() {
 
       {/* プレイヤーの声 */}
       <section className="px-4 pb-10 max-w-sm mx-auto">
-        <h2 className="text-center font-black text-amber-300 mb-4 text-lg">⛩️ プレイヤーの声</h2>
+        <h2 className="text-center font-black text-amber-300 mb-4 text-lg">️ プレイヤーの声</h2>
         <div className="space-y-3">
           {[
             { stars: 5, text: "毎日参拝してます。大吉が出た時の嬉しさは格別！", user: "@shrine_lover" },
@@ -287,7 +290,7 @@ export default function HomePage() {
               style={{ background: "rgba(212,175,55,0.07)", border: "1px solid rgba(212,175,55,0.2)" }}>
               <div className="flex items-center gap-1 mb-2">
                 {Array.from({ length: 5 }).map((_, j) => (
-                  <span key={j} style={{ color: j < review.stars ? "#fcd34d" : "rgba(212,175,55,0.25)", fontSize: "14px" }}>★</span>
+                  <span key={j} style={{ color: j < review.stars ? "#fcd34d" : "rgba(212,175,55,0.25)", fontSize: "14px" }}></span>
                 ))}
               </div>
               <p className="text-amber-100 text-sm leading-relaxed mb-1">「{review.text}」</p>
@@ -316,9 +319,9 @@ export default function HomePage() {
         <h2 className="text-center text-base font-bold text-amber-400 mb-5">こんな経験ありませんか？</h2>
         <div className="space-y-3">
           {[
-            { icon: "😓", text: "スマホゲームに疲れて、もっとまったり遊べるゲームが欲しい..." },
-            { icon: "😤", text: "暇つぶしに気軽に遊べる和風ゲームがなかなか見つからない..." },
-            { icon: "💭", text: "日本文化に触れながら、パズルゲームを楽しみたい..." },
+            { icon: "", text: "スマホゲームに疲れて、もっとまったり遊べるゲームが欲しい..." },
+            { icon: "", text: "暇つぶしに気軽に遊べる和風ゲームがなかなか見つからない..." },
+            { icon: "", text: "日本文化に触れながら、パズルゲームを楽しみたい..." },
           ].map((item, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "12px 14px" }}>
               <span style={{ fontSize: "20px" }}>{item.icon}</span>
@@ -340,7 +343,7 @@ export default function HomePage() {
             { q: "神社マージとはどんなゲームですか？", a: "神社の御神体をマージ（合体）させて、より格の高い神社に育てるパズルゲームです。神社同士を同じエリアに置くと次のランクに昇格します。" },
             { q: "無料で遊べますか？", a: "1日3回まで無料でプレイできます。制限なく遊びたい方はプレミアムプラン（¥480/月）にアップグレードしてください。" },
             { q: "スコアは保存されますか？", a: "ハイスコアはブラウザに保存されます。別のデバイスでの引き継ぎにはプレミアムアカウントが必要です。" },
-            { q: "どこまで進化できますか？", a: "全9段階の神社レベルがあります。最高位「天照大神✨」を目指してください！" },
+            { q: "どこまで進化できますか？", a: "全9段階の神社レベルがあります。最高位「天照大神」を目指してください！" },
           ].map((faq, i) => (
             <div key={i} style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: "12px", padding: "14px 16px" }}>
               <p style={{ color: "#fcd34d", fontWeight: "600", fontSize: "13px", marginBottom: "6px" }}>Q. {faq.q}</p>
@@ -353,7 +356,7 @@ export default function HomePage() {
       {/* BASEアフィリエイト */}
       <section className="py-6 px-4 max-w-lg mx-auto">
         <div style={{ background: "rgba(139,0,0,0.15)", border: "1px solid rgba(139,0,0,0.4)", borderRadius: "16px", padding: "16px" }}>
-          <p style={{ color: "#fca5a5", fontWeight: "700", fontSize: "14px", marginBottom: "12px" }}>⛩️ 神社グッズをBASEで販売しよう</p>
+          <p style={{ color: "#fca5a5", fontWeight: "700", fontSize: "14px", marginBottom: "12px" }}>️ 神社グッズをBASEで販売しよう</p>
           <a
             href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+8ZAE9E+2QQG+62MDD"
             target="_blank"
@@ -373,7 +376,7 @@ export default function HomePage() {
       {/* A8.netアフィリエイト：ハンドメイド */}
       <section className="py-8 px-4 max-w-lg mx-auto">
         <div className="rounded-2xl p-4" style={{ background: "rgba(180,120,60,0.08)", border: "1px solid rgba(180,120,60,0.25)" }}>
-          <p className="text-sm font-bold mb-3" style={{ color: "#c8956a" }}>🧵 手作りお守り・縁起物を作ってみよう（PR）</p>
+          <p className="text-sm font-bold mb-3" style={{ color: "#c8956a" }}> 手作りお守り・縁起物を作ってみよう（PR）</p>
           <a
             href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+8PRGKY+4V0U+BXB8Z"
             target="_blank"
@@ -393,12 +396,12 @@ export default function HomePage() {
 
       {/* 神社マージで楽しむ3選 */}
       <section className="py-8 px-4 max-w-lg mx-auto">
-        <h2 className="text-center text-base font-bold text-amber-400 mb-4">⛩️ もっと楽しむ3選</h2>
+        <h2 className="text-center text-base font-bold text-amber-400 mb-4">️ もっと楽しむ3選</h2>
         <ol className="space-y-3">
           {[
-            { icon: "🏆", title: "天照大神を目指して挑戦", desc: "全9段階の最高位「天照大神✨」まで合体できるか挑戦！日本の神社格制度を学びながら楽しめます。" },
-            { icon: "🦊", title: "友達とスコアを競う", desc: "ゲームオーバー後にXでスコアをシェアして、誰が一番高い神社まで到達できるか競争しよう。" },
-            { icon: "🌸", title: "毎日の癒しパズルとして", desc: "和の雰囲気で心が落ち着くパズル体験。朝の5分間の瞑想代わりに。" },
+            { icon: "", title: "天照大神を目指して挑戦", desc: "全9段階の最高位「天照大神」まで合体できるか挑戦！日本の神社格制度を学びながら楽しめます。" },
+            { icon: "", title: "友達とスコアを競う", desc: "ゲームオーバー後にXでスコアをシェアして、誰が一番高い神社まで到達できるか競争しよう。" },
+            { icon: "", title: "毎日の癒しパズルとして", desc: "和の雰囲気で心が落ち着くパズル体験。朝の5分間の瞑想代わりに。" },
           ].map((item, i) => (
             <li key={i} className="flex items-start gap-3"
               style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: "12px", padding: "12px 14px" }}>

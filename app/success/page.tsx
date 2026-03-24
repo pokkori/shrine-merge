@@ -69,7 +69,7 @@ function SuccessContent() {
       {showConfetti && <Confetti />}
       <div className="max-w-lg w-full mx-auto px-4">
         <div className="text-center mb-10">
-          <div className="text-7xl mb-4">⛩️</div>
+          <div className="text-7xl mb-4">️</div>
           <h1 className="text-3xl font-black mb-2" style={{ color: "#d4af37" }}>プレミアム会員へようこそ！</h1>
           <p className="text-amber-400">神社マージのフル機能が解放されました</p>
         </div>

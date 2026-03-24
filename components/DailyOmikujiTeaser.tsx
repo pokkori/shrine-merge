@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useMemo } from "react";
 
 const OMIKUJI_DATA = [
-  { rank: "大吉", emoji: "🌟", color: "#fcd34d", glow: "rgba(252,211,77,0.6)", message: "今日は神社マージで大連鎖を狙え！金運・縁結び 全て好調！", hint: "天照大神への道が開ける絶好の日" },
-  { rank: "中吉", emoji: "🌸", color: "#86efac", glow: "rgba(134,239,172,0.4)", message: "良縁が訪れる日。積極的に合体を狙おう！", hint: "神宮・大社まで到達できる運気" },
-  { rank: "小吉", emoji: "🌿", color: "#93c5fd", glow: "rgba(147,197,253,0.4)", message: "小さな幸せを積み重ねて。焦らず参拝を。", hint: "着実に合体を重ねて高みを目指そう" },
-  { rank: "吉",   emoji: "☀️", color: "#fde68a", glow: "rgba(253,230,138,0.4)", message: "穏やかな運気。地道な努力が実を結ぶ日。", hint: "おみくじを引いて運気を上げよう" },
-  { rank: "末吉", emoji: "🌧️", color: "#9ca3af", glow: "rgba(156,163,175,0.3)", message: "今日は慎重に。でもゲームは必ず好転する！", hint: "明日は大吉かも？毎日の参拝を続けよう" },
+  { rank: "大吉", emoji: "", color: "#fcd34d", glow: "rgba(252,211,77,0.6)", message: "今日は神社マージで大連鎖を狙え！金運・縁結び 全て好調！", hint: "天照大神への道が開ける絶好の日" },
+  { rank: "中吉", emoji: "", color: "#86efac", glow: "rgba(134,239,172,0.4)", message: "良縁が訪れる日。積極的に合体を狙おう！", hint: "神宮・大社まで到達できる運気" },
+  { rank: "小吉", emoji: "", color: "#93c5fd", glow: "rgba(147,197,253,0.4)", message: "小さな幸せを積み重ねて。焦らず参拝を。", hint: "着実に合体を重ねて高みを目指そう" },
+  { rank: "吉",   emoji: "️", color: "#fde68a", glow: "rgba(253,230,138,0.4)", message: "穏やかな運気。地道な努力が実を結ぶ日。", hint: "おみくじを引いて運気を上げよう" },
+  { rank: "末吉", emoji: "️", color: "#9ca3af", glow: "rgba(156,163,175,0.3)", message: "今日は慎重に。でもゲームは必ず好転する！", hint: "明日は大吉かも？毎日の参拝を続けよう" },
 ];
 
 function getDailyOmikuji() {
@@ -44,7 +44,7 @@ export default function DailyOmikujiTeaser() {
         />
         <div className="relative z-10">
           <p className="text-xs font-bold mb-2" style={{ color: "rgba(212,175,55,0.6)" }}>
-            📅 {dateStr}の運勢
+             {dateStr}の運勢
           </p>
           <div
             className="text-5xl mb-2"

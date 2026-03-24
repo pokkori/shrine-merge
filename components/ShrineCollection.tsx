@@ -54,8 +54,8 @@ export default function ShrineCollection({ onClose }: ShrineCollectionProps) {
       >
         {/* ヘッダー */}
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-black" style={{ color: "#d4af37" }}>⛩️ 神様図鑑</h2>
-          <button onClick={onClose} className="text-amber-500 hover:text-amber-300 text-xl leading-none">✕</button>
+          <h2 className="text-lg font-black" style={{ color: "#d4af37" }}>️ 神様図鑑</h2>
+          <button onClick={onClose} className="text-amber-500 hover:text-amber-300 text-xl leading-none"></button>
         </div>
 
         {/* 達成率 */}
@@ -80,7 +80,7 @@ export default function ShrineCollection({ onClose }: ShrineCollectionProps) {
           </div>
           {completionRate >= 100 && (
             <p className="text-center text-xs font-black mt-1" style={{ color: "#fcd34d" }}>
-              ✨ 全神様コレクション達成！
+               全神様コレクション達成！
             </p>
           )}
         </div>
@@ -103,7 +103,7 @@ export default function ShrineCollection({ onClose }: ShrineCollectionProps) {
                 }}
               >
                 <div className="text-2xl mb-1">
-                  {isUnlocked ? shrine.emoji : "❓"}
+                  {isUnlocked ? shrine.emoji : ""}
                 </div>
                 <div className="text-xs font-bold" style={{ color: isUnlocked ? shrine.color : "rgba(255,255,255,0.3)" }}>
                   {isUnlocked ? shrine.name : "???"}
@@ -138,7 +138,7 @@ export default function ShrineCollection({ onClose }: ShrineCollectionProps) {
         {completionRate >= 100 && (
           <div className="mt-3 text-center">
             <a
-              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("神社マージ 神様図鑑コンプリート！⛩️✨ 鳥居から天照大神まで全9種類の神様を解放しました！ → https://shrine-merge.vercel.app #神社マージ #コンプリート")}`}
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent("神社マージ 神様図鑑コンプリート！️ 鳥居から天照大神まで全9種類の神様を解放しました！ → https://shrine-merge.vercel.app #神社マージ #コンプリート")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-white text-xs transition-all active:scale-95"
@@ -157,7 +157,7 @@ export default function ShrineCollection({ onClose }: ShrineCollectionProps) {
           className="w-full mt-4 py-3 rounded-xl font-black text-base transition-all active:scale-95"
           style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00" }}
         >
-          参拝を続ける ⛩️
+          参拝を続ける ️
         </button>
       </div>
     </div>
