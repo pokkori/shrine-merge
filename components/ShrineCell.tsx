@@ -1,8 +1,9 @@
 "use client";
 
 import { Cell, SHRINES } from "@/lib/game";
+import ShrineSvgIcon from "./ShrineSvgIcon";
 
-// レベル別スタイル（グラデーション + 文字色）
+// Level styles (gradient + text color)
 const LEVEL_STYLES: Record<number, { bg: string; color: string; extra?: string }> = {
   1: { bg: "linear-gradient(135deg,#b91c1c,#ef4444)", color: "#fff" },
   2: { bg: "linear-gradient(135deg,#c2410c,#fb923c)", color: "#fff" },
@@ -24,7 +25,7 @@ export default function ShrineCell({ cell }: ShrineCellProps) {
     return (
       <div
         className="w-full aspect-square rounded-xl"
-        style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(212,175,55,0.12)" }}
+        style={{ background: "rgba(255,255,255,0.03)", backdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.08)" }}
       />
     );
   }
@@ -44,9 +45,7 @@ export default function ShrineCell({ cell }: ShrineCellProps) {
         border: cell.level >= 7 ? "1px solid rgba(212,175,55,0.5)" : "none",
       }}
     >
-      <span className={`leading-none ${cell.level >= 7 ? "text-3xl sm:text-4xl" : "text-2xl sm:text-3xl"}`}>
-        {shrine.emoji}
-      </span>
+      <ShrineSvgIcon level={cell.level} size={cell.level >= 7 ? 36 : 28} />
       <span className="text-[10px] sm:text-xs font-bold mt-0.5 leading-none">{shrine.name}</span>
       <span className="text-[9px] sm:text-[10px] opacity-75 leading-none">{shrine.score}</span>
     </div>

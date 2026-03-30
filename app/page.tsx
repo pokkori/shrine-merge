@@ -5,31 +5,170 @@ import ShrineStreakBadge from "@/components/ShrineStreakBadge";
 import DailyOmikujiTeaser from "@/components/DailyOmikujiTeaser";
 import MergeDemoSection from "@/components/MergeDemoSection";
 
+/* --- SVG Icons (replaces all emoji) --- */
+function ToriiSvg({ size = 28 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 48 48" width={size} height={size} aria-hidden="true">
+      <rect x="6" y="8" width="36" height="5" rx="2" fill="#B91C1C" />
+      <rect x="4" y="12" width="40" height="3" rx="1" fill="#DC2626" />
+      <rect x="10" y="15" width="4" height="30" rx="1" fill="#991B1B" />
+      <rect x="34" y="15" width="4" height="30" rx="1" fill="#991B1B" />
+      <rect x="8" y="22" width="32" height="3" rx="1" fill="#B91C1C" />
+    </svg>
+  );
+}
+function EnMusubiSvg() {
+  return (
+    <svg viewBox="0 0 32 32" width={28} height={28} aria-hidden="true">
+      <circle cx="10" cy="16" r="7" fill="none" stroke="#F472B6" strokeWidth="2.5" />
+      <circle cx="22" cy="16" r="7" fill="none" stroke="#F472B6" strokeWidth="2.5" />
+      <path d="M13 12 C16 8 16 24 19 20" stroke="#F472B6" strokeWidth="1.5" fill="none" />
+    </svg>
+  );
+}
+function KinunSvg() {
+  return (
+    <svg viewBox="0 0 32 32" width={28} height={28} aria-hidden="true">
+      <circle cx="16" cy="16" r="12" fill="#FBBF24" />
+      <text x="16" y="21" textAnchor="middle" fontSize="14" fontWeight="bold" fill="#92400E">$</text>
+    </svg>
+  );
+}
+function GakugyoSvg() {
+  return (
+    <svg viewBox="0 0 32 32" width={28} height={28} aria-hidden="true">
+      <rect x="6" y="8" width="20" height="16" rx="2" fill="#3B82F6" />
+      <rect x="8" y="10" width="16" height="12" rx="1" fill="#DBEAFE" />
+      <path d="M10 14h12M10 18h8" stroke="#3B82F6" strokeWidth="1.5" strokeLinecap="round" />
+      <rect x="12" y="24" width="8" height="3" rx="1" fill="#60A5FA" />
+    </svg>
+  );
+}
+function KenkouSvg() {
+  return (
+    <svg viewBox="0 0 32 32" width={28} height={28} aria-hidden="true">
+      <path d="M16 6 C10 6 4 12 4 18 C4 24 10 28 16 28 C22 28 28 24 28 18 C28 12 22 6 16 6Z" fill="#10B981" />
+      <path d="M12 16h8M16 12v8" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+function ShoubuSvg() {
+  return (
+    <svg viewBox="0 0 32 32" width={28} height={28} aria-hidden="true">
+      <polygon points="16,2 20,12 31,12 22,19 25,30 16,23 7,30 10,19 1,12 12,12" fill="#EF4444" />
+    </svg>
+  );
+}
+function SwipeSvg() {
+  return (
+    <svg viewBox="0 0 32 32" width={22} height={22} aria-hidden="true">
+      <path d="M8 16h16M20 12l4 4-4 4" stroke="#FBBF24" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </svg>
+  );
+}
+function MergeSvg() {
+  return (
+    <svg viewBox="0 0 32 32" width={22} height={22} aria-hidden="true">
+      <circle cx="10" cy="16" r="6" fill="#D4AF37" opacity="0.7" />
+      <circle cx="22" cy="16" r="6" fill="#D4AF37" opacity="0.7" />
+      <path d="M14 16h4" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+function GoryakuSvg() {
+  return (
+    <svg viewBox="0 0 32 32" width={22} height={22} aria-hidden="true">
+      <circle cx="16" cy="16" r="12" fill="none" stroke="#FBBF24" strokeWidth="2" />
+      <path d="M16 8v10l6 4" stroke="#FBBF24" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+function OmikujiSvg() {
+  return (
+    <svg viewBox="0 0 32 32" width={22} height={22} aria-hidden="true">
+      <rect x="10" y="4" width="12" height="24" rx="2" fill="#FEF3C7" />
+      <rect x="12" y="6" width="8" height="4" rx="1" fill="#DC2626" />
+      <path d="M14 14h4M14 18h4" stroke="#92400E" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+function StarSvg({ filled = true, size = 14 }: { filled?: boolean; size?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true">
+      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+        fill={filled ? "#fcd34d" : "rgba(212,175,55,0.25)"} />
+    </svg>
+  );
+}
+
+/* --- Floating particles --- */
+function FloatingParticles() {
+  const particles = Array.from({ length: 7 }, (_, i) => ({
+    id: i,
+    left: `${10 + i * 13}%`,
+    delay: `${i * 0.7}s`,
+    duration: `${4 + (i % 3)}s`,
+    size: 3 + (i % 3) * 2,
+  }));
+  return (
+    <>
+      <style>{`
+        @keyframes floatUp {
+          0% { transform: translateY(0) scale(1); opacity: 0.6; }
+          50% { transform: translateY(-40px) scale(1.3); opacity: 1; }
+          100% { transform: translateY(-80px) scale(0.8); opacity: 0; }
+        }
+      `}</style>
+      {particles.map(p => (
+        <div key={p.id} className="absolute pointer-events-none" style={{
+          left: p.left, bottom: '10%',
+          width: p.size, height: p.size,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, #fcd34d, #d4af37)',
+          animation: `floatUp ${p.duration} ease-in-out ${p.delay} infinite`,
+          boxShadow: '0 0 6px rgba(212,175,55,0.6)',
+        }} />
+      ))}
+    </>
+  );
+}
+
 export default function HomePage() {
   return (
-    <div className="starry-bg min-h-screen" role="main" aria-label="神社マージ ホーム">
+    <div className="starry-bg min-h-screen relative overflow-hidden" role="main" aria-label="神社マージ ホーム"
+      style={{ background: 'radial-gradient(ellipse at 20% 30%, rgba(212,175,55,0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 70%, rgba(139,0,0,0.1) 0%, transparent 50%), radial-gradient(ellipse at 50% 50%, rgba(212,175,55,0.05) 0%, transparent 60%)' }}>
+      <FloatingParticles />
       {/* Hero */}
-      <section className="text-center py-16 px-4" aria-label="ヒーローセクション">
-        <Image src="/images/hero.png" alt="神社マージ" width={400} height={225} className="mx-auto rounded-2xl mb-4" style={{ filter: "drop-shadow(0 0 20px rgba(212,175,55,0.6))" }} priority />
+      <section className="text-center py-16 px-4 relative z-10" aria-label="ヒーローセクション">
+        <Image src="/images/hero.png" alt="神社マージ" width={400} height={225} className="mx-auto rounded-2xl mb-4" style={{ filter: "drop-shadow(0 0 30px rgba(212,175,55,0.7))" }} priority />
         <h1 className="text-4xl sm:text-5xl font-black mb-3"
-          style={{ color: "#d4af37", textShadow: "0 0 24px rgba(212,175,55,0.4)" }}>
+          style={{
+            background: 'linear-gradient(135deg, #FFD700 0%, #D4AF37 40%, #B8860B 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            filter: 'drop-shadow(0 0 20px rgba(212,175,55,0.5))',
+          }}>
           神社マージ
         </h1>
         <p className="text-lg text-amber-200 mb-2 font-bold">
           神社を合体させて<br className="sm:hidden" />天照大神を目指せ！
         </p>
-        <p className="text-sm text-amber-500 mb-3">
+        <p className="text-sm mb-3" style={{ color: '#D4AF37', textShadow: '0 0 10px rgba(212,175,55,0.4)', letterSpacing: '0.15em' }}>
           鳥居からはじめ、合体を繰り返して最強の神社へ
         </p>
-        <p className="text-sm text-amber-300 mb-10 font-bold">
-           スコアをXでシェアして友達と競おう！
+        <p className="text-sm mb-10 font-bold" style={{ color: '#2DD4BF', textShadow: '0 0 10px rgba(45,212,191,0.5), 0 0 20px rgba(45,212,191,0.3)', letterSpacing: '0.2em' }}>
+          スコアをXでシェアして友達と競おう！
         </p>
         <Link
           href="/game"
-          className="btn-shrine-red inline-block px-12 py-4 text-xl font-black min-h-[44px]"
+          className="relative inline-block px-12 py-4 rounded-2xl text-xl font-black text-white min-h-[56px] transition-all duration-200 hover:-translate-y-1 active:scale-[0.95]"
           aria-label="神社マージのゲームを今すぐプレイする"
+          style={{
+            background: 'linear-gradient(135deg, #B91C1C 0%, #DC2626 50%, #EF4444 100%)',
+            boxShadow: '0 0 30px rgba(220,38,38,0.5), 0 6px 20px rgba(0,0,0,0.4)',
+          }}
         >
-          今すぐ遊ぶ
+          <span className="relative z-10 flex items-center gap-2 justify-center"><ToriiSvg size={22} /> 今すぐ遊ぶ</span>
         </Link>
         <p className="mt-3 text-xs text-amber-500">
           1日3回まで無料 • プレミアムで無制限プレイ
@@ -67,14 +206,14 @@ export default function HomePage() {
 
       {/* ご利益プリセット */}
       <section className="px-4 pb-8 max-w-sm mx-auto">
-        <h2 className="text-center font-black text-amber-300 mb-4 text-base">️ 今日の願い事を選んで参拝</h2>
+        <h2 className="text-center font-black text-amber-300 mb-4 text-base">今日の願い事を選んで参拝</h2>
         <div className="grid grid-cols-5 gap-2">
           {[
-            { emoji: "", label: "縁結び" },
-            { emoji: "", label: "金運" },
-            { emoji: "", label: "学業" },
-            { emoji: "", label: "健康" },
-            { emoji: "", label: "勝負運" },
+            { svg: <EnMusubiSvg />, label: "縁結び" },
+            { svg: <KinunSvg />, label: "金運" },
+            { svg: <GakugyoSvg />, label: "学業" },
+            { svg: <KenkouSvg />, label: "健康" },
+            { svg: <ShoubuSvg />, label: "勝負運" },
           ].map((item) => (
             <Link
               key={item.label}
@@ -88,7 +227,7 @@ export default function HomePage() {
                 border: "1px solid rgba(212,175,55,0.30)",
               }}
             >
-              <span className="text-2xl" aria-hidden="true">{item.emoji}</span>
+              <span aria-hidden="true">{item.svg}</span>
               <span className="text-xs font-bold text-amber-300">{item.label}</span>
             </Link>
           ))}
@@ -127,23 +266,23 @@ export default function HomePage() {
         <div className="space-y-3 mb-4">
           {[
             {
-              icon: "️",
+              iconEl: <ToriiSvg size={32} />,
               title: "和の世界観・神社テーマ",
               desc: "スイカゲームはフルーツを合体させるのに対し、神社マージは鳥居・拝殿・天照大神など本物の神社格制度を再現。日本の神道文化を学びながら遊べます。",
             },
             {
-              icon: "",
+              iconEl: <GoryakuSvg />,
               title: "御利益バフシステム",
               desc: "神社マージ独自の「御利益ポイント」システム。合体するほど御利益ポイントが溜まり、おみくじを引いてボーナス神社を召喚！高レベル合体で60秒間御利益2倍バフが発動。",
             },
             {
-              icon: "",
+              iconEl: <OmikujiSvg />,
               title: "毎日引けるおみくじ",
               desc: "スイカゲームにはない「デイリーおみくじ」機能。大吉〜凶まで4種類のおみくじを毎日無料で引けて、大吉なら高レベル神社がボーナス出現！",
             },
           ].map((item, i) => (
             <div key={i} className="glass-card flex gap-3 items-start p-4">
-              <span className="text-2xl flex-shrink-0">{item.icon}</span>
+              <span className="flex-shrink-0">{item.iconEl}</span>
               <div>
                 <div className="font-bold text-amber-200 text-sm mb-1">{item.title}</div>
                 <div className="text-xs text-amber-400 leading-relaxed">{item.desc}</div>
@@ -165,9 +304,9 @@ export default function HomePage() {
         <h2 className="text-center font-black text-amber-300 mb-4 text-lg">初めての方へ — 3ステップで始める</h2>
         <div className="space-y-3">
           {[
-            { step: "01", icon: "", title: "上下左右にスワイプ", desc: "画面をスワイプ（またはキーボードの矢印キー）でグリッド全体が動きます。" },
-            { step: "02", icon: "️", title: "同じ神社が合体", desc: "同じ種類の神社が隣接すると自動で合体！より格の高い神社に昇格します。" },
-            { step: "03", icon: "", title: "天照大神を目指せ", desc: "全9段階の最高位「天照大神」まで合体させるのが目標。おみくじも活用しよう！" },
+            { step: "01", iconEl: <SwipeSvg />, title: "上下左右にスワイプ", desc: "画面をスワイプ（またはキーボードの矢印キー）でグリッド全体が動きます。" },
+            { step: "02", iconEl: <MergeSvg />, title: "同じ神社が合体", desc: "同じ種類の神社が隣接すると自動で合体！より格の高い神社に昇格します。" },
+            { step: "03", iconEl: <ToriiSvg size={22} />, title: "天照大神を目指せ", desc: "全9段階の最高位「天照大神」まで合体させるのが目標。おみくじも活用しよう！" },
           ].map((item, i) => (
             <div key={i} className="flex gap-3 items-start rounded-xl p-3"
               style={{ background: "rgba(255,255,255,0.08)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: "12px" }}>
@@ -176,7 +315,7 @@ export default function HomePage() {
                 {item.step}
               </div>
               <div>
-                <div className="font-bold text-amber-200 text-sm">{item.icon} {item.title}</div>
+                <div className="font-bold text-amber-200 text-sm flex items-center gap-1">{item.iconEl} {item.title}</div>
                 <div className="text-xs text-amber-500 mt-0.5">{item.desc}</div>
               </div>
             </div>
@@ -190,13 +329,13 @@ export default function HomePage() {
         <h2 className="text-center font-black text-amber-300 mb-5 text-lg">遊び方</h2>
         <div className="space-y-3">
           {[
-            { icon: "", title: "スワイプ or 矢印キー", desc: "上下左右に全タイルを移動" },
-            { icon: "", title: "同じ神社をマージ", desc: "隣接した同じ神社が合体して次レベルに" },
-            { icon: "", title: "御利益ポイントを貯める", desc: "神社が自動でポイントを生産。おみくじに使おう！" },
-            { icon: "", title: "おみくじを引く", desc: "御利益ポイントで新しい神社を召喚！" },
+            { iconEl: <SwipeSvg />, title: "スワイプ or 矢印キー", desc: "上下左右に全タイルを移動" },
+            { iconEl: <MergeSvg />, title: "同じ神社をマージ", desc: "隣接した同じ神社が合体して次レベルに" },
+            { iconEl: <GoryakuSvg />, title: "御利益ポイントを貯める", desc: "神社が自動でポイントを生産。おみくじに使おう！" },
+            { iconEl: <OmikujiSvg />, title: "おみくじを引く", desc: "御利益ポイントで新しい神社を召喚！" },
           ].map((item, i) => (
             <div key={i} className="glass-card flex gap-3 items-start p-3">
-              <span className="text-2xl">{item.icon}</span>
+              <span className="flex-shrink-0">{item.iconEl}</span>
               <div>
                 <div className="font-bold text-amber-200 text-sm">{item.title}</div>
                 <div className="text-xs text-amber-400 mt-0.5">{item.desc}</div>
@@ -219,7 +358,7 @@ export default function HomePage() {
           }}
         >
           <p className="text-amber-300 font-black text-base mb-2">
-             スコアをXでシェアしよう
+            スコアをXでシェアしよう
           </p>
           <p className="text-amber-500 text-xs mb-4 leading-relaxed">
             ゲームオーバー後にワンタップでXに投稿できます。<br />
@@ -285,7 +424,7 @@ export default function HomePage() {
 
       {/* プレイヤーの声 */}
       <section className="px-4 pb-10 max-w-sm mx-auto">
-        <h2 className="text-center font-black text-amber-300 mb-4 text-lg">️ プレイヤーの声</h2>
+        <h2 className="text-center font-black text-amber-300 mb-4 text-lg">プレイヤーの声</h2>
         <div className="space-y-3">
           {[
             { stars: 5, text: "毎日参拝してます。大吉が出た時の嬉しさは格別！", user: "@shrine_lover" },
@@ -296,7 +435,7 @@ export default function HomePage() {
               style={{ background: "rgba(212,175,55,0.07)", border: "1px solid rgba(212,175,55,0.2)" }}>
               <div className="flex items-center gap-1 mb-2">
                 {Array.from({ length: 5 }).map((_, j) => (
-                  <span key={j} style={{ color: j < review.stars ? "#fcd34d" : "rgba(212,175,55,0.25)", fontSize: "14px" }}></span>
+                  <StarSvg key={j} filled={j < review.stars} />
                 ))}
               </div>
               <p className="text-amber-100 text-sm leading-relaxed mb-1">「{review.text}」</p>
@@ -310,8 +449,12 @@ export default function HomePage() {
       <section className="text-center pb-16 px-4">
         <Link
           href="/game"
-          className="btn-gold inline-block px-12 py-4 text-xl font-black rounded-2xl min-h-[44px]"
+          className="relative inline-block px-12 py-4 text-xl font-black rounded-2xl min-h-[56px] text-white transition-all duration-200 hover:-translate-y-1 active:scale-[0.95]"
           aria-label="神社マージのゲームをスタートする"
+          style={{
+            background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #8B6914 100%)',
+            boxShadow: '0 0 30px rgba(212,175,55,0.5), 0 6px 20px rgba(0,0,0,0.4)',
+          }}
         >
           ゲームスタート
         </Link>
@@ -325,12 +468,12 @@ export default function HomePage() {
         <h2 className="text-center text-base font-bold text-amber-400 mb-5">こんな経験ありませんか？</h2>
         <div className="space-y-3">
           {[
-            { icon: "", text: "スマホゲームに疲れて、もっとまったり遊べるゲームが欲しい..." },
-            { icon: "", text: "暇つぶしに気軽に遊べる和風ゲームがなかなか見つからない..." },
-            { icon: "", text: "日本文化に触れながら、パズルゲームを楽しみたい..." },
+            { text: "スマホゲームに疲れて、もっとまったり遊べるゲームが欲しい..." },
+            { text: "暇つぶしに気軽に遊べる和風ゲームがなかなか見つからない..." },
+            { text: "日本文化に触れながら、パズルゲームを楽しみたい..." },
           ].map((item, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px", background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.25)", borderRadius: "12px", padding: "12px 14px" }}>
-              <span style={{ fontSize: "20px" }}>{item.icon}</span>
+              <span style={{ fontSize: "20px", color: "#D4AF37" }} aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" strokeWidth="2" /><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" /><circle cx="9" cy="10" r="1" fill="currentColor" /><circle cx="15" cy="10" r="1" fill="currentColor" /></svg></span>
               <p style={{ color: "#fef3c7", fontSize: "13px", fontWeight: "500" }}>{item.text}</p>
             </div>
           ))}
@@ -362,7 +505,7 @@ export default function HomePage() {
       {/* BASEアフィリエイト */}
       <section className="py-6 px-4 max-w-lg mx-auto">
         <div style={{ background: "rgba(139,0,0,0.15)", border: "1px solid rgba(139,0,0,0.4)", borderRadius: "16px", padding: "16px" }}>
-          <p style={{ color: "#fca5a5", fontWeight: "700", fontSize: "14px", marginBottom: "12px" }}>️ 神社グッズをBASEで販売しよう</p>
+          <p style={{ color: "#fca5a5", fontWeight: "700", fontSize: "14px", marginBottom: "12px" }}>神社グッズをBASEで販売しよう</p>
           <a
             href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+8ZAE9E+2QQG+62MDD"
             target="_blank"
@@ -382,7 +525,7 @@ export default function HomePage() {
       {/* A8.netアフィリエイト：ハンドメイド */}
       <section className="py-8 px-4 max-w-lg mx-auto">
         <div className="rounded-2xl p-4" style={{ background: "rgba(180,120,60,0.08)", border: "1px solid rgba(180,120,60,0.25)" }}>
-          <p className="text-sm font-bold mb-3" style={{ color: "#c8956a" }}> 手作りお守り・縁起物を作ってみよう（PR）</p>
+          <p className="text-sm font-bold mb-3" style={{ color: "#c8956a" }}>手作りお守り・縁起物を作ってみよう（PR）</p>
           <a
             href="https://px.a8.net/svt/ejp?a8mat=4AZIOF+8PRGKY+4V0U+BXB8Z"
             target="_blank"
@@ -402,16 +545,16 @@ export default function HomePage() {
 
       {/* 神社マージで楽しむ3選 */}
       <section className="py-8 px-4 max-w-lg mx-auto">
-        <h2 className="text-center text-base font-bold text-amber-400 mb-4">️ もっと楽しむ3選</h2>
+        <h2 className="text-center text-base font-bold text-amber-400 mb-4">もっと楽しむ3選</h2>
         <ol className="space-y-3">
           {[
-            { icon: "", title: "天照大神を目指して挑戦", desc: "全9段階の最高位「天照大神」まで合体できるか挑戦！日本の神社格制度を学びながら楽しめます。" },
-            { icon: "", title: "友達とスコアを競う", desc: "ゲームオーバー後にXでスコアをシェアして、誰が一番高い神社まで到達できるか競争しよう。" },
-            { icon: "", title: "毎日の癒しパズルとして", desc: "和の雰囲気で心が落ち着くパズル体験。朝の5分間の瞑想代わりに。" },
+            { iconEl: <ToriiSvg size={24} />, title: "天照大神を目指して挑戦", desc: "全9段階の最高位「天照大神」まで合体できるか挑戦！日本の神社格制度を学びながら楽しめます。" },
+            { iconEl: <svg viewBox="0 0 24 24" width={24} height={24} aria-hidden="true"><circle cx="8" cy="12" r="5" fill="none" stroke="#FBBF24" strokeWidth="2" /><circle cx="16" cy="12" r="5" fill="none" stroke="#FBBF24" strokeWidth="2" /></svg>, title: "友達とスコアを競う", desc: "ゲームオーバー後にXでスコアをシェアして、誰が一番高い神社まで到達できるか競争しよう。" },
+            { iconEl: <OmikujiSvg />, title: "毎日の癒しパズルとして", desc: "和の雰囲気で心が落ち着くパズル体験。朝の5分間の瞑想代わりに。" },
           ].map((item, i) => (
             <li key={i} className="flex items-start gap-3"
               style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: "12px", padding: "12px 14px" }}>
-              <span style={{ fontSize: "24px", lineHeight: "1" }}>{item.icon}</span>
+              <span style={{ lineHeight: "1" }}>{item.iconEl}</span>
               <div>
                 <div style={{ color: "#fcd34d", fontWeight: "700", fontSize: "13px" }}>{i + 1}. {item.title}</div>
                 <div style={{ color: "rgba(212,175,55,0.7)", fontSize: "12px", marginTop: "2px" }}>{item.desc}</div>

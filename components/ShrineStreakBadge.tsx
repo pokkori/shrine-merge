@@ -15,6 +15,16 @@ function getShrineStreak(): number {
   }
 }
 
+/* Flame SVG icon */
+function FlameSvg() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 2c0 4-4 6-4 10a6 6 0 0012 0c0-4-4-6-4-10-1 2-3 3-4 0z" fill="#fcd34d" />
+      <path d="M12 8c0 2-2 3-2 5a3 3 0 006 0c0-2-2-3-2-5-.5 1-1.5 1.5-2 0z" fill="#f59e0b" />
+    </svg>
+  );
+}
+
 export default function ShrineStreakBadge() {
   const [streak, setStreak] = useState(0);
   const [mounted, setMounted] = useState(false);
@@ -28,15 +38,16 @@ export default function ShrineStreakBadge() {
 
   return (
     <div
-      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full font-black text-sm animate-pulse"
+      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full font-black text-sm animate-pulse min-h-[44px]"
       style={{
-        background: "linear-gradient(135deg, rgba(212,175,55,0.25), rgba(245,158,11,0.15))",
-        border: "1px solid rgba(212,175,55,0.5)",
+        background: "rgba(255,255,255,0.03)",
+        backdropFilter: "blur(16px)",
+        border: "1px solid rgba(255,255,255,0.08)",
         color: "#fcd34d",
         boxShadow: "0 0 16px rgba(212,175,55,0.3)",
       }}
     >
-       {streak}日連続参拝中！御利益UP中
+      <FlameSvg /> {streak}日連続参拝中! 御利益UP中
     </div>
   );
 }

@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
+import { Noto_Sans_JP } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+
+const notoSansJP = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "700"], display: "swap" });
 
 const SITE_URL = "https://shrine-merge.vercel.app";
 
@@ -88,6 +91,7 @@ export const metadata: Metadata = {
     title: "神社マージ - 神社を合体させて最強の神社を目指せ！",
     description: "神社を合体させる新感覚パズルゲーム。鳥居から天照大神まで合体させてスコアを競おう！",
   },
+  other: { "theme-color": "#0F0F1A" },
 };
 
 export const viewport: Viewport = {
@@ -110,7 +114,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body>
+      <body className={`${notoSansJP.className} text-slate-100 antialiased`}>
         {children}
         <Analytics />
       </body>

@@ -12,9 +12,9 @@ export default function ShrineGrid({ grid }: ShrineGridProps) {
     <div
       className="game-grid w-full max-w-sm mx-auto p-3 rounded-2xl"
       style={{
-        background: "rgba(10,6,30,0.75)",
-        backdropFilter: "blur(8px)",
-        border: "1px solid rgba(212,175,55,0.3)",
+        background: "rgba(255,255,255,0.03)",
+        backdropFilter: "blur(16px)",
+        border: "1px solid rgba(255,255,255,0.08)",
         boxShadow: "0 8px 32px rgba(0,0,0,0.6), inset 0 1px 0 rgba(212,175,55,0.2)",
       }}
     >

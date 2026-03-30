@@ -39,11 +39,17 @@ export default function KomojuButton({ planId, planLabel, className }: Props) {
       <button
         onClick={handleClick}
         disabled={loading}
-        className={className ?? "w-full font-bold py-3 rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"}
+        aria-label={loading ? "決済ページへ移動中" : planLabel}
+        className={className ?? "w-full font-bold py-3 rounded-xl transition-all active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] text-slate-100"}
+        style={{
+          background: "linear-gradient(135deg, #d4af37, #f59e0b)",
+          color: "#1a0a00",
+          boxShadow: "0 0 16px rgba(212,175,55,0.3)",
+        }}
       >
         {loading ? "決済ページへ移動中..." : planLabel}
       </button>
-      {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
+      {error && <p className="text-red-400 text-sm mt-2 text-center">{error}</p>}
     </div>
   );
 }
