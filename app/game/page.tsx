@@ -34,6 +34,8 @@ import {
 import KonMascot from "@/components/KonMascot";
 import SakuraParticleCanvas from "@/components/SakuraParticleCanvas";
 import { ScorePopLayer, type ScorePopItem } from "@/components/ScorePop";
+import { LottiePlayer } from "@/components/LottiePlayer";
+import { StreakFlame } from "@/components/StreakFlame";
 
 const DAILY_FREE_LIMIT = 3;
 const AMATERASU_LEVEL = 9; // 天照大神のレベル
@@ -367,6 +369,9 @@ export default function GamePage() {
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
   const goryakuInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Lottieキャラ感情反応
+  type LottieState = 'idle' | 'happy' | 'sad' | 'fever';
+  const [lottieState, setLottieState] = useState<LottieState>('idle');
   // ScorePop
   const [scorePopItems, setScorePopItems] = useState<ScorePopItem[]>([]);
   const scorePopIdRef = useRef(0);
@@ -517,6 +522,12 @@ export default function GamePage() {
           }));
           setPetals(newPetals);
           setTimeout(() => setPetals([]), 5000);
+        }
+        // Lottieキャラ感情反応: レベル7以上→fever、それ以外→happy
+        if (mergeLevel >= 7) {
+          setLottieState('fever');
+        } else {
+          setLottieState('happy');
         }
       }
       if (gameOver) setTimeout(() => playSE("gameover"), 300);
@@ -718,6 +729,12 @@ export default function GamePage() {
       {/* 画面フラッシュ演出 */}
       {showScreenFlash && <div className="screen-flash" />}
 
+      {/* Lottieキャラ感情反応アニメーション */}
+      <LottiePlayer
+        state={lottieState}
+        onComplete={() => setLottieState('idle')}
+      />
+
       {/* 花びら降下演出（天照大神） Canvas版 */}
       <SakuraParticleCanvas active={petals.length > 0} intensity="heavy" duration={5000} />
       {/* 旧petal div は SakuraParticleCanvas に統合 */}
@@ -755,10 +772,8 @@ export default function GamePage() {
             <BellIcon size={12} />
             今日のお告げ {dailyChallenge.cleared ? "達成！" : `目標: ${dailyChallenge.target.toLocaleString()}pt`}
           </span>
-          {shrineStreak >= 2 && (
-            <span className="text-[10px] font-bold text-amber-400 flex items-center gap-0.5">
-              <StarIcon size={10} />{shrineStreak}日連続
-            </span>
+          {shrineStreak >= 1 && (
+            <StreakFlame streak={shrineStreak} />
           )}
         </div>
         <div className="w-full h-1.5 rounded-full" style={{ background: "rgba(212,175,55,0.15)" }}>
