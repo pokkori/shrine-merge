@@ -32,6 +32,7 @@ import {
   SakuraPetalSvg,
 } from "@/components/UiSvgIcons";
 import KonMascot from "@/components/KonMascot";
+import CharacterAvatar from "@/components/CharacterAvatar";
 import SakuraParticleCanvas from "@/components/SakuraParticleCanvas";
 import { ScorePopLayer, type ScorePopItem } from "@/components/ScorePop";
 import { LottiePlayer } from "@/components/LottiePlayer";
@@ -907,6 +908,14 @@ export default function GamePage() {
           </span>
         </div>
       )}
+
+      {/* CharacterAvatar: 合体時happy・通常normal（桜ピンクテーマ） */}
+      <div className="flex justify-center mb-1">
+        <CharacterAvatar
+          emotion={mergePopup !== null ? "happy" : "normal"}
+          size={64}
+        />
+      </div>
 
       <div className="w-full max-w-sm mb-3">
         <ScoreBoard
