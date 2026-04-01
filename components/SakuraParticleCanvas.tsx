@@ -31,6 +31,11 @@ function drawPetal(ctx: CanvasRenderingContext2D, petal: Petal) {
 
   const s = petal.size;
   ctx.fillStyle = petal.color;
+
+  // shadowBlur グロー: ピンク輝き感
+  ctx.shadowColor = '#FF6B9D';
+  ctx.shadowBlur = s * 2.5;
+
   ctx.beginPath();
 
   // 5弁bezier curve 花びら
@@ -52,6 +57,10 @@ function drawPetal(ctx: CanvasRenderingContext2D, petal: Petal) {
   }
   ctx.closePath();
   ctx.fill();
+
+  // グローリセット（中心円には不要）
+  ctx.shadowBlur = 0;
+  ctx.shadowColor = 'transparent';
 
   // 中心の白い円
   ctx.fillStyle = "rgba(255,255,255,0.5)";
