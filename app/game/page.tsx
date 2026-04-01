@@ -20,12 +20,25 @@ import {
   calcGoryakuGain,
 } from "@/lib/game";
 import ShrineCollection, { unlockShrine, getUnlockedShrines } from "@/components/ShrineCollection";
+import {
+  ToriiSmallIcon,
+  BookIcon,
+  MuteOnIcon,
+  MuteOffIcon,
+  StarIcon,
+  BellIcon,
+  OmikujiScrollIcon,
+  RetryIcon,
+  SakuraPetalSvg,
+} from "@/components/UiSvgIcons";
+import KonMascot from "@/components/KonMascot";
+import SakuraParticleCanvas from "@/components/SakuraParticleCanvas";
 
 const DAILY_FREE_LIMIT = 3;
 const AMATERASU_LEVEL = 9; // 天照大神のレベル
 
-//  絵文字グリッドシェア（Wordle方式） 
-const SHRINE_EMOJIS = ['️','','','','','','️','',''];
+//  テキストグリッドシェア（Wordle方式）
+const SHRINE_EMOJIS = ['[鳥]','[犬]','[水]','[拝]','[本]','[宮]','[社]','[総]','[照]'];
 
 function generateEmojiGrid(highestLevel: number): string {
   const filled = SHRINE_EMOJIS.slice(0, highestLevel);
@@ -39,29 +52,29 @@ function generateEmojiGrid(highestLevel: number): string {
   return rows.join('\n');
 }
 
-//  合体演出レベル別テキスト 
+//  合体演出レベル別テキスト
 const MERGE_EFFECT_TEXTS: Record<number, { text: string; color: string; size: string }> = {
-  2: { text: " 縁起良し！", color: "#fb923c", size: "text-sm" },
-  3: { text: " 浄化！", color: "#fbbf24", size: "text-sm" },
-  4: { text: " 開運UP！御利益↑", color: "#4ade80", size: "text-base" },
-  5: { text: " 健康祈願！御利益UP！", color: "#38bdf8", size: "text-base" },
-  6: { text: " 金運上昇！ 御利益大！", color: "#a78bfa", size: "text-lg" },
-  7: { text: "️ 大吉！出世運爆上がり！", color: "#fcd34d", size: "text-lg" },
-  8: { text: " 万能御利益！最高運到来！", color: "#d4af37", size: "text-xl" },
-  9: { text: " 天照大神降臨！！大当たり！", color: "#fffbeb", size: "text-2xl" },
+  2: { text: "縁起良し！", color: "#fb923c", size: "text-sm" },
+  3: { text: "浄化！", color: "#fbbf24", size: "text-sm" },
+  4: { text: "開運UP！御利益↑", color: "#4ade80", size: "text-base" },
+  5: { text: "健康祈願！御利益UP！", color: "#38bdf8", size: "text-base" },
+  6: { text: "金運上昇！御利益大！", color: "#a78bfa", size: "text-lg" },
+  7: { text: "大吉！出世運爆上がり！", color: "#fcd34d", size: "text-lg" },
+  8: { text: "万能御利益！最高運到来！", color: "#d4af37", size: "text-xl" },
+  9: { text: "天照大神降臨！！大当たり！", color: "#fffbeb", size: "text-2xl" },
 };
 
 // 神社うんちくデータ（ゲームオーバー後にランダム表示）
 const SHRINE_TRIVIA = [
-  { shrine: "️ 鳥居", fact: "鳥居は「神域」と「人間の世界」の境界を示す門。くぐることで心身が清められると言われています。" },
-  { shrine: " 狛犬", fact: "狛犬の「阿（あ）」「吽（うん）」は宇宙の始まりと終わりを表す。口を開けた方が『阿』、閉じた方が『吽』。" },
-  { shrine: " 手水舎", fact: "手水（てみず）で手を清めるのは古代から続く儀式。左手→右手→口→左手の順で清めるのが正式な作法。" },
-  { shrine: " 拝殿", fact: "拝殿は参拝者が礼拝するための建物。二礼二拍手一礼が一般的な参拝作法です。" },
-  { shrine: " 本殿", fact: "本殿は神様が宿る最も神聖な場所。一般参拝者は通常、本殿に入れません。" },
-  { shrine: " 神宮", fact: "「神宮」の称号は天皇・皇族を祀る最高格の社にのみ使われます。伊勢神宮が最も有名。" },
-  { shrine: "️ 大社", fact: "大社（たいしゃ）は神格が高い神社への称号。出雲大社や住吉大社などが代表的。縁結びで有名です。" },
-  { shrine: " 総本社", fact: "総本社は全国に分社する神社の「本家」。稲荷神社の総本社は京都の伏見稲荷大社です。" },
-  { shrine: " 天照大神", fact: "天照大神（あまてらすおおみかみ）は日本神話の最高神であり太陽の神。天皇家の祖先神とされています。" },
+  { shrine: "鳥居", fact: "鳥居は「神域」と「人間の世界」の境界を示す門。くぐることで心身が清められると言われています。" },
+  { shrine: "狛犬", fact: "狛犬の「阿（あ）」「吽（うん）」は宇宙の始まりと終わりを表す。口を開けた方が『阿』、閉じた方が『吽』。" },
+  { shrine: "手水舎", fact: "手水（てみず）で手を清めるのは古代から続く儀式。左手→右手→口→左手の順で清めるのが正式な作法。" },
+  { shrine: "拝殿", fact: "拝殿は参拝者が礼拝するための建物。二礼二拍手一礼が一般的な参拝作法です。" },
+  { shrine: "本殿", fact: "本殿は神様が宿る最も神聖な場所。一般参拝者は通常、本殿に入れません。" },
+  { shrine: "神宮", fact: "「神宮」の称号は天皇・皇族を祀る最高格の社にのみ使われます。伊勢神宮が最も有名。" },
+  { shrine: "大社", fact: "大社（たいしゃ）は神格が高い神社への称号。出雲大社や住吉大社などが代表的。縁結びで有名です。" },
+  { shrine: "総本社", fact: "総本社は全国に分社する神社の「本家」。稲荷神社の総本社は京都の伏見稲荷大社です。" },
+  { shrine: "天照大神", fact: "天照大神（あまてらすおおみかみ）は日本神話の最高神であり太陽の神。天皇家の祖先神とされています。" },
 ];
 
 function getRandomTrivia(): typeof SHRINE_TRIVIA[0] {
@@ -126,13 +139,13 @@ function saveShrineDailyChallengeScore(score: number): void {
   }
 }
 
-//  デイリー無料おみくじ 
+//  デイリー無料おみくじ
 type OmikujiResult = { rank: "大吉" | "中吉" | "小吉" | "凶"; emoji: string; message: string; goryaku: string; bonusLevel: number | null };
 const OMIKUJI_RESULTS: OmikujiResult[] = [
-  { rank: "大吉", emoji: "", message: "素晴らしい運気！今日は何をやっても上手くいく日。", goryaku: "金運・開運・縁結び すべて叶います", bonusLevel: 6 },
-  { rank: "中吉", emoji: "", message: "良い運気に恵まれています。前向きに行動しましょう。", goryaku: "健康・出世・開運 がアップ", bonusLevel: 4 },
-  { rank: "小吉", emoji: "", message: "小さな幸せが訪れる日。感謝の気持ちを大切に。", goryaku: "縁結び・浄化 に御利益あり", bonusLevel: 2 },
-  { rank: "凶", emoji: "️", message: "今日は慎重に。焦らず、じっくり取り組むことで運気が開けます。", goryaku: "今日は休息日。明日から運気UP！", bonusLevel: null },
+  { rank: "大吉", emoji: "daikichi", message: "素晴らしい運気！今日は何をやっても上手くいく日。", goryaku: "金運・開運・縁結び すべて叶います", bonusLevel: 6 },
+  { rank: "中吉", emoji: "chukichi", message: "良い運気に恵まれています。前向きに行動しましょう。", goryaku: "健康・出世・開運 がアップ", bonusLevel: 4 },
+  { rank: "小吉", emoji: "shokichi", message: "小さな幸せが訪れる日。感謝の気持ちを大切に。", goryaku: "縁結び・浄化 に御利益あり", bonusLevel: 2 },
+  { rank: "凶", emoji: "kyo", message: "今日は慎重に。焦らず、じっくり取り組むことで運気が開けます。", goryaku: "今日は休息日。明日から運気UP！", bonusLevel: null },
 ];
 // 大吉:15%, 中吉:40%, 小吉:35%, 凶:10%
 function drawOmikuji(): OmikujiResult {
@@ -224,7 +237,7 @@ function generateScoreCardDataURL(
     ctx.fillStyle = "#d4af37";
     ctx.font = "bold 28px sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("️ 神社マージ", 240, 52);
+    ctx.fillText("神社マージ", 240, 52);
 
     // スコア
     ctx.fillStyle = "#fcd34d";
@@ -234,7 +247,7 @@ function generateScoreCardDataURL(
     // 最高神社
     ctx.fillStyle = "#fde68a";
     ctx.font = "22px sans-serif";
-    ctx.fillText(`最高神社: ${highestShrineEmoji} ${highestShrineName}`, 240, 175);
+    ctx.fillText(`最高神社: ${highestShrineName}`, 240, 175);
 
     // ベストスコア
     ctx.fillStyle = "rgba(212,175,55,0.7)";
@@ -270,7 +283,7 @@ async function shareScoreCard(
       if (navigator.canShare({ files: [file] })) {
         await navigator.share({
           files: [file],
-          text: `神社マージで${score.toLocaleString()}点達成！最高は${highestShrineEmoji}${highestShrineName}まで合体させた️ #神社マージ`,
+          text: `神社マージで${score.toLocaleString()}点達成！最高は${highestShrineName}まで合体させた #神社マージ`,
           url: "https://shrine-merge.vercel.app",
         });
         return;
@@ -305,9 +318,9 @@ function useSaleCountdown() {
 
 //  チュートリアルモーダル 
 const TUTORIAL_STEPS = [
-  { icon: "", title: "スワイプで神社を動かす", desc: "画面を上下左右にスワイプ（またはキーボード矢印キー）すると、グリッド全体の神社が一斉に動きます。" },
-  { icon: "️", title: "同じ神社を合体させる", desc: "隣接した同じ種類の神社が自動で合体！より格の高い神社に昇格してスコアが上がります。" },
-  { icon: "", title: "御利益ポイントを活用", desc: "神社があると御利益ポイントが自動で溜まります。おみくじを引くとボーナス神社が出現！大吉を狙え！" },
+  { icon: "swipe", title: "スワイプで神社を動かす", desc: "画面を上下左右にスワイプ（またはキーボード矢印キー）すると、グリッド全体の神社が一斉に動きます。" },
+  { icon: "merge", title: "同じ神社を合体させる", desc: "隣接した同じ種類の神社が自動で合体！より格の高い神社に昇格してスコアが上がります。" },
+  { icon: "omikuji", title: "御利益ポイントを活用", desc: "神社があると御利益ポイントが自動で溜まります。おみくじを引くとボーナス神社が出現！大吉を狙え！" },
 ];
 
 function getHasSeenTutorial(): boolean {
@@ -629,7 +642,10 @@ export default function GamePage() {
   if (!state) {
     return (
       <div className="starry-bg min-h-screen flex items-center justify-center">
-        <p className="text-amber-300 text-lg animate-pulse">️ 読み込み中...</p>
+        <p className="text-amber-300 text-lg animate-pulse flex items-center gap-2">
+          <ToriiSmallIcon size={24} />
+          読み込み中...
+        </p>
       </div>
     );
   }
@@ -649,9 +665,9 @@ export default function GamePage() {
   // スコアに応じたおみくじ結果
   const scoreOmikuji = state.score >= 5000 ? "大吉" : state.score >= 3000 ? "中吉" : state.score >= 2000 ? "吉" : state.score >= 1000 ? "小吉" : "末吉";
   const emojiGrid = generateEmojiGrid(state.highestLevel);
-  const emojiShareMsg = `️ 神社マージ 今日の記録\n${emojiGrid}\n最高: ${highestShrine.emoji}${highestShrine.name}（Lv.${state.highestLevel}）\nhttps://shrine-merge.vercel.app #神社マージ`;
+  const emojiShareMsg = `神社マージ 今日の記録\n${emojiGrid}\n最高: ${highestShrine.name}（Lv.${state.highestLevel}）\nhttps://shrine-merge.vercel.app #神社マージ`;
   const emojiShareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(emojiShareMsg);
-  const shareMsg = `【神社マージ】${state.score.toLocaleString()}点で${scoreOmikuji} ${shrineTopPercent}の参拝力！️ 最高神社「${highestShrine.emoji}${highestShrine.name}」(${highestShrine.goryaku}) あなたは天照大神まで辿り着ける？ → https://shrine-merge.vercel.app #神社マージ #おみくじ #パズルゲーム`;
+  const shareMsg = `【神社マージ】${state.score.toLocaleString()}点で${scoreOmikuji} ${shrineTopPercent}の参拝力！最高神社「${highestShrine.name}」(${highestShrine.goryaku}) あなたは天照大神まで辿り着ける？ → https://shrine-merge.vercel.app #神社マージ #おみくじ #パズルゲーム`;
   const shareUrl = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareMsg);
   const remainingPlays = isPremium ? null : Math.max(0, DAILY_FREE_LIMIT - dailyPlays);
   const dailyChallengeProgress = Math.min(100, Math.round((dailyChallenge.best / dailyChallenge.target) * 100));
@@ -662,23 +678,17 @@ export default function GamePage() {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
+      {/* 流れ星 */}
+      <div className="shooting-star-base shooting-star-1" aria-hidden="true" />
+      <div className="shooting-star-base shooting-star-2" aria-hidden="true" />
+      <div className="shooting-star-base shooting-star-3" aria-hidden="true" />
+
       {/* 画面フラッシュ演出 */}
       {showScreenFlash && <div className="screen-flash" />}
 
-      {/* 花びら降下演出（天照大神） */}
-      {petals.map(p => (
-        <div
-          key={p.id}
-          className="petal"
-          style={{
-            left: `${p.left}%`,
-            animationDelay: `${p.delay}s`,
-            animationDuration: `${p.duration}s`,
-          }}
-        >
-          
-        </div>
-      ))}
+      {/* 花びら降下演出（天照大神） Canvas版 */}
+      <SakuraParticleCanvas active={petals.length > 0} intensity="heavy" duration={5000} />
+      {/* 旧petal div は SakuraParticleCanvas に統合 */}
 
       {/* 合体演出ポップアップ */}
       {mergePopup && (
@@ -698,9 +708,10 @@ export default function GamePage() {
       {/* ストリークバナー */}
       {showStreakBanner && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
-          <div className="px-6 py-3 rounded-2xl font-black text-lg shadow-2xl animate-bounce"
+          <div className="px-6 py-3 rounded-2xl font-black text-lg shadow-2xl animate-bounce flex items-center gap-2"
             style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00", boxShadow: "0 0 30px rgba(212,175,55,0.7)" }}>
-             {shrineStreak}日連続参拝！御利益UP！
+            <StarIcon size={20} />
+            {shrineStreak}日連続参拝！御利益UP！
           </div>
         </div>
       )}
@@ -708,11 +719,14 @@ export default function GamePage() {
       {/* デイリーチャレンジバー */}
       <div className="w-full max-w-sm px-1 pt-1 mb-1">
         <div className="flex items-center justify-between mb-0.5">
-          <span className="text-[10px] font-bold" style={{ color: "#d4af37" }}>
-             今日のお告げ {dailyChallenge.cleared ? " 達成！" : `目標: ${dailyChallenge.target.toLocaleString()}pt`}
+          <span className="text-[10px] font-bold flex items-center gap-1" style={{ color: "#d4af37" }}>
+            <BellIcon size={12} />
+            今日のお告げ {dailyChallenge.cleared ? "達成！" : `目標: ${dailyChallenge.target.toLocaleString()}pt`}
           </span>
           {shrineStreak >= 2 && (
-            <span className="text-[10px] font-bold text-amber-400"> {shrineStreak}日連続</span>
+            <span className="text-[10px] font-bold text-amber-400 flex items-center gap-0.5">
+              <StarIcon size={10} />{shrineStreak}日連続
+            </span>
           )}
         </div>
         <div className="w-full h-1.5 rounded-full" style={{ background: "rgba(212,175,55,0.15)" }}>
@@ -728,20 +742,22 @@ export default function GamePage() {
 
       <div className="w-full max-w-sm mx-auto flex items-center justify-between mb-3">
         <a href="/" className="text-amber-400 text-sm hover:text-amber-300 transition-colors">&#8592; トップ</a>
-        <h1 className="text-xl font-black" style={{ color: "#d4af37", textShadow: "0 0 12px rgba(212,175,55,0.5)" }}>
-          ️ 神社マージ
+        <h1 className="text-xl font-black flex items-center gap-1.5" style={{ color: "#d4af37", textShadow: "0 0 12px rgba(212,175,55,0.5)" }}>
+          <ToriiSmallIcon size={22} />
+          神社マージ
         </h1>
         <div className="flex items-center gap-2">
           {/* 図鑑ボタン */}
           <button
             onClick={() => setShowCollection(true)}
-            className="relative text-xl leading-none"
+            className="relative flex items-center justify-center"
+            style={{ width: 44, height: 44 }}
             aria-label="神様図鑑"
             title="神様図鑑"
           >
-            
+            <BookIcon size={24} />
             {collectionCount > 0 && (
-              <span className="absolute -top-1 -right-1 text-[9px] font-black px-1 rounded-full"
+              <span className="absolute top-0.5 right-0.5 text-[9px] font-black px-1 rounded-full"
                 style={{ background: "#d4af37", color: "#1a0a00", minWidth: "14px", lineHeight: "14px", textAlign: "center" }}>
                 {collectionCount}
               </span>
@@ -749,10 +765,11 @@ export default function GamePage() {
           </button>
           <button
             onClick={toggleMute}
-            className="text-xl leading-none"
+            className="flex items-center justify-center"
+            style={{ width: 44, height: 44 }}
             aria-label={isMuted ? "ミュート解除" : "ミュート"}
           >
-            {isMuted ? "" : ""}
+            {isMuted ? <MuteOffIcon size={24} /> : <MuteOnIcon size={24} />}
           </button>
           <button
             onClick={() => { playSE("button"); handleRestart(); }}
@@ -774,8 +791,9 @@ export default function GamePage() {
               border: "1px solid rgba(212,175,55,0.6)",
               boxShadow: "0 0 16px rgba(212,175,55,0.4)",
             }}>
-            <p className="text-sm font-black" style={{ color: "#fcd34d" }}>
-               {SHRINES[bonusEventShrineLevel - 1]?.name}合成！御利益2倍バフ発動中！
+            <p className="text-sm font-black flex items-center justify-center gap-1.5" style={{ color: "#fcd34d" }}>
+              <StarIcon size={16} />
+              {SHRINES[bonusEventShrineLevel - 1]?.name}合成！御利益2倍バフ発動中！
             </p>
             <p className="text-xs text-amber-400">60秒間 御利益ポイント獲得量2倍</p>
           </div>
@@ -786,7 +804,9 @@ export default function GamePage() {
         <div className="w-full max-w-sm mb-2">
           <div className="rounded-lg px-3 py-1 text-center"
             style={{ background: "rgba(212,175,55,0.1)", border: "1px solid rgba(212,175,55,0.3)" }}>
-            <p className="text-xs font-bold" style={{ color: "#fcd34d" }}> 御利益2倍バフ発動中</p>
+            <p className="text-xs font-bold flex items-center justify-center gap-1" style={{ color: "#fcd34d" }}>
+              <StarIcon size={12} /> 御利益2倍バフ発動中
+            </p>
           </div>
         </div>
       )}
@@ -815,7 +835,9 @@ export default function GamePage() {
               boxShadow: "0 0 16px rgba(212,175,55,0.3)",
             }}>
             <div>
-              <p className="text-xs font-black" style={{ color: "#fcd34d" }}>️ 本日の参拝はあと1回！</p>
+              <p className="text-xs font-black flex items-center gap-1" style={{ color: "#fcd34d" }}>
+                <ToriiSmallIcon size={14} /> 本日の参拝はあと1回！
+              </p>
               <p className="text-xs" style={{ color: "rgba(212,175,55,0.7)" }}>プレミアムで明日も無制限参拝</p>
             </div>
             <button
@@ -850,7 +872,7 @@ export default function GamePage() {
       <div className="w-full max-w-sm mb-3 flex items-center gap-2 px-2 py-2 rounded-xl"
         style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(212,175,55,0.15)" }}>
         <span className="text-xs text-amber-400">最高位:</span>
-        <span className="text-lg">{highestShrine.emoji}</span>
+        <ToriiSmallIcon size={20} />
         <span className="text-sm font-bold text-amber-200">{highestShrine.name}</span>
         <span className="text-xs text-amber-500 ml-auto">御利益: {highestShrine.goryaku}</span>
       </div>
@@ -870,7 +892,10 @@ export default function GamePage() {
             : { boxShadow: "0 0 20px rgba(212,175,55,0.5)" }
           }
         >
-          {dailyOmikujiDrawn ? " 今日のおみくじは引きました" : " 今日のおみくじ（毎日1回・無料）"}
+          <span className="flex items-center justify-center gap-2">
+            <OmikujiScrollIcon size={20} />
+            {dailyOmikujiDrawn ? "今日のおみくじは引きました" : "今日のおみくじ（毎日1回・無料）"}
+          </span>
         </button>
         {/* 御利益おみくじ */}
         <button
@@ -885,7 +910,10 @@ export default function GamePage() {
             : {}
           }
         >
-           おみくじを引く（御利益 {OMIKUJI_COST}pt）
+          <span className="flex items-center justify-center gap-2">
+            <OmikujiScrollIcon size={20} />
+            おみくじを引く（御利益 {OMIKUJI_COST}pt）
+          </span>
         </button>
         <p className="text-center text-xs text-amber-600">
           おみくじでグリッドにランダムな神社が出現します
@@ -899,12 +927,14 @@ export default function GamePage() {
             style={{ background: "linear-gradient(160deg, #1a0a00, #2d1800)", border: "2px solid rgba(212,175,55,0.6)", boxShadow: "0 0 60px rgba(212,175,55,0.3)" }}>
             {!omikujiRevealed ? (
               <div className="py-4">
-                <div className="text-6xl mb-4 animate-spin" style={{ animationDuration: "0.8s" }}></div>
+                <div className="mb-4 flex justify-center" style={{ animation: "kon-spin 0.8s linear infinite" }}>
+                  <OmikujiScrollIcon size={64} />
+                </div>
                 <p className="text-amber-300 font-bold text-lg animate-pulse">おみくじを引いています…</p>
               </div>
             ) : omikujiResult && (
               <>
-                {/* 大吉専用: 桜の花びらアニメーション */}
+                {/* 大吉専用: 桜の花びらCanvas */}
                 {omikujiResult.rank === "大吉" && (
                   <>
                     <style>{`
@@ -912,9 +942,8 @@ export default function GamePage() {
                         0% { transform: translateY(-30px) rotate(0deg); opacity: 1; }
                         100% { transform: translateY(320px) rotate(720deg); opacity: 0; }
                       }
-                      .omikuji-petal {
+                      .omikuji-petal-svg {
                         position: absolute;
-                        font-size: 18px;
                         pointer-events: none;
                         z-index: 0;
                         animation: omikuji-petal-fall linear infinite;
@@ -927,20 +956,26 @@ export default function GamePage() {
                     {Array.from({ length: 12 }, (_, i) => (
                       <div
                         key={`omikuji-petal-${i}`}
-                        className="omikuji-petal"
+                        className="omikuji-petal-svg"
                         style={{
                           left: `${8 + (i * 7) % 84}%`,
-                          animationDuration: `${2 + Math.random() * 2}s`,
-                          animationDelay: `${Math.random() * 1.5}s`,
+                          animationDuration: `${2 + (i * 0.17) % 2}s`,
+                          animationDelay: `${(i * 0.13) % 1.5}s`,
                         }}
                       >
-                        
+                        <SakuraPetalSvg size={18} />
                       </div>
                     ))}
                   </>
                 )}
                 <div className="relative z-10">
-                <div className="text-6xl mb-2 animate-bounce">{omikujiResult.emoji}</div>
+                {/* ランク別SVGアイコン */}
+                <div className="mb-2 flex justify-center animate-bounce">
+                  {omikujiResult.rank === "大吉" && <KonMascot pose="excited" size={72} />}
+                  {omikujiResult.rank === "中吉" && <KonMascot pose="happy" size={64} />}
+                  {omikujiResult.rank === "小吉" && <KonMascot pose="idle" size={60} />}
+                  {omikujiResult.rank === "凶" && <KonMascot pose="sad" size={60} />}
+                </div>
                 <div className="text-5xl font-black mb-3" style={{
                   color: omikujiResult.rank === "大吉" ? "#fcd34d" : omikujiResult.rank === "中吉" ? "#86efac" : omikujiResult.rank === "小吉" ? "#93c5fd" : "#9ca3af",
                   textShadow: omikujiResult.rank === "大吉" ? "0 0 30px rgba(252,211,77,0.8)" : "none",
@@ -955,16 +990,18 @@ export default function GamePage() {
                 )}
                 <p className="text-amber-200 text-sm mb-2 leading-relaxed">{omikujiResult.message}</p>
                 <div className="bg-amber-900/30 rounded-xl p-3 mb-4 border border-amber-700/30">
-                  <p className="text-xs text-amber-400 font-bold">️ 御利益</p>
+                  <p className="text-xs text-amber-400 font-bold flex items-center gap-1">
+                    <ToriiSmallIcon size={12} /> 御利益
+                  </p>
                   <p className="text-xs text-amber-300 mt-1">{omikujiResult.goryaku}</p>
                 </div>
                 {omikujiResult.bonusLevel && (
                   <div className="bg-green-900/30 rounded-xl p-2 mb-4 border border-green-700/30">
-                    <p className="text-xs text-green-400 font-bold"> ボーナスタイル「{SHRINES[omikujiResult.bonusLevel - 1]?.name}」が出現！</p>
+                    <p className="text-xs text-green-400 font-bold">ボーナスタイル「{SHRINES[omikujiResult.bonusLevel - 1]?.name}」が出現！</p>
                   </div>
                 )}
                 <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`神社マージのおみくじで${omikujiResult.rank}が出た！️ ${omikujiResult.goryaku} #神社マージ #おみくじ → https://shrine-merge.vercel.app`)}`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`神社マージのおみくじで${omikujiResult.rank}が出た！ ${omikujiResult.goryaku} #神社マージ #おみくじ → https://shrine-merge.vercel.app`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white text-sm mb-2 transition-all active:scale-95"
@@ -981,7 +1018,10 @@ export default function GamePage() {
                   className="w-full py-3 rounded-xl font-black text-amber-900 text-base transition-all active:scale-95"
                   style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)" }}
                 >
-                  参拝を続ける ️
+                  <span className="flex items-center justify-center gap-2">
+                    <ToriiSmallIcon size={18} />
+                    参拝を続ける
+                  </span>
                 </button>
                 <p className="text-xs text-amber-800 mt-2">明日またおみくじが引けます</p>
                 </div>{/* close relative z-10 */}
@@ -1016,13 +1056,15 @@ export default function GamePage() {
                 border: "1px solid rgba(239,68,68,0.5)",
                 boxShadow: "0 0 12px rgba(239,68,68,0.2)",
               }}>
-              <p className="text-xs font-black" style={{ color: "#fca5a5" }}> 期間限定 50%OFFキャンペーン中！</p>
+              <p className="text-xs font-black" style={{ color: "#fca5a5" }}>期間限定 50%OFFキャンペーン中！</p>
               <p className="text-xs mt-0.5" style={{ color: "rgba(252,165,165,0.7)" }}>
                 終了まで{" "}
                 <span className="font-black tabular-nums" style={{ color: "#f87171" }}>{saleCountdown}</span>
               </p>
             </div>
-            <div className="text-5xl mb-2">️</div>
+            <div className="mb-2 flex justify-center">
+              <ToriiSmallIcon size={48} />
+            </div>
             <h2 className="text-2xl font-black mb-1" style={{ color: "#d4af37" }}>本日のプレイ上限</h2>
             <p className="text-amber-400 text-sm mb-4">
               無料版は1日{DAILY_FREE_LIMIT}回までプレイできます
@@ -1060,7 +1102,7 @@ export default function GamePage() {
                   boxShadow: "0 0 16px rgba(212,175,55,0.4)",
                 }}
               >
-                 50%OFFで今すぐ始める
+                50%OFFで今すぐ始める
               </button>
               <button
                 onClick={() => setShowPaywall(false)}
@@ -1085,11 +1127,27 @@ export default function GamePage() {
               boxShadow: "0 0 40px rgba(212,175,55,0.2)",
             }}
           >
-            <div className="text-5xl mb-2">️</div>
+            <div className="mb-2 flex justify-center">
+              <KonMascot pose="sad" size={64} />
+            </div>
             <h2 className="text-2xl font-black mb-1" style={{ color: "#d4af37" }}>ゲームオーバー</h2>
-            <p className="text-amber-400 text-sm mb-4">グリッドが埋まってしまいました</p>
+            <p className="text-amber-400 text-sm mb-2">グリッドが埋まってしまいました</p>
+            {/* ニアミス演出 */}
+            {state.bestScore - state.score > 0 && state.bestScore - state.score <= 500 && (
+              <div className="rounded-xl px-3 py-2 mb-3 animate-pulse"
+                style={{
+                  background: "linear-gradient(135deg, rgba(212,175,55,0.2), rgba(245,158,11,0.1))",
+                  border: "1px solid rgba(212,175,55,0.5)",
+                }}>
+                <p className="text-xs font-black" style={{ color: "#fcd34d" }}>
+                  あと{(state.bestScore - state.score).toLocaleString()}pt でベスト更新！
+                </p>
+              </div>
+            )}
             {isNewDailyBest && (
-              <p className="text-amber-300 font-black text-sm mb-2"> 本日ベスト更新！</p>
+              <p className="text-amber-300 font-black text-sm mb-2 flex items-center justify-center gap-1">
+                <StarIcon size={14} /> 本日ベスト更新！
+              </p>
             )}
             <div className="rounded-xl p-4 mb-4 space-y-2"
               style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)" }}>
@@ -1097,7 +1155,7 @@ export default function GamePage() {
                 ["スコア", state.score.toLocaleString()],
                 ["本日ベスト", dailyBest.toLocaleString()],
                 ["ベストスコア", state.bestScore.toLocaleString()],
-                ["最高神社", `${highestShrine.emoji} ${highestShrine.name}`],
+                ["最高神社", highestShrine.name],
                 ["御利益", highestShrine.goryaku],
               ].map(([label, val]) => (
                 <div key={label} className="flex justify-between text-sm">
@@ -1110,16 +1168,17 @@ export default function GamePage() {
               <button
                 onClick={handleRestart}
                 aria-label="もう一度ゲームをプレイする"
-                className="w-full py-4 rounded-2xl font-black text-lg transition-all active:scale-95"
+                className="w-full py-4 rounded-2xl font-black text-lg transition-all active:scale-95 flex items-center justify-center gap-2"
                 style={{
                   background: "linear-gradient(135deg, #d4af37, #f59e0b)",
                   color: "#1a0a00",
                   boxShadow: "0 0 20px rgba(212,175,55,0.4)",
                 }}
               >
-                ️ もう一度！
+                <RetryIcon size={22} />
+                もう一度！
               </button>
-              {/* 絵文字グリッドシェア（Wordle方式） */}
+              {/* テキストグリッドシェア（Wordle方式） */}
               <a
                 href={emojiShareUrl}
                 target="_blank"
@@ -1131,7 +1190,7 @@ export default function GamePage() {
                   color: "#fcd34d",
                 }}
               >
-                ️ 絵文字グリッドでシェア
+                グリッドでシェア
               </a>
               {/* スコアカードシェアボタン */}
               <button
@@ -1151,7 +1210,7 @@ export default function GamePage() {
                   color: "#fcd34d",
                 }}
               >
-                 スコアカードをシェア
+                スコアカードをシェア
               </button>
               <a
                 href={shareUrl}
@@ -1168,14 +1227,15 @@ export default function GamePage() {
                 href="/ranking"
                 className="w-full py-2 text-xs text-amber-400 hover:text-amber-200 transition-colors flex items-center justify-center gap-1"
               >
-                 週次ランキングを確認
+                週次ランキングを確認
               </a>
               <button
                 onClick={() => setShowCollection(true)}
                 aria-label={`神様図鑑を開く（${collectionCount}/${SHRINES.length}体解放済み）`}
-                className="w-full py-2 text-xs text-amber-400 hover:text-amber-200 transition-colors"
+                className="w-full py-2 text-xs text-amber-400 hover:text-amber-200 transition-colors flex items-center justify-center gap-1"
               >
-                 神様図鑑を見る（{collectionCount}/{SHRINES.length}体解放済み）
+                <BookIcon size={14} />
+                神様図鑑を見る（{collectionCount}/{SHRINES.length}体解放済み）
               </button>
               {!isPremium && (
                 <button
@@ -1183,14 +1243,16 @@ export default function GamePage() {
                   aria-label="プレミアムプランで御利益アップする（月額480円）"
                   className="w-full py-2 text-xs text-amber-500 hover:text-amber-300 transition-colors"
                 >
-                   プレミアムで御利益アップ（¥480/月）
+                  プレミアムで御利益アップ（¥480/月）
                 </button>
               )}
               {/* 神社うんちく */}
               {currentTrivia && (
                 <div className="mt-3 rounded-xl p-3 text-left"
                   style={{ background: "rgba(212,175,55,0.06)", border: "1px solid rgba(212,175,55,0.15)" }}>
-                  <p className="text-xs font-bold mb-1" style={{ color: "#d4af37" }}>️ 神社豆知識 — {currentTrivia.shrine}</p>
+                  <p className="text-xs font-bold mb-1 flex items-center gap-1" style={{ color: "#d4af37" }}>
+                    <ToriiSmallIcon size={12} /> 神社豆知識 — {currentTrivia.shrine}
+                  </p>
                   <p className="text-xs leading-relaxed" style={{ color: "rgba(253,230,138,0.75)" }}>{currentTrivia.fact}</p>
                 </div>
               )}
@@ -1201,7 +1263,9 @@ export default function GamePage() {
                     background: "linear-gradient(135deg, rgba(212,175,55,0.15), rgba(252,211,77,0.08))",
                     border: "1px solid rgba(212,175,55,0.5)",
                   }}>
-                  <p className="text-xs font-black mb-1" style={{ color: "#fcd34d" }}> 天照大神到達者限定 — 八百万神モード解放！</p>
+                  <p className="text-xs font-black mb-1 flex items-center justify-center gap-1" style={{ color: "#fcd34d" }}>
+                    <StarIcon size={12} /> 天照大神到達者限定 — 八百万神モード解放！
+                  </p>
                   <p className="text-xs" style={{ color: "rgba(212,175,55,0.7)" }}>全9神を解放したあなたへ。さらに高みを目指してスコアの限界に挑もう！</p>
                   <p className="text-xs mt-1 font-bold" style={{ color: "#f59e0b" }}>新記録まで: あと {Math.max(0, (state.bestScore || 0) + 1000 - state.score).toLocaleString()} pt</p>
                 </div>
@@ -1278,10 +1342,12 @@ export default function GamePage() {
               </div>
             </div>
             <div className="relative z-10">
-              <div className="text-7xl mb-3 animate-bounce" style={{ filter: "drop-shadow(0 0 16px rgba(255,200,0,0.9))" }}></div>
+              <div className="mb-3 flex justify-center" style={{ filter: "drop-shadow(0 0 16px rgba(255,200,0,0.9))" }}>
+                <KonMascot pose="excited" size={80} />
+              </div>
               <h2 className="text-3xl font-black mb-1"
                 style={{ color: "#fcd34d", textShadow: "0 0 30px rgba(255,200,0,1), 0 0 60px rgba(212,175,55,0.6)" }}>
-                 天照大神 降臨！
+                天照大神 降臨！
               </h2>
               <p className="text-amber-200 text-base font-black mb-1">神社マージ コンプリート！</p>
               <p className="text-amber-400 text-sm mb-1">鳥居から最強の神まで到達！</p>
@@ -1293,7 +1359,7 @@ export default function GamePage() {
                 <p className="text-xs text-amber-400 mt-1">御利益: 最強 — すべての願いが叶う</p>
               </div>
               <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(` 天照大神に到達！！神社マージコンプリート！\n${emojiGrid}\n Lv.9 天照大神（御利益：最強）\n${state.score.toLocaleString()}pt 達成！\nhttps://shrine-merge.vercel.app #神社マージ #天照大神`)}`}
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`天照大神に到達！！神社マージコンプリート！\n${emojiGrid}\nLv.9 天照大神（御利益：最強）\n${state.score.toLocaleString()}pt 達成！\nhttps://shrine-merge.vercel.app #神社マージ #天照大神`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-bold text-white text-sm mb-3 transition-all active:scale-95"
@@ -1302,7 +1368,7 @@ export default function GamePage() {
                 <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
-                 絵文字グリッドでXシェア
+                グリッドでXシェア
               </a>
               <button
                 onClick={() => setShowAmaterasuCelebration(false)}
@@ -1310,7 +1376,10 @@ export default function GamePage() {
                 className="w-full py-2 text-sm font-bold rounded-xl transition-all active:scale-95"
                 style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00" }}
               >
-                ゲームを続ける ️
+                <span className="flex items-center justify-center gap-2">
+                  <ToriiSmallIcon size={16} />
+                  ゲームを続ける
+                </span>
               </button>
             </div>
           </div>
@@ -1327,7 +1396,11 @@ export default function GamePage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4">
           <div className="w-full max-w-xs rounded-3xl p-7 text-center shadow-2xl"
             style={{ background: "linear-gradient(160deg, #1a0a00, #2d1800)", border: "2px solid rgba(212,175,55,0.6)", boxShadow: "0 0 60px rgba(212,175,55,0.3)" }}>
-            <div className="text-4xl mb-3">{TUTORIAL_STEPS[tutorialStep].icon}</div>
+            <div className="mb-3 flex justify-center">
+              {TUTORIAL_STEPS[tutorialStep].icon === "swipe" && <ToriiSmallIcon size={48} />}
+              {TUTORIAL_STEPS[tutorialStep].icon === "merge" && <StarIcon size={48} />}
+              {TUTORIAL_STEPS[tutorialStep].icon === "omikuji" && <OmikujiScrollIcon size={48} />}
+            </div>
             <h2 className="text-lg font-black mb-2" style={{ color: "#d4af37" }}>
               {tutorialStep + 1}/{TUTORIAL_STEPS.length}｜{TUTORIAL_STEPS[tutorialStep].title}
             </h2>
@@ -1356,7 +1429,10 @@ export default function GamePage() {
                 className="w-full py-3 rounded-xl font-black text-base transition-all active:scale-95"
                 style={{ background: "linear-gradient(135deg, #d4af37, #f59e0b)", color: "#1a0a00" }}
               >
-                ️ ゲームスタート！
+                <span className="flex items-center justify-center gap-2">
+                  <ToriiSmallIcon size={18} />
+                  ゲームスタート！
+                </span>
               </button>
             )}
             <button
@@ -1376,17 +1452,20 @@ export default function GamePage() {
           <div className="bg-white rounded-2xl p-6 max-w-sm w-full text-center shadow-xl relative">
             <button
               onClick={() => setShowPayjp(false)}
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl"
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl font-bold"
+              aria-label="閉じる"
             >
-              
+              &#215;
             </button>
-            <div className="text-4xl mb-3">️</div>
+            <div className="mb-3 flex justify-center">
+              <ToriiSmallIcon size={48} />
+            </div>
             <h2 className="text-lg font-bold text-gray-900 mb-2">神社マージ プレミアム</h2>
             <p className="text-sm text-gray-500 mb-4">月額¥480で無制限プレイ・御利益2倍速</p>
             <ul className="text-sm text-gray-600 space-y-1 mb-5 text-left">
-              <li> 無制限プレイ（1日3回制限なし）</li>
-              <li> 御利益ゲージ2倍速</li>
-              <li> 広告なし快適プレイ</li>
+              <li>&#10003; 無制限プレイ（1日3回制限なし）</li>
+              <li>&#10003; 御利益ゲージ2倍速</li>
+              <li>&#10003; 広告なし快適プレイ</li>
             </ul>
             <KomojuButton
               planId="standard"

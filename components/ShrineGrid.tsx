@@ -21,7 +21,7 @@ export default function ShrineGrid({ grid }: ShrineGridProps) {
       <div className="grid gap-2" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
         {grid.map((row, r) =>
           row.map((cell, c) => (
-            <ShrineCell key={`${r}-${c}`} cell={cell} />
+            <ShrineCell key={cell ? `cell-${cell.id}` : `empty-${r}-${c}`} cell={cell} />
           ))
         )}
       </div>

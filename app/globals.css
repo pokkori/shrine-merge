@@ -204,3 +204,44 @@ body {
 }
 
 .tabular-nums { font-variant-numeric: tabular-nums; }
+
+/* ===== 流れ星 ===== */
+@keyframes shooting-star-move {
+  0%   { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; }
+  70%  { opacity: 0.6; }
+  100% { transform: translateX(300px) translateY(300px) rotate(-45deg); opacity: 0; }
+}
+
+.shooting-star-base {
+  position: absolute;
+  width: 120px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(212,175,55,0.9), rgba(255,255,200,0.5), transparent);
+  pointer-events: none;
+  animation: shooting-star-move linear infinite;
+}
+
+.shooting-star-1 {
+  top: 8%;
+  left: 10%;
+  animation-duration: 4s;
+  animation-delay: 0s;
+}
+
+.shooting-star-2 {
+  top: 18%;
+  left: 40%;
+  animation-duration: 5.5s;
+  animation-delay: 1.8s;
+  width: 90px;
+}
+
+.shooting-star-3 {
+  top: 5%;
+  left: 65%;
+  animation-duration: 3.8s;
+  animation-delay: 3.2s;
+  width: 100px;
+  opacity: 0.7;
+}
