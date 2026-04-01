@@ -33,6 +33,7 @@ import {
 } from "@/components/UiSvgIcons";
 import KonMascot from "@/components/KonMascot";
 import SakuraParticleCanvas from "@/components/SakuraParticleCanvas";
+import { ScorePopLayer, type ScorePopItem } from "@/components/ScorePop";
 
 const DAILY_FREE_LIMIT = 3;
 const AMATERASU_LEVEL = 9; // 天照大神のレベル
@@ -366,6 +367,11 @@ export default function GamePage() {
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const isMoving = useRef(false);
   const goryakuInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  // ScorePop
+  const [scorePopItems, setScorePopItems] = useState<ScorePopItem[]>([]);
+  const scorePopIdRef = useRef(0);
+  const lastMergeAtRef = useRef(0);
+  const comboCountRef = useRef(0);
   const saleCountdown = useSaleCountdown();
   const { startBGM, playSE, toggleMute, isMuted } = useGameAudio();
 
@@ -459,6 +465,26 @@ export default function GamePage() {
         }, 200);
       }
       if (scoreGained > 0) {
+        // ScorePop発火
+        const nowPop = Date.now();
+        const isCombo = nowPop - lastMergeAtRef.current < 3000;
+        comboCountRef.current = isCombo ? comboCountRef.current + 1 : 1;
+        lastMergeAtRef.current = nowPop;
+        const popId = ++scorePopIdRef.current;
+        const comboSnap = comboCountRef.current;
+        setTimeout(() => {
+          setScorePopItems(sp => [
+            ...sp,
+            {
+              id: popId,
+              value: scoreGained,
+              combo: comboSnap,
+              x: window.innerWidth / 2,
+              y: window.innerHeight * 0.4,
+            },
+          ]);
+        }, 0);
+
         const mergeLevel = highestMerged > 0 ? highestMerged : getHighestLevel(newGrid);
         if (mergeLevel >= 6) {
           setTimeout(() => playSE("levelup"), 0);
@@ -682,6 +708,12 @@ export default function GamePage() {
       <div className="shooting-star-base shooting-star-1" aria-hidden="true" />
       <div className="shooting-star-base shooting-star-2" aria-hidden="true" />
       <div className="shooting-star-base shooting-star-3" aria-hidden="true" />
+
+      {/* ScorePopLayer: fixed overlay */}
+      <ScorePopLayer
+        items={scorePopItems}
+        onRemove={id => setScorePopItems(prev => prev.filter(p => p.id !== id))}
+      />
 
       {/* 画面フラッシュ演出 */}
       {showScreenFlash && <div className="screen-flash" />}
