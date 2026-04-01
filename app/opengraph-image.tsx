@@ -34,8 +34,14 @@ export default function Image() {
           }}
         />
         {/* Icon */}
-        <div style={{ fontSize: 120, marginBottom: 24, filter: "drop-shadow(0 0 30px rgba(255,200,0,0.6))" }}>
-          ️
+        <div style={{ marginBottom: 24, filter: "drop-shadow(0 0 30px rgba(255,200,0,0.6))" }}>
+          <svg viewBox="0 0 120 120" width={120} height={120}>
+            <rect x="10" y="18" width="100" height="14" rx="4" fill="#DC2626" />
+            <rect x="6" y="30" width="108" height="8" rx="2" fill="#EF4444" />
+            <rect x="25" y="38" width="12" height="72" rx="2" fill="#991B1B" />
+            <rect x="83" y="38" width="12" height="72" rx="2" fill="#991B1B" />
+            <rect x="20" y="55" width="80" height="8" rx="2" fill="#B91C1C" />
+          </svg>
         </div>
         {/* Title */}
         <div
@@ -63,15 +69,17 @@ export default function Image() {
         </div>
         {/* Shrine levels */}
         <div style={{ display: "flex", gap: 16, marginBottom: 32 }}>
-          {["️", "", "", "", "", "️"].map((s, i) => (
+          {["鳥居", "社", "拝殿", "境内社", "大社", "天照"].map((s, i) => (
             <div
               key={i}
               style={{
-                fontSize: 36,
+                fontSize: 20,
+                fontWeight: 700,
                 background: "rgba(255,200,0,0.1)",
                 border: "1px solid rgba(255,200,0,0.3)",
                 borderRadius: 12,
                 padding: "8px 12px",
+                color: "#fde68a",
               }}
             >
               {s}

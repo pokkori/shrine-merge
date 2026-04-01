@@ -84,12 +84,13 @@ export const metadata: Metadata = {
     siteName: "神社マージ",
     type: "website",
     locale: "ja_JP",
-    images: [{ url: "/images/hero.png", width: 400, height: 225, alt: "神社マージ ゲーム画面" }],
+    images: [{ url: "https://shrine-merge.vercel.app/opengraph-image", width: 1200, height: 630, alt: "神社マージ - 神社を合体させて最強の神社を目指せ！" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "神社マージ - 神社を合体させて最強の神社を目指せ！",
     description: "神社を合体させる新感覚パズルゲーム。鳥居から天照大神まで合体させてスコアを競おう！",
+    images: ["https://shrine-merge.vercel.app/opengraph-image"],
   },
   other: { "theme-color": "#0F0F1A" },
 };
