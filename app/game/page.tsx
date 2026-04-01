@@ -363,6 +363,7 @@ export default function GamePage() {
   const [currentTrivia, setCurrentTrivia] = useState<typeof SHRINE_TRIVIA[0] | null>(null);
   const [showYayoiMode, setShowYayoiMode] = useState(false); // 八百万神モードバナー
   const [mergePopup, setMergePopup] = useState<{ text: string; color: string; size: string; key: number } | null>(null);
+  const [shakeKey, setShakeKey] = useState(0);
   const [showScreenFlash, setShowScreenFlash] = useState(false);
   const [petals, setPetals] = useState<{ id: number; left: number; delay: number; duration: number }[]>([]);
   const [showTutorial, setShowTutorial] = useState(false);
@@ -621,6 +622,8 @@ export default function GamePage() {
   // Update daily best when game ends
   useEffect(() => {
     if (!state?.isGameOver) return;
+    // ゲームオーバー時スクリーンシェイク
+    setShakeKey(k => k + 1);
     const updated = saveDailyBestScore(state.score);
     setDailyBest(getDailyBestScore());
     setIsNewDailyBest(updated);
@@ -933,7 +936,10 @@ export default function GamePage() {
         <span className="text-xs text-amber-500 ml-auto">御利益: {highestShrine.goryaku}</span>
       </div>
 
-      <div className="w-full max-w-sm mb-4">
+      <div
+        key={shakeKey}
+        className={`w-full max-w-sm mb-4${shakeKey > 0 ? " screen-shake" : ""}`}
+      >
         <ShrineGrid grid={state.grid} />
       </div>
       <div className="w-full max-w-sm mb-2 space-y-2">
