@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { haptics } from "@/utils/haptics";
 import ShrineGrid from "@/components/ShrineGrid";
 import ScoreBoard from "@/components/ScoreBoard";
 import KomojuButton from "@/components/KomojuButton";
@@ -472,6 +473,7 @@ export default function GamePage() {
         }, 200);
       }
       if (scoreGained > 0) {
+        haptics.success();
         // ScorePop発火
         const nowPop = Date.now();
         const isCombo = nowPop - lastMergeAtRef.current < 3000;
@@ -532,7 +534,7 @@ export default function GamePage() {
           setLottieState('happy');
         }
       }
-      if (gameOver) setTimeout(() => playSE("gameover"), 300);
+      if (gameOver) { haptics.error(); setTimeout(() => playSE("gameover"), 300); }
       setTimeout(() => { isMoving.current = false; }, 120);
       return {
         ...prev,
